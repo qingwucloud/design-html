@@ -230,7 +230,7 @@ watch(
 
     <div class="flex items-center justify-between">
       <span class="text-14px">{{ t('watermark.watermark') }}</span>
-      <ElInput v-model="water" class="right-1 w-20" @change="setWater()" />
+      <ElInput v-model="water" class="right-1 w-55!" @change="setWater()" />
     </div>
   </div>
 </template>

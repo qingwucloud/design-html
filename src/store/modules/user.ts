@@ -3,9 +3,10 @@ import { defineStore } from 'pinia'
 import { getAccessToken, removeToken } from '@/utils/auth'
 import { CACHE_KEY, useCache, deleteUserCache } from '@/hooks/web/useCache'
 import { getInfo, loginOut } from '@/api/login'
+import { useWatermark } from "@/hooks/web/useWatermark";
 
 const { wsCache } = useCache()
-
+const { setWatermark } = useWatermark()
 interface UserVO {
   id: number
   avatar: string
@@ -68,6 +69,7 @@ export const useUserStore = defineStore('admin-user', {
       this.isSetUser = true
       wsCache.set(CACHE_KEY.USER, userInfo)
       wsCache.set(CACHE_KEY.ROLE_ROUTERS, userInfo.menus)
+      setWatermark(userInfo.user.username)
     },
     async setUserAvatarAction(avatar: string) {
       const userInfo = wsCache.get(CACHE_KEY.USER)

@@ -72,7 +72,7 @@ watch(
       />
       <div
         v-if="show"
-        class="text-lg text-[#333] truncate text-nowrap font-semibold"
+        class="text-4 text-[#333] truncate text-nowrap font-semibold"
       >
         {{ title }}
       </div>

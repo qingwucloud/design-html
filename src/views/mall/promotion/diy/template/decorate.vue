@@ -68,7 +68,7 @@ const getPageDetail = async (id: any) => {
   try {
     formData.value = await DiyTemplateApi.getDiyTemplateProperty(id)
     // 拼接手机预览链接
-    const domain = import.meta.env.VITE_MALL_H5_DOMAIN
+    const domain = ''
     previewUrl.value = `${domain}/#/pages/index/index?templateId=${formData.value.id}`
   } finally {
     formLoading.value = false

@@ -68,7 +68,7 @@ watch(
     >
       <img
         class="h-[calc(var(--logo-height)-20px)] w-[calc(var(--logo-height)-20px)] mr-10px"
-        src="https://unpkg.com/@vbenjs/static-source@0.1.7/source/logo-v1.webp"
+        src="@/assets/imgs/logo.png"
       />
       <div
         v-if="show"

@@ -27,7 +27,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { BasicInfo, ProfileUser, ResetPwd, UserSocial } from './components'
+import { BasicInfo, ProfileUser, ResetPwd } from './components'
 
 const { t } = useI18n()
 defineOptions({ name: 'Profile' })

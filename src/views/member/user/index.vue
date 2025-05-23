@@ -51,13 +51,13 @@
         />
       </el-form-item>
       <el-form-item label="用户标签" prop="tagIds">
-        <MemberTagSelect v-model="queryParams.tagIds" />
+        <MemberTagSelect v-model="queryParams.tagIds" class="w-240!"/>
       </el-form-item>
-      <el-form-item label="用户等级" prop="levelId">
-        <MemberLevelSelect v-model="queryParams.levelId" />
-      </el-form-item>
+<!--      <el-form-item label="用户等级" prop="levelId">-->
+<!--        <MemberLevelSelect v-model="queryParams.levelId" />-->
+<!--      </el-form-item>-->
       <el-form-item label="用户分组" prop="groupId">
-        <MemberGroupSelect v-model="queryParams.groupId" />
+        <MemberGroupSelect v-model="queryParams.groupId" class="w-240!" />
       </el-form-item>
       <el-form-item>
         <el-button @click="handleQuery">
@@ -68,7 +68,7 @@
           <Icon class="mr-5px" icon="ep:refresh" />
           重置
         </el-button>
-        <el-button v-hasPermi="['promotion:coupon:send']" @click="openCoupon">发送优惠券</el-button>
+<!--        <el-button v-hasPermi="['promotion:coupon:send']" @click="openCoupon">发送优惠券</el-button>-->
       </el-form-item>
     </el-form>
   </ContentWrap>
@@ -135,48 +135,49 @@
         <template #default="scope">
           <div class="flex items-center justify-center">
             <el-button link type="primary" @click="openDetail(scope.row.id)">详情</el-button>
-            <el-dropdown
-              v-hasPermi="[
-                'member:user:update',
-                'member:user:update-level',
-                'member:user:update-point',
-                'pay:wallet:update-balance'
-              ]"
-              @command="(command) => handleCommand(command, scope.row)"
-            >
-              <el-button link type="primary">
-                <Icon icon="ep:d-arrow-right" />
-                更多
-              </el-button>
-              <template #dropdown>
-                <el-dropdown-menu>
-                  <el-dropdown-item
-                    v-if="checkPermi(['member:user:update'])"
-                    command="handleUpdate"
-                  >
-                    编辑
-                  </el-dropdown-item>
-                  <el-dropdown-item
-                    v-if="checkPermi(['member:user:update-level'])"
-                    command="handleUpdateLevel"
-                  >
-                    修改等级
-                  </el-dropdown-item>
-                  <el-dropdown-item
-                    v-if="checkPermi(['member:user:update-point'])"
-                    command="handleUpdatePoint"
-                  >
-                    修改积分
-                  </el-dropdown-item>
-                  <el-dropdown-item
-                    v-if="checkPermi(['pay:wallet:update-balance'])"
-                    command="handleUpdateBlance"
-                  >
-                    修改余额
-                  </el-dropdown-item>
-                </el-dropdown-menu>
-              </template>
-            </el-dropdown>
+            <el-button link type="warning" v-hasPermi="['member:user:update']" @click="handleCommand('handleUpdate',scope.row)">编辑</el-button>
+<!--            <el-dropdown-->
+<!--              v-hasPermi="[-->
+<!--                'member:user:update',-->
+<!--                'member:user:update-level',-->
+<!--                'member:user:update-point',-->
+<!--                'pay:wallet:update-balance'-->
+<!--              ]"-->
+<!--              @command="(command) => handleCommand(command, scope.row)"-->
+<!--            >-->
+<!--              <el-button link type="primary">-->
+<!--                <Icon icon="ep:d-arrow-right" />-->
+<!--                更多-->
+<!--              </el-button>-->
+<!--              <template #dropdown>-->
+<!--                <el-dropdown-menu>-->
+<!--                  <el-dropdown-item-->
+<!--                    v-if="checkPermi(['member:user:update'])"-->
+<!--                    command="handleUpdate"-->
+<!--                  >-->
+<!--                    编辑-->
+<!--                  </el-dropdown-item>-->
+<!--                  <el-dropdown-item-->
+<!--                    v-if="checkPermi(['member:user:update-level'])"-->
+<!--                    command="handleUpdateLevel"-->
+<!--                  >-->
+<!--                    修改等级-->
+<!--                  </el-dropdown-item>-->
+<!--                  <el-dropdown-item-->
+<!--                    v-if="checkPermi(['member:user:update-point'])"-->
+<!--                    command="handleUpdatePoint"-->
+<!--                  >-->
+<!--                    修改积分-->
+<!--                  </el-dropdown-item>-->
+<!--                  <el-dropdown-item-->
+<!--                    v-if="checkPermi(['pay:wallet:update-balance'])"-->
+<!--                    command="handleUpdateBlance"-->
+<!--                  >-->
+<!--                    修改余额-->
+<!--                  </el-dropdown-item>-->
+<!--                </el-dropdown-menu>-->
+<!--              </template>-->
+<!--            </el-dropdown>-->
           </div>
         </template>
       </el-table-column>
@@ -207,7 +208,6 @@ import * as UserApi from '@/api/member/user'
 import { DICT_TYPE } from '@/utils/dict'
 import UserForm from './UserForm.vue'
 import MemberTagSelect from '@/views/member/tag/components/MemberTagSelect.vue'
-import MemberLevelSelect from '@/views/member/level/components/MemberLevelSelect.vue'
 import MemberGroupSelect from '@/views/member/group/components/MemberGroupSelect.vue'
 import UserLevelUpdateForm from './components/UserLevelUpdateForm.vue'
 import UserPointUpdateForm from './components/UserPointUpdateForm.vue'

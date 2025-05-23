@@ -1,5 +1,5 @@
 <template>
-  <el-select v-model="tagIds" placeholder="请选择用户标签" clearable multiple class="!w-240px">
+  <el-select v-model="tagIds" :style="{width:width+'!important'}" placeholder="请选择用户标签" clearable multiple>
     <el-option v-for="tag in tags" :key="tag.id" :label="tag.name" :value="tag.id" />
   </el-select>
   <el-button
@@ -33,6 +33,10 @@ const props = defineProps({
   showAdd: {
     type: Boolean,
     default: false
+  },
+  width:{
+    type: String,
+    default: '240px'
   }
 })
 const emit = defineEmits(['update:modelValue'])

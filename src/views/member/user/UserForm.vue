@@ -1,5 +1,5 @@
 <template>
-  <Dialog :title="dialogTitle" v-model="dialogVisible">
+  <Dialog :title="dialogTitle" top="2vh" v-model="dialogVisible">
     <el-form
       ref="formRef"
       :model="formData"
@@ -43,6 +43,7 @@
       </el-form-item>
       <el-form-item label="出生日期" prop="birthday">
         <el-date-picker
+          class="w-full!"
           v-model="formData.birthday"
           type="date"
           value-format="x"
@@ -58,10 +59,10 @@
         />
       </el-form-item>
       <el-form-item label="用户标签" prop="tagIds">
-        <MemberTagSelect v-model="formData.tagIds" show-add />
+        <MemberTagSelect width="100%" v-model="formData.tagIds" show-add />
       </el-form-item>
       <el-form-item label="用户分组" prop="groupId">
-        <MemberGroupSelect v-model="formData.groupId" />
+        <MemberGroupSelect class="w-full!" v-model="formData.groupId" />
       </el-form-item>
       <el-form-item label="会员备注" prop="mark">
         <el-input type="textarea" v-model="formData.mark" placeholder="请输入会员备注" />

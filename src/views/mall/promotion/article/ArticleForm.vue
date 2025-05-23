@@ -58,43 +58,43 @@
             </el-radio-group>
           </el-form-item>
         </el-col>
-<!--        <el-col :span="12">-->
-<!--          <el-form-item label="是否热门" prop="recommendHot">-->
-<!--            <el-radio-group v-model="formData.recommendHot">-->
-<!--              <el-radio-->
-<!--                v-for="dict in getBoolDictOptions(DICT_TYPE.INFRA_BOOLEAN_STRING)"-->
-<!--                :key="dict.value"-->
-<!--                :value="dict.value"-->
-<!--              >-->
-<!--                {{ dict.label }}-->
-<!--              </el-radio>-->
-<!--            </el-radio-group>-->
-<!--          </el-form-item>-->
-<!--        </el-col>-->
-<!--        <el-col :span="12">-->
-<!--          <el-form-item label="是否轮播图" prop="recommendBanner">-->
-<!--            <el-radio-group v-model="formData.recommendBanner">-->
-<!--              <el-radio-->
-<!--                v-for="dict in getBoolDictOptions(DICT_TYPE.INFRA_BOOLEAN_STRING)"-->
-<!--                :key="dict.value"-->
-<!--                :value="dict.value"-->
-<!--              >-->
-<!--                {{ dict.label }}-->
-<!--              </el-radio>-->
-<!--            </el-radio-group>-->
-<!--          </el-form-item>-->
-<!--        </el-col>-->
-<!--        <el-col :span="24">-->
-<!--          <el-form-item label="商品关联" prop="spuId">-->
-<!--            <el-tag v-if="formData.spuId" class="mr-10px">-->
-<!--              {{ spuList.find((item) => item.id === formData.spuId)?.name }}-->
-<!--            </el-tag>-->
-<!--            <el-button @click="spuSelectRef?.open()">选择商品</el-button>-->
-<!--          </el-form-item>-->
-<!--        </el-col>-->
+        <!--        <el-col :span="12">-->
+        <!--          <el-form-item label="是否热门" prop="recommendHot">-->
+        <!--            <el-radio-group v-model="formData.recommendHot">-->
+        <!--              <el-radio-->
+        <!--                v-for="dict in getBoolDictOptions(DICT_TYPE.INFRA_BOOLEAN_STRING)"-->
+        <!--                :key="dict.value"-->
+        <!--                :value="dict.value"-->
+        <!--              >-->
+        <!--                {{ dict.label }}-->
+        <!--              </el-radio>-->
+        <!--            </el-radio-group>-->
+        <!--          </el-form-item>-->
+        <!--        </el-col>-->
+        <!--        <el-col :span="12">-->
+        <!--          <el-form-item label="是否轮播图" prop="recommendBanner">-->
+        <!--            <el-radio-group v-model="formData.recommendBanner">-->
+        <!--              <el-radio-->
+        <!--                v-for="dict in getBoolDictOptions(DICT_TYPE.INFRA_BOOLEAN_STRING)"-->
+        <!--                :key="dict.value"-->
+        <!--                :value="dict.value"-->
+        <!--              >-->
+        <!--                {{ dict.label }}-->
+        <!--              </el-radio>-->
+        <!--            </el-radio-group>-->
+        <!--          </el-form-item>-->
+        <!--        </el-col>-->
+        <!--        <el-col :span="24">-->
+        <!--          <el-form-item label="商品关联" prop="spuId">-->
+        <!--            <el-tag v-if="formData.spuId" class="mr-10px">-->
+        <!--              {{ spuList.find((item) => item.id === formData.spuId)?.name }}-->
+        <!--            </el-tag>-->
+        <!--            <el-button @click="spuSelectRef?.open()">选择商品</el-button>-->
+        <!--          </el-form-item>-->
+        <!--        </el-col>-->
         <el-col :span="24">
           <el-form-item label="文章内容">
-            <Editor v-model="formData.content" height="150px" />
+            <Editor v-model="formData.content" height="200px" />
           </el-form-item>
         </el-col>
       </el-row>

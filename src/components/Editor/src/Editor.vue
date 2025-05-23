@@ -26,6 +26,21 @@ const props = defineProps({
     type: Object as PropType<Partial<IEditorConfig>>,
     default: () => undefined
   },
+  toolbarKeys: {
+    type: Array as PropType<string[]>,
+    default: () => [
+      'bold',
+      'italic',
+      'underline',
+      'fontSize',
+      'bulletedList',
+      'numberedList',
+      'uploadImage',
+      'todo',
+      'fullScreen' // 添加全屏功能
+    ]
+  },
+
   readonly: propTypes.bool.def(false),
   modelValue: propTypes.string.def('')
 })
@@ -87,6 +102,7 @@ const editorConfig = computed((): IEditorConfig => {
       },
       autoFocus: false,
       scroll: true,
+
       MENU_CONF: {
         ['uploadImage']: {
           server: getUploadUrl(),
@@ -200,6 +216,8 @@ const editorStyle = computed(() => {
 // 回调函数
 const handleChange = (editor: IDomEditor) => {
   emit('change', editor)
+
+  console.log(editor.getAllMenuKeys())
 }
 
 // 组件销毁时，及时销毁编辑器
@@ -221,9 +239,10 @@ defineExpose({
 </script>
 
 <template>
-  <div class="border-1 border-solid border-[var(--tags-view-border-color)] z-10">
+  <div class="border-1 w-full border-solid border-[var(--tags-view-border-color)] z-10">
     <!-- 工具栏 -->
     <Toolbar
+      :default-config="{ toolbarKeys }"
       :editor="editorRef"
       :editorId="editorId"
       class="border-0 b-b-1 border-solid border-[var(--tags-view-border-color)]"

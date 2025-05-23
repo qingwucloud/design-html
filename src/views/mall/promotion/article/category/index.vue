@@ -65,11 +65,12 @@
     <el-table v-loading="loading" :data="list" :show-overflow-tooltip="true" :stripe="true">
       <el-table-column align="center" label="编号" prop="id" min-width="100" />
       <el-table-column align="center" label="分类名称" prop="name" min-width="240" />
-      <el-table-column label="分类图图" min-width="80">
+      <!-- <el-table-column label="分类图" min-width="80">
         <template #default="{ row }">
-          <el-image :src="row.picUrl" class="h-30px w-30px" @click="imagePreview(row.picUrl)" />
+          <el-image v-if="row.picUrl" :src="row.picUrl" class="h-30px w-30px" @click="imagePreview(row.picUrl)" />
+          <div v-else>-</div>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column align="center" label="状态" prop="status" min-width="150">
         <template #default="scope">
           <dict-tag :type="DICT_TYPE.COMMON_STATUS" :value="scope.row.status" />

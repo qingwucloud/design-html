@@ -1,7 +1,7 @@
 <template>
   <el-card shadow="never" v-loading="loading">
     <template #header>
-      <CardTitle title="会员终端" />
+      <CardTitle title="用户类型统计" />
     </template>
     <Echart :height="300" :options="terminalChartOptions" />
   </el-card>
@@ -29,10 +29,10 @@ const terminalChartOptions = reactive<EChartsOption>({
     orient: 'vertical',
     left: 'right'
   },
-  roseType: 'area',
+  // roseType: 'area',
   series: [
     {
-      name: '会员终端',
+      name: '用户类型统计',
       type: 'pie',
       label: {
         show: false
@@ -50,15 +50,19 @@ const getMemberTerminalStatisticsList = async () => {
   loading.value = true
   const list = await MemberStatisticsApi.getMemberTerminalStatisticsList()
   const dictDataList = getIntDictOptions(DICT_TYPE.TERMINAL)
-  terminalChartOptions.series![0].data = dictDataList.map((dictData: DictDataType) => {
-    const userCount = list.find(
-      (item: MemberTerminalStatisticsRespVO) => item.terminal === dictData.value
-    )?.userCount
-    return {
-      name: dictData.label,
-      value: userCount || 0
-    }
-  })
+  terminalChartOptions.series![0].data = [
+    { name: '设计师', value: 100 },
+    { name: '普通用户', value: 1110 }
+  ]
+  // terminalChartOptions.series![0].data = dictDataList.map((dictData: DictDataType) => {
+  //   const userCount = list.find(
+  //     (item: MemberTerminalStatisticsRespVO) => item.terminal === dictData.value
+  //   )?.userCount
+  //   return {
+  //     name: dictData.label,
+  //     value: userCount || 0
+  //   }
+  // })
   loading.value = false
 }
 

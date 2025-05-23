@@ -366,7 +366,7 @@ export default {
     },
     login: {
       backSignIn: '返回',
-      signInFormTitle: '登录',
+      signInFormTitle: '欢迎登录',
       ssoFormTitle: '三方授权',
       mobileSignInFormTitle: '手机登录',
       qrSignInFormTitle: '二维码登录',

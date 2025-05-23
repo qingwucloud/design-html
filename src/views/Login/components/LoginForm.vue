@@ -1,139 +1,158 @@
 <template>
-  <el-form
-    v-show="getShow"
-    ref="formLogin"
-    :model="loginData.loginForm"
-    :rules="LoginRules"
-    class="login-form"
-    label-position="top"
-    label-width="120px"
-    size="large"
-  >
-    <el-row style="margin-right: -10px; margin-left: -10px">
-      <el-col :span="24" style="padding-right: 10px; padding-left: 10px">
-        <el-form-item>
-          <LoginFormTitle style="width: 100%" />
-        </el-form-item>
-      </el-col>
-      <el-col :span="24" style="padding-right: 10px; padding-left: 10px">
-        <el-form-item v-if="loginData.tenantEnable === 'true'" prop="tenantName">
-          <el-input
-            v-model="loginData.loginForm.tenantName"
-            :placeholder="t('login.tenantNamePlaceholder')"
-            :prefix-icon="iconHouse"
-            link
-            type="primary"
-          />
-        </el-form-item>
-      </el-col>
-      <el-col :span="24" style="padding-right: 10px; padding-left: 10px">
-        <el-form-item prop="username">
-          <el-input
-            v-model="loginData.loginForm.username"
-            :placeholder="t('login.usernamePlaceholder')"
-            :prefix-icon="iconAvatar"
-          />
-        </el-form-item>
-      </el-col>
-      <el-col :span="24" style="padding-right: 10px; padding-left: 10px">
-        <el-form-item prop="password">
-          <el-input
-            v-model="loginData.loginForm.password"
-            :placeholder="t('login.passwordPlaceholder')"
-            :prefix-icon="iconLock"
-            show-password
-            type="password"
-            @keyup.enter="getCode()"
-          />
-        </el-form-item>
-      </el-col>
-      <el-col
-        :span="24"
-        style="padding-right: 10px; padding-left: 10px; margin-top: -20px; margin-bottom: -20px"
+  <div class="flex">
+    <div class="left-bg">
+      <img src="@/assets/imgs/logo-bg-card.png" alt="" />
+      <div class="left-bg-title">
+        <div>80度原创设计平台</div>
+        <div>管理系统</div>
+      </div>
+    </div>
+    <div class="w-100 bg-white p-30px w-500px " style="margin: 18px -8px 25px;border-radius: 0 20px 20px 0;">
+      <el-form
+        v-show="getShow"
+        ref="formLogin"
+        :model="loginData.loginForm"
+        :rules="LoginRules"
+        class="login-form"
+        label-position="top"
+        label-width="120px"
+        size="large"
       >
-        <el-form-item>
-          <el-row justify="space-between" style="width: 100%">
-            <el-col :span="6">
-              <el-checkbox v-model="loginData.loginForm.rememberMe">
-                {{ t('login.remember') }}
-              </el-checkbox>
-            </el-col>
-            <el-col :offset="6" :span="12">
-<!--              <el-link-->
-<!--                style="float: right"-->
-<!--                type="primary"-->
-<!--                @click="setLoginState(LoginStateEnum.RESET_PASSWORD)"-->
-<!--              >-->
-<!--                {{ t('login.forgetPassword') }}-->
-<!--              </el-link>-->
-            </el-col>
-          </el-row>
-        </el-form-item>
-      </el-col>
-      <el-col :span="24" style="padding-right: 10px; padding-left: 10px">
-        <el-form-item>
-          <XButton
-            :loading="loginLoading"
-            :title="t('login.login')"
-            class="w-[100%]"
-            type="primary"
-            @click="getCode()"
+        <el-row style="margin-right: -10px; margin-left: -10px">
+          <el-col :span="24" style="padding-right: 10px; padding-left: 10px">
+            <el-form-item>
+              <LoginFormTitle style="width: 100%" />
+            </el-form-item>
+          </el-col>
+          <!--          <el-col :span="24" style="padding-right: 10px; padding-left: 10px">-->
+          <!--            <el-form-item v-if="loginData.tenantEnable === 'true'" prop="tenantName">-->
+          <!--              <el-input-->
+          <!--                v-model="loginData.loginForm.tenantName"-->
+          <!--                :placeholder="t('login.tenantNamePlaceholder')"-->
+          <!--                :prefix-icon="iconHouse"-->
+          <!--                link-->
+          <!--                type="primary"-->
+          <!--              />-->
+          <!--            </el-form-item>-->
+          <!--          </el-col>-->
+          <el-col :span="24" class="px-16px pb-20px">
+            <div class="input-title">
+              <icon icon="ep:user"  />
+              <div>用户名</div>
+            </div>
+            <el-form-item prop="username">
+              <el-input
+                v-model="loginData.loginForm.username"
+                :placeholder="t('login.usernamePlaceholder')"
+              />
+            </el-form-item>
+          </el-col>
+          <el-col :span="24" class="px-16px pb-20px">
+            <div class="input-title">
+              <icon icon="ep:lock" />
+              <div>密码</div>
+            </div>
+            <el-form-item prop="password">
+              <el-input
+                v-model="loginData.loginForm.password"
+                :placeholder="t('login.passwordPlaceholder')"
+                show-password
+                type="password"
+                @keyup.enter="getCode()"
+              />
+            </el-form-item>
+          </el-col>
+          <el-col
+            :span="24"
+            class="px-10px mb--20px mt-10px"
+          >
+            <el-form-item>
+              <el-row justify="space-between" style="width: 100%">
+                <el-col :span="6">
+                  <el-checkbox v-model="loginData.loginForm.rememberMe">
+                    {{ t('login.remember') }}
+                  </el-checkbox>
+                </el-col>
+                <el-col :offset="6" :span="12">
+                  <!--              <el-link-->
+                  <!--                style="float: right"-->
+                  <!--                type="primary"-->
+                  <!--                @click="setLoginState(LoginStateEnum.RESET_PASSWORD)"-->
+                  <!--              >-->
+                  <!--                {{ t('login.forgetPassword') }}-->
+                  <!--              </el-link>-->
+                </el-col>
+              </el-row>
+            </el-form-item>
+          </el-col>
+          <el-col :span="24" class="px-10px ">
+            <el-form-item>
+              <XButton
+                round
+                size="large"
+                :loading="loginLoading"
+                :title="t('login.login')"
+                class="w-[100%]"
+                type="primary"
+                @click="getCode()"
+              />
+            </el-form-item>
+          </el-col>
+          <Verify
+            v-if="loginData.captchaEnable === 'true'"
+            ref="verify"
+            :captchaType="captchaType"
+            :imgSize="{ width: '400px', height: '200px' }"
+            mode="pop"
+            @success="handleLogin"
           />
-        </el-form-item>
-      </el-col>
-      <Verify
-        v-if="loginData.captchaEnable === 'true'"
-        ref="verify"
-        :captchaType="captchaType"
-        :imgSize="{ width: '400px', height: '200px' }"
-        mode="pop"
-        @success="handleLogin"
-      />
-<!--      <el-col :span="24" style="padding-right: 10px; padding-left: 10px">-->
-<!--        <el-form-item>-->
-<!--          <el-row :gutter="5" justify="space-between" style="width: 100%">-->
-<!--            <el-col :span="8">-->
-<!--              <XButton-->
-<!--                :title="t('login.btnMobile')"-->
-<!--                class="w-[100%]"-->
-<!--                @click="setLoginState(LoginStateEnum.MOBILE)"-->
-<!--              />-->
-<!--            </el-col>-->
-<!--            <el-col :span="8">-->
-<!--              <XButton-->
-<!--                :title="t('login.btnQRCode')"-->
-<!--                class="w-[100%]"-->
-<!--                @click="setLoginState(LoginStateEnum.QR_CODE)"-->
-<!--              />-->
-<!--            </el-col>-->
-<!--            <el-col :span="8">-->
-<!--              <XButton-->
-<!--                :title="t('login.btnRegister')"-->
-<!--                class="w-[100%]"-->
-<!--                @click="setLoginState(LoginStateEnum.REGISTER)"-->
-<!--              />-->
-<!--            </el-col>-->
-<!--          </el-row>-->
-<!--        </el-form-item>-->
-<!--      </el-col>-->
-<!--      <el-divider content-position="center" >{{ t('login.otherLogin') }}</el-divider>-->
-<!--      <el-col :span="24" style="padding-right: 10px; padding-left: 10px">-->
-<!--        <el-form-item>-->
-<!--          <div class="w-[100%] flex justify-between">-->
-<!--            <Icon-->
-<!--              v-for="(item, key) in socialList"-->
-<!--              :key="key"-->
-<!--              :icon="item.icon"-->
-<!--              :size="30"-->
-<!--              class="anticon cursor-pointer"-->
-<!--              color="#999"-->
-<!--              @click="doSocialLogin(item.type)"-->
-<!--            />-->
-<!--          </div>-->
-<!--        </el-form-item>-->
-<!--      </el-col>-->
-    </el-row>
-  </el-form>
+          <!--      <el-col :span="24" style="padding-right: 10px; padding-left: 10px">-->
+          <!--        <el-form-item>-->
+          <!--          <el-row :gutter="5" justify="space-between" style="width: 100%">-->
+          <!--            <el-col :span="8">-->
+          <!--              <XButton-->
+          <!--                :title="t('login.btnMobile')"-->
+          <!--                class="w-[100%]"-->
+          <!--                @click="setLoginState(LoginStateEnum.MOBILE)"-->
+          <!--              />-->
+          <!--            </el-col>-->
+          <!--            <el-col :span="8">-->
+          <!--              <XButton-->
+          <!--                :title="t('login.btnQRCode')"-->
+          <!--                class="w-[100%]"-->
+          <!--                @click="setLoginState(LoginStateEnum.QR_CODE)"-->
+          <!--              />-->
+          <!--            </el-col>-->
+          <!--            <el-col :span="8">-->
+          <!--              <XButton-->
+          <!--                :title="t('login.btnRegister')"-->
+          <!--                class="w-[100%]"-->
+          <!--                @click="setLoginState(LoginStateEnum.REGISTER)"-->
+          <!--              />-->
+          <!--            </el-col>-->
+          <!--          </el-row>-->
+          <!--        </el-form-item>-->
+          <!--      </el-col>-->
+          <!--      <el-divider content-position="center" >{{ t('login.otherLogin') }}</el-divider>-->
+          <!--      <el-col :span="24" style="padding-right: 10px; padding-left: 10px">-->
+          <!--        <el-form-item>-->
+          <!--          <div class="w-[100%] flex justify-between">-->
+          <!--            <Icon-->
+          <!--              v-for="(item, key) in socialList"-->
+          <!--              :key="key"-->
+          <!--              :icon="item.icon"-->
+          <!--              :size="30"-->
+          <!--              class="anticon cursor-pointer"-->
+          <!--              color="#999"-->
+          <!--              @click="doSocialLogin(item.type)"-->
+          <!--            />-->
+          <!--          </div>-->
+          <!--        </el-form-item>-->
+          <!--      </el-col>-->
+        </el-row>
+      </el-form>
+    </div>
+  </div>
 </template>
 <script lang="ts" setup>
 import { ElLoading } from 'element-plus'
@@ -146,7 +165,6 @@ import * as authUtil from '@/utils/auth'
 import { usePermissionStore } from '@/store/modules/permission'
 import * as LoginApi from '@/api/login'
 import { LoginStateEnum, useFormValid, useLoginState } from './useLogin'
-
 defineOptions({ name: 'LoginForm' })
 
 const { t } = useI18n()
@@ -343,4 +361,39 @@ onMounted(() => {
     cursor: pointer;
   }
 }
+
+.input-title {
+  display: flex;
+  margin-bottom: 10px;
+  margin-left: 5px;
+  font-family: 'PingFang SC';
+  font-size: 14px;
+  font-weight: 400;
+  color: #222;
+  align-items: center;
+  gap: 5px;
+}
+
+:deep(.el-input__wrapper){
+  height: 46px;
+  border-radius: 10px;
+}
+
+.left-bg{
+  position: relative;
+
+  .left-bg-title{
+    position: absolute;
+    top: 80px;
+    left: 70px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-family: 'PingFang SC';
+    font-size: 36px;
+    font-weight: bold;
+    color: #FFF;
+  }
+}
+
 </style>

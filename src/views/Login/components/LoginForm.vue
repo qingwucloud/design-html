@@ -186,7 +186,22 @@ const getShow = computed(() => unref(getLoginState) === LoginStateEnum.LOGIN)
 
 const LoginRules = {
   tenantName: [required],
-  username: [required],
+  username: [
+    //自定义校验，为 只能为'admin' 或者手机号格式
+    {
+      validator: (rule: any, value: string, callback: any) => {
+        if (!value) {
+          callback(new Error('请输入用户名'))
+        } else if (value=== 'admin') {
+          callback()
+        } else if (!/^(?:(?:\+|00)86)?1(?:3[\d]|4[5-79]|5[0-35-9]|6[5-7]|7[0-8]|8[\d]|9[189])\d{8}$/.test(value)) {
+          callback(new Error('用户名为手机号格式'))
+        } else {
+          callback()
+        }
+      },
+      trigger: 'blur'
+    }],
   password: [required]
 }
 const loginData = reactive({

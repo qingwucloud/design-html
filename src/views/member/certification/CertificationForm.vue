@@ -170,20 +170,20 @@
     </template>
   </Dialog>
   <Dialog title="履历" v-model="dialogResumesVisible" width="1080px">
-    <el-form ref="formRef" :model="formData.resumes" label-width="120px">
+    <el-form disabled ref="formRef" :model="formData.resumes" label-width="120px">
       <div v-for="resume in formData.resumes" :key="resume.id" class="mb-20px">
         <el-form-item label="公司名称" prop="companyName">
-          <el-input disabled v-model="resume.companyName" />
+          <el-input v-model="resume.companyName" />
         </el-form-item>
         <el-row>
           <el-col :span="12">
             <el-form-item label="职位名称" prop="job">
-              <el-input disabled v-model="resume.job" />
+              <el-input v-model="resume.job" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="开始日期" prop="job">
-              <el-input disabled :value="dayjs(Number(resume.startTime)).format('YYYY-MM-DD')" />
+              <el-input :value="dayjs(Number(resume.startTime)).format('YYYY-MM-DD')" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -191,7 +191,6 @@
           <el-col :span="12">
             <el-form-item label="结束日期" prop="job">
               <el-input
-                disabled
                 :value="
                   resume.endTime ? dayjs(Number(resume.endTime)).format('YYYY-MM-DD') : '至今'
                 "
@@ -200,7 +199,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="岗位职责" prop="remark">
-              <el-input disabled v-model="resume.remark" type="textarea" autosize />
+              <el-input v-model="resume.remark" type="textarea" autosize />
             </el-form-item>
           </el-col>
         </el-row>

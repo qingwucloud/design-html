@@ -169,7 +169,7 @@
           >
             审核
           </el-button>
-          <el-button link type="primary"  v-hasPermi="['member:certification:detail']">
+          <el-button @click="openDetail(scope.row.userId)" link type="primary"  v-hasPermi="['member:certification:detail']">
             详情
           </el-button>
           <el-button
@@ -265,7 +265,10 @@ const formRef = ref()
 const openForm = (id?: number) => {
   formRef.value.open(id)
 }
-
+const { push } = useRouter()
+const openDetail = (id: number) => {
+  push({ name: 'MemberDesignerDetail', params: { id } })
+}
 /** 排序按钮操作 */
 const sortOfActions = async (row) => {
   ElMessageBox.prompt('排序值最大的8个会显示在小程序首页', '请输入排序值', {

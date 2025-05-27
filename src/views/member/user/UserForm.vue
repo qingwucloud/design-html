@@ -58,15 +58,15 @@
           :render-after-expand="true"
         />
       </el-form-item>
-      <el-form-item label="用户标签" prop="tagIds">
-        <MemberTagSelect width="100%" v-model="formData.tagIds" show-add />
-      </el-form-item>
-      <el-form-item label="用户分组" prop="groupId">
-        <MemberGroupSelect class="w-full!" v-model="formData.groupId" />
-      </el-form-item>
-      <el-form-item label="会员备注" prop="mark">
-        <el-input type="textarea" v-model="formData.mark" placeholder="请输入会员备注" />
-      </el-form-item>
+<!--      <el-form-item label="用户标签" prop="tagIds">-->
+<!--        <MemberTagSelect width="100%" v-model="formData.tagIds" show-add />-->
+<!--      </el-form-item>-->
+<!--      <el-form-item label="用户分组" prop="groupId">-->
+<!--        <MemberGroupSelect class="w-full!" v-model="formData.groupId" />-->
+<!--      </el-form-item>-->
+<!--      <el-form-item label="会员备注" prop="mark">-->
+<!--        <el-input type="textarea" v-model="formData.mark" placeholder="请输入会员备注" />-->
+<!--      </el-form-item>-->
     </el-form>
     <template #footer>
       <el-button @click="submitForm" type="primary" :disabled="formLoading">确 定</el-button>

@@ -1,58 +1,74 @@
 <template>
-  <el-descriptions :class="{ 'kefu-descriptions': column === 1 }" :column="column">
+  <el-descriptions :column="column">
     <el-descriptions-item>
       <template #label>
-        <descriptions-item-label icon="svg-icon:member_level" label=" 等级 " />
+        <descriptions-item-label icon="svg-icon:member_level" label=" 姓名" />
       </template>
-      {{ user.levelName || '无' }}
+      {{ designerInfo.cardName }}
     </el-descriptions-item>
-<!--    <el-descriptions-item>-->
-<!--      <template #label>-->
-<!--        <descriptions-item-label icon="ep:suitcase" label=" 成长值 " />-->
-<!--      </template>-->
-<!--      {{ user.experience || 0 }}-->
-<!--    </el-descriptions-item>-->
-<!--    <el-descriptions-item>-->
-<!--      <template #label>-->
-<!--        <descriptions-item-label icon="ep:coin" label=" 当前积分 " />-->
-<!--      </template>-->
-<!--      {{ user.point || 0 }}-->
-<!--    </el-descriptions-item>-->
-<!--    <el-descriptions-item>-->
-<!--      <template #label>-->
-<!--        <descriptions-item-label icon="ep:coin" label=" 总积分 " />-->
-<!--      </template>-->
-<!--      {{ user.totalPoint || 0 }}-->
-<!--    </el-descriptions-item>-->
-    <el-descriptions-item>
+    <el-descriptions-item span="2">
       <template #label>
-        <descriptions-item-label icon="svg-icon:member_balance" label=" 当前余额 " />
+        <descriptions-item-label icon="svg-icon:member_level" label=" 号码 " />
       </template>
-      {{ fenToYuan(wallet.balance || 0) }}
+      {{ designerInfo.cardNo }}
     </el-descriptions-item>
-<!--    <el-descriptions-item>-->
-<!--      <template #label>-->
-<!--        <descriptions-item-label icon="svg-icon:member_expenditure_balance" label=" 支出金额 " />-->
-<!--      </template>-->
-<!--      {{ fenToYuan(wallet.totalExpense || 0) }}-->
-<!--    </el-descriptions-item>-->
-<!--    <el-descriptions-item>-->
-<!--      <template #label>-->
-<!--        <descriptions-item-label icon="svg-icon:member_recharge_balance" label=" 充值金额 " />-->
-<!--      </template>-->
-<!--      {{ fenToYuan(wallet.totalRecharge || 0) }}-->
-<!--    </el-descriptions-item>-->
+
+    <el-descriptions-item >
+      <template #label>
+        <descriptions-item-label icon="svg-icon:member_level" label=" 国徽面 " />
+      </template>
+      <el-image
+        disabled
+        class="w-60px h-70px mr-10px"
+        :src="designerInfo.cardImgFront"
+        :preview-src-list="[designerInfo.cardImgFront]"
+        show-progress
+        fit="cover"
+      />
+    </el-descriptions-item>
+    <el-descriptions-item >
+      <template #label>
+        <descriptions-item-label icon="svg-icon:member_level" label=" 人像面 " />
+      </template>
+      <el-image
+        disabled
+        class="w-60px h-70px mr-10px"
+        :src="designerInfo.cardImgBack"
+        :preview-src-list="[designerInfo.cardImgBack]"
+        show-progress
+        fit="cover"
+      />
+    </el-descriptions-item>
+    <el-descriptions-item span="3">
+      <template #label>
+        <descriptions-item-label icon="svg-icon:member_level" label=" 地址 " />
+      </template>
+      {{ designerInfo.cardAddr }}
+    </el-descriptions-item>
+    <el-descriptions-item span="3">
+      <template #label>
+        <descriptions-item-label icon="svg-icon:member_level" label=" 签发机关 " />
+      </template>
+      {{ designerInfo.cardOrgan }}
+    </el-descriptions-item>
+    <el-descriptions-item span="3">
+      <template #label>
+        <descriptions-item-label icon="svg-icon:member_level" label=" 有效期 " />
+      </template>
+      {{ dayjs(Number(designerInfo.startTime)).format('YYYY-MM-DD') }} -
+      {{ designerInfo.endTime ? dayjs(Number(designerInfo.endTime)).format('YYYY-MM-DD') : '至今' }}
+    </el-descriptions-item>
+
   </el-descriptions>
 </template>
 <script lang="ts" setup>
 import { DescriptionsItemLabel } from '@/components/Descriptions'
 import * as UserApi from '@/api/member/user'
-import * as WalletApi from '@/api/pay/wallet/balance'
-import { fenToYuan } from '@/utils'
+import dayjs from 'dayjs'
 
-withDefaults(defineProps<{ user: UserApi.UserVO; wallet: WalletApi.WalletVO; column?: number }>(), {
+withDefaults(defineProps<{ user: UserApi.UserVO; designerInfo: any; column?: number }>(), {
   column: 2
-}) // 用户信息
+})
 </script>
 <style lang="scss" scoped>
 .cell-item {
@@ -63,22 +79,7 @@ withDefaults(defineProps<{ user: UserApi.UserVO; wallet: WalletApi.WalletVO; col
   content: ':';
 }
 
-.kefu-descriptions {
-  ::v-deep(.el-descriptions__cell) {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    .el-descriptions__label {
-      display: block;
-      width: 120px;
-      text-align: left;
-    }
-
-    .el-descriptions__content {
-      flex: 1;
-      text-align: end;
-    }
-  }
+:deep(.el-descriptions__label) {
+  vertical-align: top;
 }
 </style>

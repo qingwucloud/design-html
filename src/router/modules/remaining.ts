@@ -444,6 +444,16 @@ const remainingRouter: AppRouteRecordRaw[] = [
           hidden: true
         },
         component: () => import('@/views/member/user/detail/index.vue')
+      },
+      {
+        path: 'designer/detail/:id',
+        name: 'MemberDesignerDetail',
+        meta: {
+          title: '设计师详情',
+          noCache: true,
+          hidden: true
+        },
+        component: () => import('@/views/member/certification/detail/index.vue')
       }
     ]
   },

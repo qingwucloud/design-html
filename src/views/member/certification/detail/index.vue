@@ -3,24 +3,39 @@
     <el-row :gutter="10">
       <!-- 左上角：基本信息 -->
       <el-col :span="14" class="detail-info-item">
-        <UserBasicInfo :user="user">
-          <template #header>
-            <div class="card-header">
-              <CardTitle title="基本信息" />
-              <el-button size="small" text type="primary" @click="openForm('update')">
-                编辑
-              </el-button>
-            </div>
-          </template>
-        </UserBasicInfo>
+         <el-row :gutter="10">
+           <el-col>
+             <UserBasicInfo :user="user">
+               <template #header>
+                 <div class="card-header">
+                   <CardTitle title="基本信息" />
+                 </div>
+               </template>
+             </UserBasicInfo>
+           </el-col>
+           <el-col class="mt-20px">
+             <el-card class="h-full " shadow="never">
+               <template #header>
+                 <CardTitle title="身份证信息" />
+               </template>
+               <UserAccountInfo :user="user" :designerInfo="designerInfo" />
+             </el-card>
+           </el-col>
+         </el-row>
       </el-col>
       <!-- 右上角：账户信息 -->
       <el-col :span="10" class="detail-info-item">
-        <el-card class="h-full" shadow="never">
+        <el-card class="h-full mb-10" shadow="never">
           <template #header>
-            <CardTitle title="账户信息" />
+            <CardTitle title="设计师信息" />
           </template>
-          <UserAccountInfo :user="user" :wallet="wallet" />
+          <DesignerAccountInfo :designerInfo="designerInfo" class="detail-info-item">
+            <template #header>
+              <div class="card-header">
+                <CardTitle title="设计信息" />
+              </div>
+            </template>
+          </DesignerAccountInfo>
         </el-card>
       </el-col>
       <!-- 下边：账户明细 -->
@@ -69,6 +84,8 @@ import UserAfterSaleList from './UserAftersaleList.vue'
 import UserBalanceList from './UserBalanceList.vue'
 import { CardTitle } from '@/components/Card/index'
 import { ElMessage } from 'element-plus'
+import { CertificationApi } from '@/api/member/certification'
+import DesignerAccountInfo from '@/views/member/certification/detail/DesignerAccountInfo.vue'
 
 defineOptions({ name: 'MemberDetail' })
 
@@ -80,12 +97,18 @@ const formRef = ref()
 const openForm = (type: string) => {
   formRef.value.open(type, id)
 }
-
+const designerInfo = ref({})
 /** 获得用户 */
 const getUserData = async (id: number) => {
   loading.value = true
   try {
     user.value = await UserApi.getUser(id)
+    let data = await CertificationApi.getCertification(id)
+    designerInfo.value = {
+      ...data,
+      certificates: data.certificates?.split(',') || [],
+      designerStyleType: data.designerStyleType?.split(',').map((item) => Number(item)) || []
+    }
   } finally {
     loading.value = false
   }

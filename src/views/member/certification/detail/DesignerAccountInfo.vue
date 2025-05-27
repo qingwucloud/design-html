@@ -2,38 +2,38 @@
   <el-descriptions :column="column">
     <el-descriptions-item>
       <template #label>
-        <descriptions-item-label icon="svg-icon:member_level" label=" 工作经验" />
+        <descriptions-item-label label=" 工作经验" />
       </template>
       {{ designerInfo.workExperience }} 年
     </el-descriptions-item>
     <el-descriptions-item>
       <template #label>
-        <descriptions-item-label icon="svg-icon:member_level" label=" 设计师等级 " />
+        <descriptions-item-label label=" 设计师等级 " />
       </template>
       <DictTag :type="DICT_TYPE.DESIGNER_GRADE_TYPE" :value="designerInfo.designerGradeType" />
     </el-descriptions-item>
     <el-descriptions-item>
       <template #label>
-        <descriptions-item-label icon="svg-icon:member_level" label=" 擅长风格" />
+        <descriptions-item-label label=" 擅长风格" />
       </template>
       <DictTag :type="DICT_TYPE.DESIGNER_STYLE_TYPE" :value="designerInfo.designerStyleType" />
     </el-descriptions-item>
     <el-descriptions-item span="3">
       <template #label>
-        <descriptions-item-label icon="svg-icon:member_level" label=" 联系地址 " />
+        <descriptions-item-label label=" 联系地址 " />
       </template>
       {{ designerInfo.address }}
     </el-descriptions-item>
 
     <el-descriptions-item span="3">
       <template #label>
-        <descriptions-item-label icon="svg-icon:member_level" label=" 个人简介" />
+        <descriptions-item-label label=" 个人简介" />
       </template>
       {{ designerInfo.profile }}
     </el-descriptions-item>
     <el-descriptions-item span="2">
       <template #label>
-        <descriptions-item-label icon="svg-icon:member_level" label=" 证书 " />
+        <descriptions-item-label label=" 证书 " />
       </template>
       <div class="inline-block">
         <el-image
@@ -50,7 +50,7 @@
     </el-descriptions-item>
     <el-descriptions-item span="3">
       <template #label>
-        <descriptions-item-label icon="svg-icon:member_level" label=" 工作履历" />
+        <descriptions-item-label label=" 工作履历" />
       </template>
       <el-button type="primary" text @click="dialogResumesVisible = true">查看履历</el-button>
     </el-descriptions-item>

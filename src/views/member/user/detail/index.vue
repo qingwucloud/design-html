@@ -2,7 +2,7 @@
   <div v-loading="loading">
     <el-row :gutter="10">
       <!-- 左上角：基本信息 -->
-      <el-col :span="14" class="detail-info-item">
+      <el-col :span="24" class="detail-info-item">
         <UserBasicInfo :user="user">
           <template #header>
             <div class="card-header">
@@ -15,14 +15,14 @@
         </UserBasicInfo>
       </el-col>
       <!-- 右上角：账户信息 -->
-      <el-col :span="10" class="detail-info-item">
-        <el-card class="h-full" shadow="never">
-          <template #header>
-            <CardTitle title="账户信息" />
-          </template>
-          <UserAccountInfo :user="user" :wallet="wallet" />
-        </el-card>
-      </el-col>
+<!--      <el-col :span="10" class="detail-info-item">-->
+<!--        <el-card class="h-full" shadow="never">-->
+<!--          <template #header>-->
+<!--            <CardTitle title="账户信息" />-->
+<!--          </template>-->
+<!--          <UserAccountInfo :user="user" :wallet="wallet" />-->
+<!--        </el-card>-->
+<!--      </el-col>-->
       <!-- 下边：账户明细 -->
       <!-- TODO 芋艿：【订单管理】【售后管理】【收藏记录】-->
       <el-card header="账户明细" shadow="never" style="width: 100%; margin-top: 20px">

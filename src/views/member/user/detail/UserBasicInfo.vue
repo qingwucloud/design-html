@@ -11,55 +11,55 @@
         <el-descriptions :column="2">
           <el-descriptions-item>
             <template #label>
-              <descriptions-item-label icon="ep:user" label="用户名" />
+              <descriptions-item-label label="用户名" />
             </template>
             {{ user.name || '空' }}
           </el-descriptions-item>
           <el-descriptions-item>
             <template #label>
-              <descriptions-item-label icon="ep:user" label="昵称" />
+              <descriptions-item-label label="昵称" />
             </template>
             {{ user.nickname }}
           </el-descriptions-item>
           <el-descriptions-item label="手机号">
             <template #label>
-              <descriptions-item-label icon="ep:phone" label="手机号" />
+              <descriptions-item-label label="手机号" />
             </template>
             {{ user.mobile }}
           </el-descriptions-item>
           <el-descriptions-item>
             <template #label>
-              <descriptions-item-label icon="fa:mars-double" label="性别" />
+              <descriptions-item-label label="性别" />
             </template>
             <dict-tag :type="DICT_TYPE.SYSTEM_USER_SEX" :value="user.sex" />
           </el-descriptions-item>
           <el-descriptions-item>
             <template #label>
-              <descriptions-item-label icon="ep:location" label="所在地" />
+              <descriptions-item-label label="所在地" />
             </template>
             {{ user.areaName }}
           </el-descriptions-item>
           <el-descriptions-item>
             <template #label>
-              <descriptions-item-label icon="ep:position" label="注册 IP" />
+              <descriptions-item-label label="注册 IP" />
             </template>
             {{ user.registerIp }}
           </el-descriptions-item>
           <el-descriptions-item>
             <template #label>
-              <descriptions-item-label icon="fa:birthday-cake" label="生日" />
+              <descriptions-item-label label="生日" />
             </template>
             {{ user.birthday ? formatDate(user.birthday as any) : '空' }}
           </el-descriptions-item>
           <el-descriptions-item>
             <template #label>
-              <descriptions-item-label icon="ep:calendar" label="注册时间" />
+              <descriptions-item-label label="注册时间" />
             </template>
             {{ user.createTime ? formatDate(user.createTime as any) : '空' }}
           </el-descriptions-item>
           <el-descriptions-item>
             <template #label>
-              <descriptions-item-label icon="ep:calendar" label="最后登录时间" />
+              <descriptions-item-label label="最后登录时间" />
             </template>
             {{ user.loginDate ? formatDate(user.loginDate as any) : '空' }}
           </el-descriptions-item>
@@ -151,8 +151,8 @@ withDefaults(defineProps<{ user: UserApi.UserVO; mode?: string }>(), {
     justify-content: space-between;
 
     .el-descriptions__label {
-      width: 120px;
       display: block;
+      width: 120px;
       text-align: left;
     }
 

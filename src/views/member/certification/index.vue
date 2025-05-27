@@ -155,12 +155,7 @@
         :formatter="dateFormatter"
         width="180px"
       />
-      <el-table-column label="排序号" align="center" prop="startSort">
-        <template #default="scope">
-          <el-tag v-if="scope.row.orderStatus === 1" type="success" size="small">开启</el-tag>
-          <el-tag v-else type="danger" size="small">关闭</el-tag>
-        </template>
-      </el-table-column>
+      <el-table-column label="排序号" align="center" prop="startSort"/>
 
       <el-table-column label="审核人" align="center" prop="checker" />
       <el-table-column label="操作" align="center" min-width="120px">
@@ -168,7 +163,7 @@
           <el-button
             link
             type="danger"
-            @click="openForm(scope.row.id)"
+            @click="openForm(scope.row.userId)"
             v-if="scope.row.certStatus !== 1"
             v-hasPermi="['member:certification:check']"
           >
@@ -182,7 +177,7 @@
             link
             type="success"
             v-if="scope.row.certStatus === 1"
-            @click="sortOfActions(scope.row.id)"
+            @click="sortOfActions(scope.row)"
           >
             星选排序
           </el-button>
@@ -272,16 +267,17 @@ const openForm = (id?: number) => {
 }
 
 /** 排序按钮操作 */
-const sortOfActions = async (id: number) => {
+const sortOfActions = async (row) => {
   ElMessageBox.prompt('排序值最大的8个会显示在小程序首页', '请输入排序值', {
     inputPattern: /^[1-9]\d*$/,
     inputType: 'number',
+    inputValue:row.startSort,
     inputErrorMessage: '请输入排序值'
   })
     .then(async ({ value }) => {
       await CertificationApi.recommendCertification({
         startSort: value,
-        id
+        id:row.id
       })
       message.success('排序成功')
       resetQuery()

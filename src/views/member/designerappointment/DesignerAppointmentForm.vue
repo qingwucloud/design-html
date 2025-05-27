@@ -7,19 +7,19 @@
       label-width="150px"
       v-loading="formLoading"
     >
-      <el-form-item label="客户手机号：" prop="userMobile" >
+      <el-form-item label="客户手机号" prop="userMobile" >
         <el-input v-model="formData.userMobile"  disabled placeholder="" />
       </el-form-item>
-      <el-form-item label="预约设计师姓名：" prop="designerId" >
+      <el-form-item label="预约设计师姓名" prop="designerId" >
         <el-input v-model="formData.designerName" disabled placeholder="" />
       </el-form-item>
-      <el-form-item label="预约设计师电话：" prop="designerId" >
+      <el-form-item label="预约设计师电话" prop="designerId" >
         <el-input v-model="formData.designerMobile" disabled placeholder="" />
       </el-form-item>
-      <el-form-item label="客户备注：" prop="memberRemark">
+      <el-form-item label="客户备注" prop="memberRemark">
         <el-input v-model="formData.memberRemark" disabled placeholder="请输入客户备注" />
       </el-form-item>
-      <el-form-item label="指派设计师：" prop="assignedDesignerId">
+      <el-form-item label="指派设计师" prop="assignedDesignerId">
         <el-select
           v-model="formData.assignedDesignerId"
           filterable
@@ -51,7 +51,7 @@ const message = useMessage() // 消息弹窗
 
 const dialogVisible = ref(false) // 弹窗的是否展示
 
-const formLoading = ref(false) // 表单的加载中：1）修改时的数据加载；2）提交的按钮禁用
+const formLoading = ref(false) // 表单的加载中1）修改时的数据加载；2）提交的按钮禁用
 const formData = ref({
   userMobile:'',
   designerName:'',

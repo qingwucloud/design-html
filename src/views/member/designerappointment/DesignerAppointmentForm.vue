@@ -4,19 +4,22 @@
       ref="formRef"
       :model="formData"
       :rules="formRules"
-      label-width="100px"
+      label-width="150px"
       v-loading="formLoading"
     >
-      <el-form-item label="客户手机号" prop="userId">
-        <el-input v-model="formData.userId" placeholder="" />
+      <el-form-item label="客户手机号：" prop="userMobile" >
+        <el-input v-model="formData.userMobile"  disabled placeholder="" />
       </el-form-item>
-      <el-form-item label="预约设计师姓名" prop="designerId">
-        <el-input v-model="formData.designerId" placeholder="" />
+      <el-form-item label="预约设计师姓名：" prop="designerId" >
+        <el-input v-model="formData.designerName" disabled placeholder="" />
       </el-form-item>
-      <el-form-item label="客户备注" prop="memberRemark">
-        <el-input v-model="formData.memberRemark" placeholder="请输入客户备注" />
+      <el-form-item label="预约设计师电话：" prop="designerId" >
+        <el-input v-model="formData.designerMobile" disabled placeholder="" />
       </el-form-item>
-      <el-form-item label="指派设计师" prop="assignedDesignerId">
+      <el-form-item label="客户备注：" prop="memberRemark">
+        <el-input v-model="formData.memberRemark" disabled placeholder="请输入客户备注" />
+      </el-form-item>
+      <el-form-item label="指派设计师：" prop="assignedDesignerId">
         <el-select
           v-model="formData.assignedDesignerId"
           filterable
@@ -24,9 +27,9 @@
         >
           <el-option
             v-for="item in designerList"
-            :key="item.id"
-            :label="item.cardName"
-            :value="item.id"
+            :key="item.userId"
+            :label="item.name +'-'+ item.mobile"
+            :value="item.userId"
           />
         </el-select>
       </el-form-item>
@@ -37,10 +40,10 @@
     </template>
   </Dialog>
 </template>
-<script setup lang="ts">
+<script setup>
 import { DesignerAppointmentApi } from '@/api/member/designerappointment'
-import { CertificationApi } from "@/api/member/certification";
 import { cloneDeep } from "lodash-es";
+import { CertificationApi } from "@/api/member/certification";
 defineOptions({ name: 'DesignerAppointmentForm' })
 
 const { t } = useI18n() // 国际化
@@ -49,22 +52,28 @@ const message = useMessage() // 消息弹窗
 const dialogVisible = ref(false) // 弹窗的是否展示
 
 const formLoading = ref(false) // 表单的加载中：1）修改时的数据加载；2）提交的按钮禁用
-const formData = ref<any>({})
+const formData = ref({
+  userMobile:'',
+  designerName:'',
+  designerMobile:'',
+  memberRemark:'',
+  assignedDesignerId: null,
+
+})
 const formRules = reactive({})
 const formRef = ref() // 表单 Ref
 //设计师列表
 const designerList = ref([]) // 设计师列表
 
-const open = async (item:any) => {
+const open = async (item) => {
   dialogVisible.value = true
   formLoading.value = true
+  let data=await CertificationApi.getAllDesignerUserPage()
+  designerList.value = data
+  if (!item.assignedDesignerId){
+    item.assignedDesignerId=item.designerId
+  }
   formData.value = cloneDeep(item)
-  let {data}=await CertificationApi.getCertificationPage({
-    pageNo: 1,
-    pageSize: 999,
-    certStatus: 1
-  })
-  designerList.value = data.list
   formLoading.value = false
 }
 defineExpose({ open })
@@ -82,7 +91,6 @@ const submitForm = async () => {
       designerId: formData.value.assignedDesignerId,
     })
     message.success('指派成功')
-    message.success(t('common.createSuccess'))
     dialogVisible.value = false
     // 发送操作成功的事件
     emit('success')

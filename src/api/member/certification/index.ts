@@ -43,4 +43,8 @@ export const CertificationApi = {
     return await request.get({ url: `/member/certification/get?userId=` + id })
   },
 
+  // 获取所有设计师
+  getAllDesignerUserPage: async () => {
+    return await request.get({ url: `/member/certification/getDesignerAllList` })
+  },
 }

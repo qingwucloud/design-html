@@ -6,7 +6,7 @@
       :model="queryParams"
       ref="queryFormRef"
       :inline="true"
-      label-width="88px"
+      label-width="110px"
     >
       <el-form-item label="客户手机号" prop="userId">
         <el-input
@@ -59,10 +59,10 @@
           start-placeholder="开始日期"
           end-placeholder="结束日期"
           :default-time="[new Date('1 00:00:00'), new Date('1 23:59:59')]"
-          class="!w-220px"
+          class="!w-240px"
         />
       </el-form-item>
-      <el-form-item label="审核时间" prop="checkTime">
+      <el-form-item label="指派时间" prop="checkTime">
         <el-date-picker
           v-model="queryParams.checkTime"
           value-format="YYYY-MM-DD HH:mm:ss"
@@ -70,7 +70,7 @@
           start-placeholder="开始日期"
           end-placeholder="结束日期"
           :default-time="[new Date('1 00:00:00'), new Date('1 23:59:59')]"
-          class="!w-220px"
+          class="!w-240px"
         />
       </el-form-item>
       <el-form-item>
@@ -85,10 +85,10 @@
     <el-table v-loading="loading" :data="list" :stripe="true" :show-overflow-tooltip="true">
       <el-table-column label="编号" align="center" prop="id" />
       <el-table-column label="客户手机号" align="center" prop="userMobile" />
-      <el-table-column label="预约设计师名称" align="center" prop="designerName" />
-      <el-table-column label="预约设计师电话" align="center" prop="designerMobile" />
-      <el-table-column label="指派设计师名称" align="center" prop="assignedDesignerName" />
-      <el-table-column label="指派设计师电话" align="center" prop="assignedDesignerMobile" />
+      <el-table-column label="预约设计师" align="center" prop="designerName" />
+      <el-table-column label="预约设计师电话" align="center" prop="designerMobile"  width="150"/>
+      <el-table-column label="指派设计师" align="center" prop="assignedDesignerName" />
+      <el-table-column label="指派设计师电话" align="center" prop="assignedDesignerMobile"  width="150"/>
       <el-table-column label="预约状态" align="center" prop="designerAppointmentStatus" >
         <template #default="{row}">
           <DictTag :type="DICT_TYPE.DESIGNER_APPOINTMENT_STATUS" :value="row.designerAppointmentStatus" />
@@ -104,15 +104,15 @@
         width="180px"
       />
       <el-table-column
-        label="审核时间"
+        label="指派时间"
         align="center"
-        prop="chenkTime"
+        prop="checkTime"
         :formatter="dateFormatter"
         width="180px"
       />
       <el-table-column label="操作" align="center" min-width="120px">
-        <template #default="scope">
-          <el-button link type="primary" @click="openForm(scope.row)" v-hasPermi="['member:designer-appointment:assigned']">
+        <template #default="{row}">
+          <el-button v-if="[0,1].includes(row.designerAppointmentStatus)" link type="primary" @click="openForm(row)" v-hasPermi="['member:designer-appointment:assigned']">
             指派
           </el-button>
         </template>
@@ -152,7 +152,8 @@ const queryParams = reactive({
   portfolioId: undefined,
   memberRemark: undefined,
   checker: undefined,
-  createTime: []
+  createTime: [],
+  checkTime:[]
 })
 const queryFormRef = ref() // 搜索的表单
 
@@ -183,7 +184,7 @@ const resetQuery = () => {
 /** 添加/修改操作 */
 const formRef = ref()
 const openForm = (data) => {
-  formRef.value.open( id)
+  formRef.value.open( data)
 }
 
 /** 初始化 **/

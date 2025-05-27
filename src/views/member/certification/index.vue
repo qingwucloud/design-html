@@ -151,7 +151,7 @@
       <el-table-column
         label="审核时间"
         align="center"
-        prop="chenkTime"
+        prop="checkTime"
         :formatter="dateFormatter"
         width="180px"
       />

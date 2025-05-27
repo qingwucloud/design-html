@@ -124,7 +124,7 @@ const formRules = reactive({
   area: [{ required: true, message: '面积(㎡)不能为空', trigger: 'blur' }],
   portfolioTagType: [{ required: true, message: '作品标签类型(逗号分隔)不能为空', trigger: 'change' }],
   designerStyleType: [{ required: true, message: '作品风格类型(逗号分隔)不能为空', trigger: 'change' }],
-  content: [{ required: true, message: '富文本内容不能为空', trigger: 'blur' }]
+  content: [{ required: true, message: '内容不能为空', trigger: 'blur' }]
 })
 const formRef = ref() // 表单 Ref
 

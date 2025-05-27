@@ -122,15 +122,6 @@
         >
           <Icon icon="ep:plus" class="mr-5px" /> 新增
         </el-button>
-        <el-button
-          type="success"
-          plain
-          @click="handleExport"
-          :loading="exportLoading"
-          v-hasPermi="['member:portfolio:export']"
-        >
-          <Icon icon="ep:download" class="mr-5px" /> 导出
-        </el-button>
       </el-form-item>
     </el-form>
   </ContentWrap>
@@ -138,13 +129,22 @@
   <!-- 列表 -->
   <ContentWrap>
     <el-table v-loading="loading" :data="list" :stripe="true" :show-overflow-tooltip="true">
-      <el-table-column label="作品集ID" align="center" prop="id" fixed />
+      <el-table-column label="编号" align="center" prop="id" fixed />
       <el-table-column label="作品标题" align="center" prop="title" fixed/>
-<!--      <el-table-column label="用户ID" align="center" prop="userId" />-->
+      <el-table-column label="用户手机号" align="center" prop="userId" />
       <el-table-column label="小区名称" align="center" prop="communityName" fixed/>
       <el-table-column label="总造价金额" align="center" prop="totalMoney" width="120" fixed/>
       <el-table-column label="审核状态 " align="center" prop="status" fixed />
-      <el-table-column label="主图" align="center" prop="coverUrl" width="120"/>
+      <el-table-column label="主图" align="center" prop="coverUrl" width="120">
+        <template #default="scope">
+          <el-image
+            :src="scope.row.coverUrl"
+            style="width: 80px; height: 60px"
+            fit="cover"
+            :preview-src-list="[scope.row.coverUrl]"
+          />
+        </template>
+      </el-table-column>
       <el-table-column label="户型字典" align="center" prop="portfolioHouseType" />
       <el-table-column label="面积(㎡)" align="center" prop="area" />
       <el-table-column label="作品标签" align="center" prop="portfolioTagType" />
@@ -152,7 +152,6 @@
       <el-table-column label="内容" align="center" prop="content" />
       <el-table-column label="浏览量" align="center" prop="viewCount" />
       <el-table-column label="点赞量" align="center" prop="likeCount" />
-      <el-table-column label="优先级排序" align="center" prop="sortNum" width="120"/>
       <el-table-column label="审核人" align="center" prop="checker" />
       <el-table-column
         label="创建时间"
@@ -173,11 +172,19 @@
           </el-button>
           <el-button
             link
-            type="danger"
-            @click="handleDelete(scope.row.id)"
-            v-hasPermi="['member:portfolio:delete']"
+            type="primary"
+            @click="openForm('update', scope.row.id)"
+            v-hasPermi="['member:portfolio:check']"
           >
-            删除
+            审核
+          </el-button>
+          <el-button
+            link
+            type="danger"
+            @click="handleSort(scope.row.id)"
+            v-hasPermi="['member:portfolio:recommend']"
+          >
+            精选排序
           </el-button>
         </template>
       </el-table-column>
@@ -197,7 +204,6 @@
 
 <script setup lang="ts">
 import { dateFormatter } from '@/utils/formatTime'
-import download from '@/utils/download'
 import { PortfolioApi, PortfolioVO } from '@/api/member/portfolio'
 import PortfolioForm from './PortfolioForm.vue'
 import { getIntDictOptions,DICT_TYPE } from "@/utils/dict";
@@ -262,6 +268,9 @@ const resetQuery = () => {
   handleQuery()
 }
 
+const handleSort = () => {
+
+}
 /** 添加/修改操作 */
 const formRef = ref()
 const openForm = (type: string, id?: number) => {
@@ -279,21 +288,6 @@ const handleDelete = async (id: number) => {
     // 刷新列表
     await getList()
   } catch {}
-}
-
-/** 导出按钮操作 */
-const handleExport = async () => {
-  try {
-    // 导出的二次确认
-    await message.exportConfirm()
-    // 发起导出
-    exportLoading.value = true
-    const data = await PortfolioApi.exportPortfolio(queryParams)
-    download.excel(data, '设计师作品集.xls')
-  } catch {
-  } finally {
-    exportLoading.value = false
-  }
 }
 
 /** 初始化 **/

@@ -23,28 +23,24 @@ export const CertificationApi = {
     return await request.get({ url: `/member/certification/page`, params })
   },
 
-  // 查询设计师认证详情
+  // 用户查看设计师主页简介
+  getCertificationView: async (id: number) => {
+    return await request.get({ url: `/member/certification/views?userId=` + id })
+  },
+
+  // 审核设计师信息
+  checkCertification: async (data: any) => {
+    return await request.post({ url: `/member/certification/check`, data })
+  },
+
+  //设置明星设计师排序
+  recommendCertification: async (data: any) => {
+    return await request.post({ url: `/member/certification/recommend`, data })
+  },
+
+  // 获得设计师认证信息
   getCertification: async (id: number) => {
-    return await request.get({ url: `/member/certification/get?id=` + id })
+    return await request.get({ url: `/member/certification/get?userId=` + id })
   },
 
-  // 新增设计师认证
-  createCertification: async (data: CertificationVO) => {
-    return await request.post({ url: `/member/certification/create`, data })
-  },
-
-  // 修改设计师认证
-  updateCertification: async (data: CertificationVO) => {
-    return await request.put({ url: `/member/certification/update`, data })
-  },
-
-  // 删除设计师认证
-  deleteCertification: async (id: number) => {
-    return await request.delete({ url: `/member/certification/delete?id=` + id })
-  },
-
-  // 导出设计师认证 Excel
-  exportCertification: async (params) => {
-    return await request.download({ url: `/member/certification/export-excel`, params })
-  }
 }

@@ -8,28 +8,29 @@
       :inline="true"
       label-width="88px"
     >
-      <el-form-item label="用户ID" prop="userId">
+      <el-form-item label="客户手机号" prop="userId">
         <el-input
           v-model="queryParams.userId"
-          placeholder="请输入用户ID"
+          placeholder="请输入客户手机号"
           clearable
+          type="number"
           @keyup.enter="handleQuery"
           class="!w-240px"
         />
       </el-form-item>
-      <el-form-item label="预约设计师" prop="designerId">
+      <el-form-item label="设计师名称" prop="designerId">
         <el-input
           v-model="queryParams.designerId"
-          placeholder="请输入预约设计师ID"
+          placeholder="请输入设计师名称"
           clearable
           @keyup.enter="handleQuery"
           class="!w-240px"
         />
       </el-form-item>
-      <el-form-item label="指派设计师" prop="assignedDesignerId">
+      <el-form-item label="指派设计师名称" prop="assignedDesignerId">
         <el-input
           v-model="queryParams.assignedDesignerId"
-          placeholder="请输入运营指派设计师ID"
+          placeholder="请输入指派设计师名称"
           clearable
           @keyup.enter="handleQuery"
           class="!w-240px"
@@ -50,15 +51,6 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="作品集ID" prop="portfolioId">
-        <el-input
-          v-model="queryParams.portfolioId"
-          placeholder="请输入关联作品集ID"
-          clearable
-          @keyup.enter="handleQuery"
-          class="!w-240px"
-        />
-      </el-form-item>
       <el-form-item label="创建时间" prop="createTime">
         <el-date-picker
           v-model="queryParams.createTime"
@@ -70,26 +62,20 @@
           class="!w-220px"
         />
       </el-form-item>
+      <el-form-item label="审核时间" prop="checkTime">
+        <el-date-picker
+          v-model="queryParams.checkTime"
+          value-format="YYYY-MM-DD HH:mm:ss"
+          type="daterange"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+          :default-time="[new Date('1 00:00:00'), new Date('1 23:59:59')]"
+          class="!w-220px"
+        />
+      </el-form-item>
       <el-form-item>
         <el-button @click="handleQuery"><Icon icon="ep:search" class="mr-5px" /> 搜索</el-button>
         <el-button @click="resetQuery"><Icon icon="ep:refresh" class="mr-5px" /> 重置</el-button>
-        <el-button
-          type="primary"
-          plain
-          @click="openForm('create')"
-          v-hasPermi="['member:designer-appointment:create']"
-        >
-          <Icon icon="ep:plus" class="mr-5px" /> 新增
-        </el-button>
-        <el-button
-          type="success"
-          plain
-          @click="handleExport"
-          :loading="exportLoading"
-          v-hasPermi="['member:designer-appointment:export']"
-        >
-          <Icon icon="ep:download" class="mr-5px" /> 导出
-        </el-button>
       </el-form-item>
     </el-form>
   </ContentWrap>
@@ -97,14 +83,19 @@
   <!-- 列表 -->
   <ContentWrap>
     <el-table v-loading="loading" :data="list" :stripe="true" :show-overflow-tooltip="true">
-      <el-table-column label="唯一主键" align="center" prop="id" />
-      <el-table-column label="用户ID" align="center" prop="userId" />
-      <el-table-column label="预约设计师ID" align="center" prop="designerId" />
-      <el-table-column label="指派设计师ID" align="center" prop="assignedDesignerId" />
-      <el-table-column label="预约状态" align="center" prop="designerAppointmentStatus" />
-      <el-table-column label="作品集ID" align="center" prop="portfolioId" />
+      <el-table-column label="编号" align="center" prop="id" />
+      <el-table-column label="客户手机号" align="center" prop="userMobile" />
+      <el-table-column label="预约设计师名称" align="center" prop="designerName" />
+      <el-table-column label="预约设计师电话" align="center" prop="designerMobile" />
+      <el-table-column label="指派设计师名称" align="center" prop="assignedDesignerName" />
+      <el-table-column label="指派设计师电话" align="center" prop="assignedDesignerMobile" />
+      <el-table-column label="预约状态" align="center" prop="designerAppointmentStatus" >
+        <template #default="{row}">
+          <DictTag :type="DICT_TYPE.DESIGNER_APPOINTMENT_STATUS" :value="row.designerAppointmentStatus" />
+        </template>
+      </el-table-column>
       <el-table-column label="备注" align="center" prop="memberRemark" />
-      <el-table-column label="运营指派者" align="center" prop="checker" />
+      <el-table-column label="审核人" align="center" prop="checker" />
       <el-table-column
         label="创建时间"
         align="center"
@@ -112,23 +103,17 @@
         :formatter="dateFormatter"
         width="180px"
       />
+      <el-table-column
+        label="审核时间"
+        align="center"
+        prop="chenkTime"
+        :formatter="dateFormatter"
+        width="180px"
+      />
       <el-table-column label="操作" align="center" min-width="120px">
         <template #default="scope">
-          <el-button
-            link
-            type="primary"
-            @click="openForm('update', scope.row.id)"
-            v-hasPermi="['member:designer-appointment:update']"
-          >
-            编辑
-          </el-button>
-          <el-button
-            link
-            type="danger"
-            @click="handleDelete(scope.row.id)"
-            v-hasPermi="['member:designer-appointment:delete']"
-          >
-            删除
+          <el-button link type="primary" @click="openForm(scope.row)" v-hasPermi="['member:designer-appointment:assigned']">
+            指派
           </el-button>
         </template>
       </el-table-column>
@@ -148,17 +133,12 @@
 
 <script setup lang="ts">
 import { dateFormatter } from '@/utils/formatTime'
-import download from '@/utils/download'
 import { DesignerAppointmentApi, DesignerAppointmentVO } from '@/api/member/designerappointment'
 import DesignerAppointmentForm from './DesignerAppointmentForm.vue'
 import { getIntDictOptions,DICT_TYPE } from "@/utils/dict";
 
-/** 用户预约设计师 列表 */
+/** 客户预约设计师 列表 */
 defineOptions({ name: 'DesignerAppointment' })
-
-const message = useMessage() // 消息弹窗
-const { t } = useI18n() // 国际化
-
 const loading = ref(true) // 列表的加载中
 const list = ref<DesignerAppointmentVO[]>([]) // 列表的数据
 const total = ref(0) // 列表的总页数
@@ -175,7 +155,6 @@ const queryParams = reactive({
   createTime: []
 })
 const queryFormRef = ref() // 搜索的表单
-const exportLoading = ref(false) // 导出的加载中
 
 /** 查询列表 */
 const getList = async () => {
@@ -203,36 +182,8 @@ const resetQuery = () => {
 
 /** 添加/修改操作 */
 const formRef = ref()
-const openForm = (type: string, id?: number) => {
-  formRef.value.open(type, id)
-}
-
-/** 删除按钮操作 */
-const handleDelete = async (id: number) => {
-  try {
-    // 删除的二次确认
-    await message.delConfirm()
-    // 发起删除
-    await DesignerAppointmentApi.deleteDesignerAppointment(id)
-    message.success(t('common.delSuccess'))
-    // 刷新列表
-    await getList()
-  } catch {}
-}
-
-/** 导出按钮操作 */
-const handleExport = async () => {
-  try {
-    // 导出的二次确认
-    await message.exportConfirm()
-    // 发起导出
-    exportLoading.value = true
-    const data = await DesignerAppointmentApi.exportDesignerAppointment(queryParams)
-    download.excel(data, '用户预约设计师.xls')
-  } catch {
-  } finally {
-    exportLoading.value = false
-  }
+const openForm = (data) => {
+  formRef.value.open( id)
 }
 
 /** 初始化 **/

@@ -31,52 +31,52 @@ export type AppNodeConfigRes = {
   /**
    * 工作成果要求
    */
-  deliverableRequirements?: string;
+  deliverableRequirements?: string
   /**
    * 设计师可结算比例
    */
-  designerSettlementRatio: number;
+  designerSettlementRatio: number
   /**
    * 节点所有文件Ids
    */
-  fileIds: string;
+  fileIds: string
   /**
    * 节点ID
    */
-  id: number;
+  id: number
   /**
    * 节点状态是否完成 0否1是
    */
-  isComplete: number;
+  isComplete: number
   /**
    * 上传工作成果照片 0否1是
    */
-  needRequirements: number;
+  needRequirements: number
   /**
    * 节点说明
    */
-  nodeDescription?: string;
+  nodeDescription?: string
   /**
    * 节点图标标识
    */
-  nodeIcon?: string;
+  nodeIcon?: string
   /**
    * 节点名称
    */
-  nodeName: string;
+  nodeName: string
   /**
    * 是否可付款(0否 1是)
    */
-  payable: number;
+  payable: number
   /**
    * 节点排序
    */
-  sortOrder: number;
+  sortOrder: number
   /**
    * 用户可付款比例
    */
-  userPaymentRatio: number;
-  [property: string]: any;
+  userPaymentRatio: number
+  [property: string]: any
 }
 
 // 用户合同 API
@@ -94,6 +94,11 @@ export const ContractApi = {
   // 查询用户合同详情
   getContract: async (id: number) => {
     return await request.get({ url: `/member/contract/get?id=` + id })
+  },
+
+  // 获得合同工作成果列表
+  getWorkFilePage: async (params: any) => {
+    return await request.get({ url: `/member/work-file/page`, params })
   },
 
   // 审核合同

@@ -158,6 +158,14 @@
                     <span class="info-label">工作成果要求:</span>
                     <span class="info-value">{{ node.deliverableRequirements || '暂无要求' }}</span>
                   </div>
+                  <div class="info-item">
+                    <span class="info-label">用户付款比例:</span>
+                    <span class="info-value">{{ node.userPaymentRatio }}%</span>
+                  </div>
+                  <div class="info-item">
+                    <span class="info-label">设计师结算比例:</span>
+                    <span class="info-value">{{ node.designerSettlementRatio }}%</span>
+                  </div>
                 </div>
               </div>
 

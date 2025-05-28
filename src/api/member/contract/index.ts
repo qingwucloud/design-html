@@ -105,7 +105,7 @@ export const ContractApi = {
 
   // 获得合同工作成果列表
   getWorkFilePage: async (params: any) => {
-    return await request.get({ url: `/member/work-file/page`, params })
+    return await request.get({ url: `/member/work-file/list`, params })
   },
 
   // 审核合同

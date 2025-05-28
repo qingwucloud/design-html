@@ -13,10 +13,22 @@
                 {{ contractData?.contractNo || '' }}
               </el-descriptions-item>
               <el-descriptions-item label="合同状态">
-                <DictTag
-                  :type="DICT_TYPE.MEMBER_CONTRACT_STATUS"
-                  :value="contractData?.memberContractStatus"
-                />
+                <div class="contract-status-container">
+                  <DictTag
+                    :type="DICT_TYPE.MEMBER_CONTRACT_STATUS"
+                    :value="contractData?.memberContractStatus"
+                  />
+                  <el-tooltip
+                    v-if="contractData?.memberContractStatus === 2"
+                    :content="contractData.rejectReason"
+                    placement="top"
+                    effect="dark"
+                  >
+                    <el-icon class="reject-reason-icon">
+                      <InfoFilled />
+                    </el-icon>
+                  </el-tooltip>
+                </div>
               </el-descriptions-item>
               <el-descriptions-item label="审核人">
                 {{ contractData?.checker || '' }}
@@ -279,7 +291,7 @@ import { CardTitle } from '@/components/Card'
 import { AppNodeConfigRes, ContractApi } from '@/api/member/contract'
 import { DICT_TYPE } from '@/utils/dict'
 import { formatDate } from '@/utils/formatTime'
-import { Check, Download, ArrowDown, Document } from '@element-plus/icons-vue'
+import { Check, Download, ArrowDown, Document, InfoFilled } from '@element-plus/icons-vue'
 
 defineOptions({ name: 'MemberDetail' })
 const loading = ref(false) // 加载中
@@ -583,6 +595,23 @@ const parseAttachments = (url) => {
 
     &.remaining {
       color: #e6a23c;
+    }
+  }
+
+  .contract-status-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    .reject-reason-icon {
+      font-size: 16px;
+      color: #f56c6c;
+      cursor: pointer;
+      transition: color 0.3s ease;
+
+      &:hover {
+        color: #f54747;
+      }
     }
   }
 

@@ -34,7 +34,7 @@ export const ContractApi = {
 
   // 获得合同节点列表
   getContractNodeList: async (id: number) => {
-    return await request.get({ url: `/member/contract/nodeList?id=` + id  })
+    return await request.get({ url: `/member/contract/nodeList?id=` + id })
   },
 
   // 查询用户合同详情
@@ -45,7 +45,7 @@ export const ContractApi = {
   // 审核合同
   checkContract: async (data: ContractVO) => {
     return await request.post({ url: `/member/contract/check`, data })
-  },
+  }
 
   // 新增用户合同
   // createContract: async (data: ContractVO) => {

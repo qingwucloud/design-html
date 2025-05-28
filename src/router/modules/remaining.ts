@@ -456,7 +456,7 @@ const remainingRouter: AppRouteRecordRaw[] = [
         component: () => import('@/views/member/certification/detail/index.vue')
       },
       {
-        path: 'contract/detail/:id',
+        path: 'contract/detail/:type/:id',
         name: 'MemberContractDetail',
         meta: {
           title: '合同详情',

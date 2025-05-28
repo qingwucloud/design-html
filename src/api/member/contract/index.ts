@@ -24,6 +24,13 @@ export interface ContractVO {
   endTime: Date // 合同结束时间
   memberContractConfirmStatus: number // 设计合同用户确认状态 见dict_type
 }
+
+// 合同审核 VO
+export interface ContractCheckVO {
+  id: number // 合同ID
+  memberContractStatus: number // 合同审核状态见dict
+  rejectReason?: string // 驳回原因
+}
 /**
  * AppNodeConfigRespVO，用户 APP - 合同节点配置 Response VO
  */
@@ -102,7 +109,7 @@ export const ContractApi = {
   },
 
   // 审核合同
-  checkContract: async (data: ContractVO) => {
+  checkContract: async (data: ContractCheckVO) => {
     return await request.post({ url: `/member/contract/check`, data })
   }
 

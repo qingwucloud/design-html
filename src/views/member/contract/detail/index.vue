@@ -1,6 +1,6 @@
 <template>
   <div v-loading="loading" class="flex gap-20px flex-col">
-    <el-card :body-style="{ paddingTop: '0',paddingBottom:0 }" class="contract-card">
+    <el-card :body-style="{ paddingTop: '0', paddingBottom: 0 }" class="contract-card">
       <el-collapse v-model="activeNames">
         <el-collapse-item name="info">
           <template #title>
@@ -98,7 +98,8 @@
         </el-collapse-item>
       </el-collapse>
     </el-card>
-    <el-card>
+    <!-- 非审核模式：显示节点信息 -->
+    <el-card v-if="!isCheckMode">
       <CardTitle title="节点信息" />
 
       <!-- 进度节点显示 -->
@@ -222,6 +223,47 @@
         </div>
       </div>
     </el-card>
+
+    <!-- 审核模式：显示审核表单 -->
+    <el-card v-if="isCheckMode">
+      <CardTitle title="合同审核" />
+      <el-form
+        ref="checkFormRef"
+        :model="checkFormData"
+        :rules="checkFormRules"
+        label-width="100px"
+        class="check-form"
+      >
+        <el-form-item label="审核状态" prop="memberContractStatus">
+          <el-radio-group v-model="checkFormData.memberContractStatus">
+            <el-radio :label="1">通过</el-radio>
+            <el-radio :label="2">驳回</el-radio>
+          </el-radio-group>
+        </el-form-item>
+
+        <el-form-item
+          v-if="checkFormData.memberContractStatus === 2"
+          label="驳回原因"
+          prop="rejectReason"
+        >
+          <el-input
+            v-model="checkFormData.rejectReason"
+            type="textarea"
+            :rows="3"
+            placeholder="请输入驳回原因"
+            maxlength="200"
+            show-word-limit
+          />
+        </el-form-item>
+
+        <el-form-item>
+          <el-button type="primary" @click="handleSubmitCheck" :loading="loading">
+            提交审核
+          </el-button>
+          <el-button @click="handleCancel">取消</el-button>
+        </el-form-item>
+      </el-form>
+    </el-card>
   </div>
 </template>
 <script setup lang="ts">
@@ -229,11 +271,10 @@ import { CardTitle } from '@/components/Card'
 import { AppNodeConfigRes, ContractApi } from '@/api/member/contract'
 import { DICT_TYPE } from '@/utils/dict'
 import { formatDate } from '@/utils/formatTime'
-import { Check, Download, ArrowDown } from '@element-plus/icons-vue'
+import { Check, Download, ArrowDown, Document } from '@element-plus/icons-vue'
 
 defineOptions({ name: 'MemberDetail' })
 const loading = ref(false) // 加载中
-const activeNames = ref('')
 const route = useRoute()
 const contractData = ref()
 const imageAttachments = ref<string[]>([])
@@ -243,6 +284,39 @@ const currentActiveNodeId = ref<number>() // 当前选中的节点ID
 const currentFileList = ref<any[]>([]) // 当前节点的工作成果列表
 const expandedNodeId = ref<number>() // 当前展开的节点ID
 const nodeFileMap = ref<Map<number, any[]>>(new Map()) // 存储每个节点的文件列表
+
+// 判断是否为审核模式
+const isCheckMode = computed(() => route.params.type === 'check')
+
+// 控制合同信息展开状态
+const activeNames = ref('')
+
+// 审核表单数据
+const checkFormRef = ref()
+const checkFormData = ref({
+  id: 0,
+  memberContractStatus: 1, // 默认通过
+  rejectReason: ''
+})
+
+// 审核表单规则
+const checkFormRules = {
+  memberContractStatus: [{ required: true, message: '请选择审核状态', trigger: 'change' }],
+  rejectReason: [
+    {
+      required: true,
+      message: '请输入驳回原因',
+      trigger: 'blur',
+      validator: (_rule: any, value: string, callback: any) => {
+        if (checkFormData.value.memberContractStatus === 2 && (!value || value.trim() === '')) {
+          callback(new Error('驳回时必须填写驳回原因'))
+        } else {
+          callback()
+        }
+      }
+    }
+  ]
+}
 
 // 判断是否为当前进行中的节点（最近的未完成节点）
 const isCurrentNode = (node: AppNodeConfigRes, index: number) => {
@@ -377,19 +451,51 @@ onMounted(async () => {
   const contractId = Number(route.params.id)
   contractData.value = await ContractApi.getContract(contractId)
   parseAttachments(contractData.value.attachmentUrl)
-  contractNodeList.value = await ContractApi.getContractNodeList(contractId)
 
-  // 自动选中第一个节点或当前进行中的节点
-  if (contractNodeList.value.length > 0) {
-    // 找到当前进行中的节点
-    const currentNodeIndex = contractNodeList.value.findIndex((node, index) =>
-      isCurrentNode(node, index)
-    )
-    const targetNode =
-      currentNodeIndex >= 0 ? contractNodeList.value[currentNodeIndex] : contractNodeList.value[0]
-    await handleNodeClick(targetNode)
+  // 审核模式下设置合同ID和默认展开合同信息
+  if (isCheckMode.value) {
+    checkFormData.value.id = contractId
+    activeNames.value = 'info' // 审核模式下默认展开合同信息
+  } else {
+    // 非审核模式才加载节点信息
+    contractNodeList.value = await ContractApi.getContractNodeList(contractId)
+
+    // 自动选中第一个节点或当前进行中的节点
+    if (contractNodeList.value.length > 0) {
+      // 找到当前进行中的节点
+      const currentNodeIndex = contractNodeList.value.findIndex((node, index) =>
+        isCurrentNode(node, index)
+      )
+      const targetNode =
+        currentNodeIndex >= 0 ? contractNodeList.value[currentNodeIndex] : contractNodeList.value[0]
+      await handleNodeClick(targetNode)
+    }
   }
 })
+
+// 处理审核提交
+const handleSubmitCheck = async () => {
+  try {
+    await checkFormRef.value?.validate()
+    loading.value = true
+
+    await ContractApi.checkContract(checkFormData.value)
+    ElMessage.success('审核提交成功')
+
+    // 返回上一页或关闭页面
+    window.history.back()
+  } catch (error) {
+    console.error('审核提交失败:', error)
+    ElMessage.error('审核提交失败')
+  } finally {
+    loading.value = false
+  }
+}
+
+// 处理取消
+const handleCancel = () => {
+  window.history.back()
+}
 
 // 打开PDF文件
 const openPdf = (url: string) => {
@@ -770,5 +876,37 @@ const parseAttachments = (url) => {
 .file-actions {
   display: flex;
   gap: 8px;
+}
+
+/* 审核表单样式 */
+.check-form {
+  max-width: 600px;
+  padding: 20px 0;
+
+  .el-form-item {
+    margin-bottom: 24px;
+
+    .el-radio-group {
+      .el-radio {
+        margin-right: 24px;
+
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+    }
+  }
+
+  .el-textarea {
+    .el-textarea__inner {
+      resize: vertical;
+    }
+  }
+
+  .el-button {
+    &:not(:last-child) {
+      margin-right: 12px;
+    }
+  }
 }
 </style>

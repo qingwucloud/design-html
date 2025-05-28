@@ -122,18 +122,24 @@
       <el-table-column label="客户电话" align="center" prop="customerMobile" width="100" fixed />
       <el-table-column label="设计师姓名" align="center" prop="designerName" width="100" fixed />
       <el-table-column label="设计师电话" align="center" prop="designerMobile" width="100" fixed />
-      <el-table-column label="合同状态" align="center" prop="memberContractStatus" width="100" fixed>
+      <el-table-column
+        label="合同状态"
+        align="center"
+        prop="memberContractStatus"
+        width="100"
+        fixed
+      >
         <template #default="{ row }">
           <DictTag :type="DICT_TYPE.MEMBER_CONTRACT_STATUS" :value="row.memberContractStatus" />
         </template>
       </el-table-column>
-      <el-table-column label="工程地址" align="center" prop="projectAddress" width="150"/>
-      <el-table-column label="合同总金额" align="center" prop="totalAmount" width="100" >
+      <el-table-column label="工程地址" align="center" prop="projectAddress" width="150" />
+      <el-table-column label="合同总金额" align="center" prop="totalAmount" width="100">
         <template #default="{ row }">
           <span>{{ row.totalAmount }} 元</span>
         </template>
       </el-table-column>
-      <el-table-column label="已支付金额" align="center" prop="paidAmount" width="100" >
+      <el-table-column label="已支付金额" align="center" prop="paidAmount" width="100">
         <template #default="{ row }">
           <span>{{ row.paidAmount }} 元</span>
         </template>
@@ -153,6 +159,7 @@
           <el-button
             link
             type="danger"
+            v-if="scope.row.memberContractStatus === 0"
             @click="handleDetail('check', scope.row.id)"
             v-hasPermi="['member:contract:check']"
           >
@@ -161,7 +168,8 @@
           <el-button
             link
             type="primary"
-            @click="handleDetail('detail',scope.row.id)"
+            v-if="scope.row.memberContractStatus !== 0"
+            @click="handleDetail('detail', scope.row.id)"
             v-hasPermi="['member:contract:detail']"
           >
             详情
@@ -182,7 +190,6 @@
 <script setup lang="ts">
 import { dateFormatter } from '@/utils/formatTime'
 import { ContractApi, ContractVO } from '@/api/member/contract'
-import ContractForm from './ContractForm.vue'
 import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
 
 /** 用户合同 列表 */

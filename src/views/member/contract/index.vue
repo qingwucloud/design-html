@@ -122,14 +122,22 @@
       <el-table-column label="客户电话" align="center" prop="customerMobile" width="100" fixed />
       <el-table-column label="设计师姓名" align="center" prop="designerName" width="100" fixed />
       <el-table-column label="设计师电话" align="center" prop="designerMobile" width="100" fixed />
-      <el-table-column label="合同状态" align="center" prop="memberContractStatus" fixed>
+      <el-table-column label="合同状态" align="center" prop="memberContractStatus" width="100" fixed>
         <template #default="{ row }">
           <DictTag :type="DICT_TYPE.MEMBER_CONTRACT_STATUS" :value="row.memberContractStatus" />
         </template>
       </el-table-column>
-      <el-table-column label="工程地址" align="center" prop="projectAddress" />
-      <el-table-column label="合同总金额" align="center" prop="totalAmount" width="100" />
-      <el-table-column label="已支付金额" align="center" prop="paidAmount" width="100" />
+      <el-table-column label="工程地址" align="center" prop="projectAddress" width="150"/>
+      <el-table-column label="合同总金额" align="center" prop="totalAmount" width="100" >
+        <template #default="{ row }">
+          <span>{{ row.totalAmount }} 元</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="已支付金额" align="center" prop="paidAmount" width="100" >
+        <template #default="{ row }">
+          <span>{{ row.paidAmount }} 元</span>
+        </template>
+      </el-table-column>
       <el-table-column label="审核时间" align="center" prop="checkTime" />
       <el-table-column label="审核人" align="center" prop="checker" />
       <el-table-column label="驳回原因" align="center" prop="rejectReason" />

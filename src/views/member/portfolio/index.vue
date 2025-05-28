@@ -44,6 +44,7 @@
         >
           <el-option label="未审核" value="0" />
           <el-option label="已审核" value="1" />
+          <el-option label="已驳回" value="2" />
         </el-select>
       </el-form-item>
       <el-form-item label="户型" prop="portfolioHouseType">
@@ -132,7 +133,7 @@
   <ContentWrap>
     <el-table v-loading="loading" :data="list" :stripe="true" :show-overflow-tooltip="true">
       <el-table-column label="编号" align="center" prop="id" fixed />
-      <el-table-column label="作品标题" align="center" prop="title" fixed/>
+      <el-table-column label="作品标题" align="center" prop="title" fixed width="150"/>
       <el-table-column label="设计师名称" align="center" prop="name" fixed width="100"/>
       <el-table-column label="小区名称" align="center" prop="communityName" fixed/>
       <el-table-column label="审核状态 " align="center" prop="status" fixed >

@@ -4,30 +4,30 @@
       <el-row>
         <el-col :span="12">
           <el-form-item label="设计师" prop="userId">
-           <div class="flex gap-20px">
-             <el-select
-               class="w-280px!"
-               disabled
-               v-model="formData.userId"
-               filterable
-               placeholder="请选择设计师"
-             >
-               <el-option
-                 v-for="item in designerList"
-                 :key="item.userId"
-                 :label="item.name + '-' + item.mobile"
-                 :value="item.userId"
-               />
-             </el-select>
-             <el-button
-               @click="openDetail(formData.userId)"
-               link
-               type="primary"
-               v-hasPermi="['member:certification:detail']"
-             >
-               设计师详情
-             </el-button>
-           </div>
+            <div class="flex gap-20px">
+              <el-select
+                class="w-280px!"
+                disabled
+                v-model="formData.userId"
+                filterable
+                placeholder="请选择设计师"
+              >
+                <el-option
+                  v-for="item in designerList"
+                  :key="item.userId"
+                  :label="item.name + '-' + item.mobile"
+                  :value="item.userId"
+                />
+              </el-select>
+              <el-button
+                @click="openDetail(formData.userId)"
+                link
+                type="primary"
+                v-hasPermi="['member:certification:detail']"
+              >
+                设计师详情
+              </el-button>
+            </div>
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -160,7 +160,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="驳回原因" prop="rejectReason">
+          <el-form-item label="驳回原因" prop="rejectReason" v-if="formType==='detail'">
             <el-input
               disabled
               v-model="formData.rejectReason"

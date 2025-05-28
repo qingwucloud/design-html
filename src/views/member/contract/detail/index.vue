@@ -111,92 +111,105 @@
             :class="[
               'node-item',
               {
-                active: currentActiveNodeId === node.id,
+                expanded: expandedNodeId === node.id,
                 completed: node.isComplete === 1,
                 current: isCurrentNode(node, index)
               }
             ]"
-            @click="selectNode(node)"
           >
-            <!-- 节点图标 -->
-            <div
-              class="node-icon"
-              :class="{ completed: node.isComplete === 1, current: isCurrentNode(node, index) }"
-            >
-              <el-icon v-if="node.isComplete === 1" color="#fff" size="14">
-                <Check />
-              </el-icon>
-              <span v-else class="node-number">{{ index + 1 }}</span>
-            </div>
-
-            <!-- 节点名称 -->
-            <div class="node-content">
-              <div class="node-name">{{ index + 1 }}. {{ node.nodeName }}</div>
-              <div v-if="node.isComplete === 1" class="node-status completed">已完成</div>
-              <div v-else-if="isCurrentNode(node, index)" class="node-status processing">
-                进行中
-              </div>
-              <div v-else class="node-status pending">未开始</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 当前选中节点的详细信息 -->
-        <div v-if="currentNode" class="node-detail">
-          <h4 class="detail-title">{{ currentNode.nodeName }}</h4>
-          <div class="detail-info">
-            <div class="info-item">
-              <span class="info-label">工作成果要求:</span>
-              <span class="info-value">{{
-                currentNode.deliverableRequirements || '暂无要求'
-              }}</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- 节点工作成果 -->
-        <div class="work-results">
-          <h4 class="results-title">节点成果</h4>
-          <div v-if="currentFileList.length > 0" class="file-list">
-            <div v-for="(item, index) in currentFileList" :key="index" class="file-item">
-              <!-- 图片预览区域 -->
-              <div v-if="isImageFile(item.fileUrl)" class="file-image-preview">
-                <el-image
-                  :src="item.fileUrl"
-                  :preview-src-list="getImageUrls()"
-                  class="work-image"
-                  fit="cover"
-                  :preview-teleported="true"
-                />
+            <!-- 节点头部 -->
+            <div class="node-header" @click="handleNodeClick(node)">
+              <!-- 节点图标 -->
+              <div
+                class="node-icon"
+                :class="{ completed: node.isComplete === 1, current: isCurrentNode(node, index) }"
+              >
+                <el-icon v-if="node.isComplete === 1" color="#fff" size="14">
+                  <Check />
+                </el-icon>
+                <span v-else class="node-number">{{ index + 1 }}</span>
               </div>
 
-              <!-- 文件信息区域 -->
-              <div class="file-info">
-                <div class="file-name">{{ item.fileName || `成果文件${index + 1}` }}</div>
-                <div class="file-meta">
-                  <span
-                    class="file-status"
-                    :class="{
-                      'status-pending': item.confirmStatus === 0,
-                      'status-approved': item.confirmStatus === 1,
-                      'status-rejected': item.confirmStatus === 2
-                    }"
-                  >
-                    {{ getFileStatusText(item.confirmStatus) }}
-                  </span>
+              <!-- 节点内容 -->
+              <div class="node-content">
+                <div class="node-name">{{ index + 1 }}. {{ node.nodeName }}</div>
+                <div v-if="node.isComplete === 1" class="node-status completed">已完成</div>
+                <div v-else-if="isCurrentNode(node, index)" class="node-status processing">
+                  进行中
+                </div>
+                <div v-else class="node-status pending">未开始</div>
+              </div>
+
+              <!-- 展开箭头 -->
+              <div class="expand-arrow" :class="{ expanded: expandedNodeId === node.id }">
+                <el-icon>
+                  <ArrowDown />
+                </el-icon>
+              </div>
+            </div>
+
+            <!-- 节点展开内容 -->
+            <div v-if="expandedNodeId === node.id" class="node-expanded-content">
+              <!-- 节点详细信息 -->
+              <div class="node-detail">
+                <div class="detail-info">
+                  <div class="info-item">
+                    <span class="info-label">工作成果要求:</span>
+                    <span class="info-value">{{ node.deliverableRequirements || '暂无要求' }}</span>
+                  </div>
                 </div>
               </div>
 
-              <!-- 操作按钮区域 -->
-              <div class="file-actions">
-                <el-button type="primary" link @click="downloadFile(item)">
-                  <el-icon><Download /></el-icon>
-                  下载
-                </el-button>
+              <!-- 工作成果 -->
+              <div class="work-results">
+                <h5 class="results-title">工作成果</h5>
+                <div v-if="currentFileList.length > 0" class="file-list">
+                  <div
+                    v-for="(item, fileIndex) in currentFileList"
+                    :key="fileIndex"
+                    class="file-item"
+                  >
+                    <!-- 图片预览区域 -->
+                    <div v-if="isImageFile(item.fileUrl)" class="file-image-preview">
+                      <el-image
+                        :src="item.fileUrl"
+                        :preview-src-list="getImageUrls()"
+                        class="work-image"
+                        fit="cover"
+                        :preview-teleported="true"
+                      />
+                    </div>
+
+                    <!-- 文件信息区域 -->
+                    <div class="file-info">
+                      <div class="file-name">{{ item.fileName || `成果文件${fileIndex + 1}` }}</div>
+                      <div class="file-meta">
+                        <span
+                          class="file-status"
+                          :class="{
+                            'status-pending': item.confirmStatus === 0,
+                            'status-approved': item.confirmStatus === 1,
+                            'status-rejected': item.confirmStatus === 2
+                          }"
+                        >
+                          {{ getFileStatusText(item.confirmStatus) }}
+                        </span>
+                      </div>
+                    </div>
+
+                    <!-- 操作按钮区域 -->
+                    <div class="file-actions">
+                      <el-button type="primary" link @click="downloadFile(item)">
+                        <el-icon><Download /></el-icon>
+                        下载
+                      </el-button>
+                    </div>
+                  </div>
+                </div>
+                <el-empty v-else description="暂无成果文件" :image-size="60" />
               </div>
             </div>
           </div>
-          <el-empty v-else description="暂无成果文件" />
         </div>
       </div>
     </el-card>
@@ -207,7 +220,7 @@ import { CardTitle } from '@/components/Card'
 import { AppNodeConfigRes, ContractApi } from '@/api/member/contract'
 import { DICT_TYPE } from '@/utils/dict'
 import { formatDate } from '@/utils/formatTime'
-import { Check, View, Download } from '@element-plus/icons-vue'
+import { Check, Download, ArrowDown } from '@element-plus/icons-vue'
 
 defineOptions({ name: 'MemberDetail' })
 const loading = ref(false) // 加载中
@@ -219,11 +232,8 @@ const pdfAttachments = ref<string[]>([])
 const contractNodeList = ref<AppNodeConfigRes[]>([])
 const currentActiveNodeId = ref<number>() // 当前选中的节点ID
 const currentFileList = ref<any[]>([]) // 当前节点的工作成果列表
-
-// 计算当前选中的节点
-const currentNode = computed(() => {
-  return contractNodeList.value.find((node) => node.id === currentActiveNodeId.value)
-})
+const expandedNodeId = ref<number>() // 当前展开的节点ID
+const nodeFileMap = ref<Map<number, any[]>>(new Map()) // 存储每个节点的文件列表
 
 // 判断是否为当前进行中的节点（最近的未完成节点）
 const isCurrentNode = (node: AppNodeConfigRes, index: number) => {
@@ -239,23 +249,41 @@ const isCurrentNode = (node: AppNodeConfigRes, index: number) => {
   return true
 }
 
-// 选择节点
-const selectNode = async (node: AppNodeConfigRes) => {
-  currentActiveNodeId.value = node.id
-  await loadWorkFiles(node.id)
+// 处理节点点击
+const handleNodeClick = async (node: AppNodeConfigRes) => {
+  if (expandedNodeId.value === node.id) {
+    // 如果点击的是已展开的节点，则收起
+    expandedNodeId.value = undefined
+    currentActiveNodeId.value = undefined
+    currentFileList.value = []
+  } else {
+    // 展开节点并加载文件
+    expandedNodeId.value = node.id
+    currentActiveNodeId.value = node.id
+    await loadNodeFiles(node.id)
+  }
 }
 
-// 加载工作文件
-const loadWorkFiles = async (nodeId: number) => {
+// 加载节点的工作成果
+const loadNodeFiles = async (nodeId: number) => {
   try {
+    // 检查是否已经缓存了该节点的文件
+    if (nodeFileMap.value.has(nodeId)) {
+      currentFileList.value = nodeFileMap.value.get(nodeId) || []
+      return
+    }
+
     const contractId = Number(route.params.id)
     const response = await ContractApi.getWorkFilePage({
       contractId: contractId,
       nodeId
     })
-    currentFileList.value = response.list || []
+    const files = response.list || []
+    // 缓存文件列表
+    nodeFileMap.value.set(nodeId, files)
+    currentFileList.value = files
   } catch (error) {
-    console.error('加载工作文件失败:', error)
+    console.error('加载工作成果失败:', error)
     currentFileList.value = []
   }
 }
@@ -287,13 +315,6 @@ const getFileStatusText = (status: number) => {
   }
 }
 
-// 预览文件
-const previewFile = (item: any) => {
-  if (item.fileUrl) {
-    window.open(item.fileUrl, '_blank')
-  }
-}
-
 // 下载文件
 const downloadFile = (item: any) => {
   if (item.fileUrl) {
@@ -320,7 +341,7 @@ onMounted(async () => {
     )
     const targetNode =
       currentNodeIndex >= 0 ? contractNodeList.value[currentNodeIndex] : contractNodeList.value[0]
-    await selectNode(targetNode)
+    await handleNodeClick(targetNode)
   }
 })
 
@@ -431,38 +452,49 @@ const parseAttachments = (url) => {
 }
 
 .node-list {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  flex-direction: column;
   gap: 16px;
   margin-bottom: 24px;
 }
 
 .node-item {
-  display: flex;
-  padding: 12px;
-  cursor: pointer;
-  background: #f8f9fa;
-  border: 2px solid transparent;
+  overflow: hidden;
+  background: #fafbfc;
+  border: 1px solid transparent;
   border-radius: 8px;
   transition: all 0.3s ease;
-  align-items: center;
 
   &:hover {
-    background: #e9ecef;
+    background: #f5f6f7;
+    border-color: #e4e6ea;
   }
 
-  &.active {
-    background: #e6f7ff;
-    border-color: #1890ff;
+  &.expanded {
+    background: #f0f9ff;
+    border-color: #93c5fd;
   }
 
   &.completed {
-    background: #f6ffed;
+    background: #f0fdf4;
+    border-color: #86efac;
   }
 
   &.current {
-    background: #fff7e6;
-    border-color: #faad14;
+    background: #fffbeb;
+    border-color: #fbbf24;
+  }
+}
+
+.node-header {
+  display: flex;
+  padding: 12px;
+  cursor: pointer;
+  align-items: center;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: rgb(0 0 0 / 1%);
   }
 }
 
@@ -472,20 +504,20 @@ const parseAttachments = (url) => {
   height: 28px;
   margin-right: 10px;
   font-weight: 500;
-  color: #666;
-  background: #d9d9d9;
+  color: #6b7280;
+  background: #e5e7eb;
   border-radius: 50%;
   align-items: center;
   justify-content: center;
 
   &.completed {
     color: #fff;
-    background: #52c41a;
+    background: #10b981;
   }
 
   &.current {
     color: #fff;
-    background: #faad14;
+    background: #f59e0b;
   }
 
   .node-number {
@@ -512,29 +544,45 @@ const parseAttachments = (url) => {
   border-radius: 12px;
 
   &.completed {
-    color: #52c41a;
-    background: #f6ffed;
-    border: 1px solid #b7eb8f;
+    color: #15803d;
+    background: #dcfce7;
+    border: 1px solid #bbf7d0;
   }
 
   &.processing {
-    color: #faad14;
-    background: #fff7e6;
-    border: 1px solid #ffd591;
+    color: #d97706;
+    background: #fef3c7;
+    border: 1px solid #fde68a;
   }
 
   &.pending {
-    color: #8c8c8c;
-    background: #f5f5f5;
-    border: 1px solid #d9d9d9;
+    color: #6b7280;
+    background: #f3f4f6;
+    border: 1px solid #e5e7eb;
   }
 }
 
+.expand-arrow {
+  margin-left: 8px;
+  color: #9ca3af;
+  transition: transform 0.3s ease;
+
+  &.expanded {
+    color: #6b7280;
+    transform: rotate(180deg);
+  }
+}
+
+.node-expanded-content {
+  padding: 0 12px 12px;
+  background: rgb(255 255 255 / 50%);
+  border-top: 1px solid #f1f3f4;
+}
+
 .node-detail {
-  padding: 20px;
-  margin-bottom: 24px;
-  background: #fafafa;
-  border-radius: 8px;
+  padding: 16px 0;
+  background: transparent;
+  border-radius: 0;
 }
 
 .detail-title {
@@ -561,14 +609,14 @@ const parseAttachments = (url) => {
 }
 
 .work-results {
-  margin-top: 24px;
-}
+  margin-top: 16px;
 
-.results-title {
-  margin: 0 0 16px;
-  font-size: 16px;
-  font-weight: 600;
-  color: #262626;
+  .results-title {
+    margin: 0 0 12px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #262626;
+  }
 }
 
 .file-list {
@@ -635,18 +683,18 @@ const parseAttachments = (url) => {
   border-radius: 4px;
 
   &.status-pending {
-    color: #faad14;
-    background: #fff7e6;
+    color: #92400e;
+    background: #fef3c7;
   }
 
   &.status-approved {
-    color: #52c41a;
-    background: #f6ffed;
+    color: #065f46;
+    background: #d1fae5;
   }
 
   &.status-rejected {
-    color: #ff4d4f;
-    background: #fff2f0;
+    color: #991b1b;
+    background: #fee2e2;
   }
 }
 

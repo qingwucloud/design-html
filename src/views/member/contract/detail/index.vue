@@ -4,7 +4,7 @@
       <el-collapse v-model="activeNames">
         <el-collapse-item name="info">
           <template #title>
-            <CardTitle title="合同信息（点击展开）" />
+            <CardTitle title="合同信息（点击展开收起）" />
           </template>
           <div class="contract-details">
             <el-descriptions :column="3" border>
@@ -21,7 +21,7 @@
               <el-descriptions-item label="审核人">
                 {{ contractData?.checker || '' }}
               </el-descriptions-item>
-              <el-descriptions-item label="合同周期" :span="3">
+              <el-descriptions-item label="合同周期">
                 {{ formatDate(contractData?.startTime, 'YYYY-MM-DD') }} -
                 {{ formatDate(contractData?.endTime, 'YYYY-MM-DD') }}
               </el-descriptions-item>
@@ -33,9 +33,9 @@
               <el-descriptions-item label="客户手机号">
                 {{ contractData?.customerMobile || '' }}
               </el-descriptions-item>
-              <el-descriptions-item label="设计师名称">
+              <!-- <el-descriptions-item label="设计师名称">
                 {{ contractData?.designerName || '' }}
-              </el-descriptions-item>
+              </el-descriptions-item> -->
 
               <!-- 项目信息 -->
               <el-descriptions-item label="工程地址" :span="3">

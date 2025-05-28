@@ -155,8 +155,8 @@
         <el-col :span="12">
           <el-form-item label="审核状态" prop="status">
             <el-tag v-if="formData.status === 0" type="warning" size="small">待审核</el-tag>
-            <el-tag v-else-if="formData.status === 1" type="warning" size="small">已审核</el-tag>
-            <el-tag v-else type="success" size="small">已驳回</el-tag>
+            <el-tag v-else-if="formData.status === 1" type="primary" size="small">已审核</el-tag>
+            <el-tag v-else type="danger" size="small">已驳回</el-tag>
           </el-form-item>
         </el-col>
         <el-col :span="12">

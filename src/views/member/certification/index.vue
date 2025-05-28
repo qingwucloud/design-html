@@ -137,7 +137,7 @@
       />
       <el-table-column label="认证状态" align="center" prop="certStatus">
         <template #default="scope">
-          <el-tag v-if="scope.row.certStatus === 1" type="success" size="small">已通过</el-tag>
+          <el-tag v-if="scope.row.certStatus === 1" type="primary" size="small">已通过</el-tag>
           <el-tag v-else-if="scope.row.certStatus === 2" type="danger" size="small">已拒绝</el-tag>
           <el-tag v-else type="warning" size="small">待审核</el-tag>
         </template>

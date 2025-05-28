@@ -138,8 +138,8 @@
       <el-table-column label="审核状态 " align="center" prop="status" fixed >
         <template #default="{row}">
           <el-tag v-if="row.status === 0" type="warning" size="small">待审核</el-tag>
-          <el-tag v-else-if="row.status === 1" type="warning" size="small">已审核</el-tag>
-          <el-tag v-else type="success" size="small">已驳回</el-tag>
+          <el-tag v-else-if="row.status === 1" type="primary" size="small">已审核</el-tag>
+          <el-tag v-else type="danger" size="small">已驳回</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="主图" align="center" prop="coverUrl" width="120">

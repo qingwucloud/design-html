@@ -143,8 +143,8 @@
         <el-col :span="12">
           <el-form-item label="审核意见" prop="certStatus">
             <el-radio-group v-model="formData.certStatus">
-              <el-radio value="1">通过</el-radio>
-              <el-radio value="2">驳回</el-radio>
+              <el-radio :value="1">通过</el-radio>
+              <el-radio :value="2">驳回</el-radio>
             </el-radio-group>
           </el-form-item>
         </el-col>
@@ -211,7 +211,7 @@
     </template>
   </Dialog>
 </template>
-<script setup lang="ts">
+<script setup>
 import { CertificationApi } from '@/api/member/certification'
 import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
 import dayjs from 'dayjs'
@@ -244,14 +244,14 @@ const formData = ref({
   cardStartdate: '',
   cardValidate: '',
   resumes: [],
-  certStatus: '1',
+  certStatus: 1,
   rejectReason: ''
 })
 
 const formRef = ref() // 表单 Ref
 
 /** 打开弹窗 */
-const open = async (id?: number) => {
+const open = async (id) => {
   dialogVisible.value = true
   formLoading.value = true
   let data = await CertificationApi.getCertification(id)
@@ -259,7 +259,7 @@ const open = async (id?: number) => {
     ...data,
     certificates: data.certificates?.split(',') || [],
     designerStyleType: data.designerStyleType?.split(',').map((item) => Number(item)) || [],
-    certStatus: '1',
+    certStatus: 1,
     rejectReason: ''
   }
   formLoading.value = false

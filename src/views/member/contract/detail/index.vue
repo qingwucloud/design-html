@@ -4,7 +4,7 @@
       <el-collapse v-model="activeNames">
         <el-collapse-item name="info">
           <template #title>
-            <CardTitle title="合同信息" />
+            <CardTitle title="合同信息（点击展开）" />
           </template>
           <div class="contract-details">
             <el-descriptions :column="3" border>
@@ -131,7 +131,7 @@
 
             <!-- 节点名称 -->
             <div class="node-content">
-              <div class="node-name">{{ node.nodeName }}</div>
+              <div class="node-name">{{ index + 1 }}. {{ node.nodeName }}</div>
               <div v-if="node.isComplete === 1" class="node-status completed">已完成</div>
               <div v-else-if="isCurrentNode(node, index)" class="node-status processing">
                 进行中
@@ -189,15 +189,6 @@
 
               <!-- 操作按钮区域 -->
               <div class="file-actions">
-                <el-button
-                  v-if="!isImageFile(item.fileUrl)"
-                  type="primary"
-                  link
-                  @click="previewFile(item)"
-                >
-                  <el-icon><View /></el-icon>
-                  预览
-                </el-button>
                 <el-button type="primary" link @click="downloadFile(item)">
                   <el-icon><Download /></el-icon>
                   下载
@@ -220,7 +211,7 @@ import { Check, View, Download } from '@element-plus/icons-vue'
 
 defineOptions({ name: 'MemberDetail' })
 const loading = ref(false) // 加载中
-const activeNames = ref('info')
+const activeNames = ref('')
 const route = useRoute()
 const contractData = ref()
 const imageAttachments = ref<string[]>([])
@@ -440,15 +431,15 @@ const parseAttachments = (url) => {
 }
 
 .node-list {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 16px;
   margin-bottom: 24px;
 }
 
 .node-item {
   display: flex;
-  padding: 16px;
+  padding: 12px;
   cursor: pointer;
   background: #f8f9fa;
   border: 2px solid transparent;
@@ -477,9 +468,9 @@ const parseAttachments = (url) => {
 
 .node-icon {
   display: flex;
-  width: 32px;
-  height: 32px;
-  margin-right: 12px;
+  width: 28px;
+  height: 28px;
+  margin-right: 10px;
   font-weight: 500;
   color: #666;
   background: #d9d9d9;

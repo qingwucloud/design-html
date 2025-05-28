@@ -24,6 +24,60 @@ export interface ContractVO {
   endTime: Date // 合同结束时间
   memberContractConfirmStatus: number // 设计合同用户确认状态 见dict_type
 }
+/**
+ * AppNodeConfigRespVO，用户 APP - 合同节点配置 Response VO
+ */
+export type AppNodeConfigRes = {
+  /**
+   * 工作成果要求
+   */
+  deliverableRequirements?: string;
+  /**
+   * 设计师可结算比例
+   */
+  designerSettlementRatio: number;
+  /**
+   * 节点所有文件Ids
+   */
+  fileIds: string;
+  /**
+   * 节点ID
+   */
+  id: number;
+  /**
+   * 节点状态是否完成 0否1是
+   */
+  isComplete: number;
+  /**
+   * 上传工作成果照片 0否1是
+   */
+  needRequirements: number;
+  /**
+   * 节点说明
+   */
+  nodeDescription?: string;
+  /**
+   * 节点图标标识
+   */
+  nodeIcon?: string;
+  /**
+   * 节点名称
+   */
+  nodeName: string;
+  /**
+   * 是否可付款(0否 1是)
+   */
+  payable: number;
+  /**
+   * 节点排序
+   */
+  sortOrder: number;
+  /**
+   * 用户可付款比例
+   */
+  userPaymentRatio: number;
+  [property: string]: any;
+}
 
 // 用户合同 API
 export const ContractApi = {
@@ -34,7 +88,7 @@ export const ContractApi = {
 
   // 获得合同节点列表
   getContractNodeList: async (id: number) => {
-    return await request.get({ url: `/member/contract/nodeList?id=` + id })
+    return await request.get<AppNodeConfigRes[]>({ url: `/member/contract/nodeList?id=` + id })
   },
 
   // 查询用户合同详情

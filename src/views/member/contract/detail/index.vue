@@ -7,107 +7,105 @@
             <CardTitle title="合同信息" />
           </template>
           <div class="contract-details">
-            <div class="detail-item">
-              <div class="detail-label">合同编号:</div>
-              <div class="detail-value">{{ contractData?.contractNo || '' }}</div>
-            </div>
-            <div class="detail-item">
-              <div class="detail-label">合同状态:</div>
-              <div class="detail-value">
+            <el-descriptions :column="3" border>
+              <!-- 基本信息 -->
+              <el-descriptions-item label="合同编号">
+                {{ contractData?.contractNo || '' }}
+              </el-descriptions-item>
+              <el-descriptions-item label="合同状态">
                 <DictTag
                   :type="DICT_TYPE.MEMBER_CONTRACT_STATUS"
                   :value="contractData?.memberContractStatus"
                 />
-              </div>
-            </div>
-            <div class="detail-item">
-              <div class="detail-label">客户姓名:</div>
-              <div class="detail-value">{{ contractData?.customerName || '' }}</div>
-            </div>
-            <div class="detail-item">
-              <div class="detail-label">客户手机号:</div>
-              <div class="detail-value">{{ contractData?.customerMobile || '' }}</div>
-            </div>
-            <div class="detail-item">
-              <div class="detail-label">设计师名称:</div>
-              <div class="detail-value">{{ contractData?.designerName || '' }}</div>
-            </div>
-            <div class="detail-item">
-              <div class="detail-label">工程地址:</div>
-              <div class="detail-value">{{ contractData?.projectAddress || '' }}</div>
-            </div>
-            <div class="detail-item">
-              <div class="detail-label">建筑面积:</div>
-              <div class="detail-value">{{ contractData?.builtArea || '' }}㎡</div>
-            </div>
-            <div class="detail-item">
-              <div class="detail-label">实测外框面积:</div>
-              <div class="detail-value">{{ contractData?.measuredArea || '' }}㎡</div>
-            </div>
-            <div class="detail-item">
-              <div class="detail-label">审核人:</div>
-              <div class="detail-value">{{ contractData?.checker || '' }}</div>
-            </div>
-            <div class="detail-item">
-              <div class="detail-label">合同周期:</div>
-              <div class="detail-value">
+              </el-descriptions-item>
+              <el-descriptions-item label="审核人">
+                {{ contractData?.checker || '' }}
+              </el-descriptions-item>
+              <el-descriptions-item label="合同周期" :span="3">
                 {{ formatDate(contractData?.startTime, 'YYYY-MM-DD') }} -
                 {{ formatDate(contractData?.endTime, 'YYYY-MM-DD') }}
-              </div>
-            </div>
-            <div class="detail-item">
-              <div class="detail-label">合同总金额:</div>
-              <div class="detail-value">¥{{ contractData?.totalAmount || 0 }}</div>
-            </div>
-            <div class="detail-item">
-              <div class="detail-label">已支付金额:</div>
-              <div class="detail-value">¥{{ contractData?.paidAmount || 0 }}</div>
-            </div>
-            <div class="detail-item">
-              <div class="detail-label">补充说明:</div>
-              <div class="detail-value">{{ contractData?.footnote || '' }}</div>
-            </div>
+              </el-descriptions-item>
 
-            <!-- 附件展示 -->
-            <div class="detail-item attachment-item" v-if="contractData?.attachmentUrl">
-              <div class="detail-label">合同附件:</div>
-              <div class="attachment-container">
-                <div class="flex gap-10px">
-                  <el-image
-                    :key="item"
-                    disabled
-                    v-for="item in imageAttachments"
-                    class="w-70px h-70px"
-                    :src="item"
-                    :preview-src-list="imageAttachments"
-                    show-progress
-                    fit="cover"
-                  />
-                </div>
+              <!-- 客户信息 -->
+              <el-descriptions-item label="客户姓名">
+                {{ contractData?.customerName || '' }}
+              </el-descriptions-item>
+              <el-descriptions-item label="客户手机号">
+                {{ contractData?.customerMobile || '' }}
+              </el-descriptions-item>
+              <el-descriptions-item label="设计师名称">
+                {{ contractData?.designerName || '' }}
+              </el-descriptions-item>
 
-                <!-- PDF附件列表 -->
-                <div class="pdf-attachments" v-if="pdfAttachments.length > 0">
-                  <div
-                    v-for="(pdf, index) in pdfAttachments"
-                    :key="index"
-                    class="pdf-item"
-                    @click="window.open(pdf)"
-                  >
-                    <el-icon><Document /></el-icon>
-                    <div class="pdf-name">PDF文档{{ index + 1 }}</div>
+              <!-- 项目信息 -->
+              <el-descriptions-item label="工程地址" :span="3">
+                {{ contractData?.projectAddress || '' }}
+              </el-descriptions-item>
+              <el-descriptions-item label="建筑面积">
+                {{ contractData?.builtArea || '' }}㎡
+              </el-descriptions-item>
+              <el-descriptions-item label="实测外框面积">
+                {{ contractData?.measuredArea || '' }}㎡
+              </el-descriptions-item>
+
+              <!-- 费用信息 -->
+              <el-descriptions-item label="合同总金额">
+                <span class="amount-text">¥{{ contractData?.totalAmount || 0 }}</span>
+              </el-descriptions-item>
+              <el-descriptions-item label="已支付金额">
+                <span class="amount-text paid">¥{{ contractData?.paidAmount || 0 }}</span>
+              </el-descriptions-item>
+              <el-descriptions-item label="剩余金额">
+                <span class="amount-text remaining">
+                  ¥{{ (contractData?.totalAmount || 0) - (contractData?.paidAmount || 0) }}
+                </span>
+              </el-descriptions-item>
+
+              <!-- 附加信息 -->
+              <el-descriptions-item label="补充说明" :span="3">
+                {{ contractData?.footnote || '无' }}
+              </el-descriptions-item>
+              <el-descriptions-item label="合同附件" v-if="contractData?.attachmentUrl" :span="3">
+                <div class="attachment-container">
+                  <div class="flex gap-10px mb-3" v-if="imageAttachments.length > 0">
+                    <el-image
+                      :key="item"
+                      v-for="item in imageAttachments"
+                      class="w-70px h-70px"
+                      :src="item"
+                      :preview-src-list="imageAttachments"
+                      show-progress
+                      fit="cover"
+                    />
+                  </div>
+
+                  <!-- PDF附件列表 -->
+                  <div class="pdf-attachments" v-if="pdfAttachments.length > 0">
+                    <div
+                      v-for="(pdf, index) in pdfAttachments"
+                      :key="index"
+                      class="pdf-item"
+                      @click="window.open(pdf)"
+                    >
+                      <el-icon><Document /></el-icon>
+                      <div class="pdf-name">PDF文档{{ index + 1 }}</div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
+              </el-descriptions-item>
+            </el-descriptions>
           </div>
         </el-collapse-item>
       </el-collapse>
     </el-card>
+    <el-card>
+      <CardTitle title="节点信息" />
+    </el-card>
   </div>
 </template>
-<script  setup>
+<script setup lang="ts">
 import { CardTitle } from '@/components/Card'
-import { ContractApi } from '@/api/member/contract'
+import { AppNodeConfigRes, ContractApi } from "@/api/member/contract";
 import { DICT_TYPE } from '@/utils/dict'
 import { formatDate } from '@/utils/formatTime'
 
@@ -119,14 +117,15 @@ const id = route.params.id
 const contractData = ref()
 const imageAttachments = ref([])
 const pdfAttachments = ref([])
+const contractNodeList=ref<AppNodeConfigRes[]>([])
 onMounted(async () => {
   contractData.value = await ContractApi.getContract(route.params.id)
   parseAttachments(contractData.value.attachmentUrl)
-  console.log(contractData.value)
+  contractNodeList.value=await ContractApi.getContractNodeList(route.params.id)
 })
 
 // 解析附件URL
-const parseAttachments = (url)=>{
+const parseAttachments = (url) => {
   if (!url) return
 
   // 清空之前的附件
@@ -147,4 +146,77 @@ const parseAttachments = (url)=>{
   })
 }
 </script>
-<style lang="css" scoped></style>
+<style lang="css" scoped>
+:deep(.el-collapse) {
+  border-top: 0 !important;
+}
+
+:deep(.el-collapse-item__wrap) {
+  border-bottom: 0 !important;
+}
+
+.contract-details {
+  .attachment-container {
+    .pdf-attachments {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+
+      .pdf-item {
+        display: flex;
+        padding: 8px 12px;
+        font-size: 14px;
+        color: inherit;
+        cursor: pointer;
+        background: #f5f7fa;
+        border-radius: 4px;
+        transition: all 0.3s;
+        align-items: center;
+        gap: 8px;
+
+        &:hover {
+          color: #1890ff;
+          background: #e6f7ff;
+        }
+
+        .pdf-name {
+          font-size: 14px;
+        }
+      }
+    }
+  }
+
+  .amount-text {
+    font-size: 16px;
+    font-weight: 600;
+
+    &.paid {
+      color: #67c23a;
+    }
+
+    &.remaining {
+      color: #e6a23c;
+    }
+  }
+
+  :deep(.el-collapse-item__header) {
+    font-weight: 500;
+    color: #409eff;
+  }
+
+  :deep(.el-collapse-item__content) {
+    padding-bottom: 0;
+  }
+
+  :deep(.el-descriptions__body) {
+    background-color: #fff;
+  }
+
+  :deep(.el-descriptions__label) {
+    font-weight: 500;
+    color: #606266;
+    background-color: #fafafa;
+  }
+}
+</style>

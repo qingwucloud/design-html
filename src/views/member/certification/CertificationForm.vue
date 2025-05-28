@@ -44,7 +44,7 @@
               :key="formData.cardImgFront"
               disabled
               class="w-70px h-70px mr-10px"
-              :src="item"
+              :src="formData.cardImgFront"
               :preview-src-list="[formData.cardImgFront]"
               show-progress
               fit="cover"
@@ -166,7 +166,8 @@
       </el-row>
     </el-form>
     <template #footer>
-      <el-button @click="submitForm" type="primary" :disabled="formLoading">确认</el-button>
+      <el-button @click="submitForm" type="primary" :disabled="formLoading">审核</el-button>
+      <el-button @click="dialogVisible = false">取 消</el-button>
     </template>
   </Dialog>
   <Dialog title="履历" v-model="dialogResumesVisible" width="1080px">

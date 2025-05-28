@@ -155,8 +155,8 @@
         :formatter="dateFormatter"
         width="180px"
       />
-      <el-table-column label="排序号" align="center" prop="startSort"/>
-
+      <el-table-column label="驳回原因" align="center" prop="rejectReason" />
+      <el-table-column label="精选排序号" align="center" prop="startSort"/>
       <el-table-column label="审核人" align="center" prop="checker" />
       <el-table-column label="操作" align="center" min-width="120px">
         <template #default="scope">
@@ -179,7 +179,7 @@
             v-if="scope.row.certStatus === 1"
             @click="sortOfActions(scope.row)"
           >
-            星选排序
+            精选排序
           </el-button>
         </template>
       </el-table-column>

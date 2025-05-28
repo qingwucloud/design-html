@@ -37,12 +37,12 @@ export const PortfolioApi = {
   },
 
   // 新增设计师作品集
-  createPortfolio: async (data: PortfolioVO) => {
+  createPortfolio: async (data: any) => {
     return await request.post({ url: `/member/portfolio/create`, data })
   },
 
   // 修改设计师作品集
-  updatePortfolio: async (data: PortfolioVO) => {
+  updatePortfolio: async (data: any) => {
     return await request.put({ url: `/member/portfolio/update`, data })
   },
 
@@ -51,8 +51,15 @@ export const PortfolioApi = {
     return await request.delete({ url: `/member/portfolio/delete?id=` + id })
   },
 
-  // 导出设计师作品集 Excel
-  exportPortfolio: async (params) => {
-    return await request.download({ url: `/member/portfolio/export-excel`, params })
-  }
+
+  // 审核设计师作品集
+  checkPortfolio: async (data: any) => {
+    return await request.put({ url: `/member/portfolio/check`, data })
+  },
+
+  // 设置精选作品集排序
+  recommendPortfolio: async (data: any) => {
+    return await request.post({ url: `/member/portfolio/recommend`, data })
+  },
+
 }

@@ -6,12 +6,12 @@
       :model="queryParams"
       ref="queryFormRef"
       :inline="true"
-      label-width="68px"
+      label-width="100px"
     >
-      <el-form-item label="用户ID" prop="userId">
+      <el-form-item label="设计师名称" prop="name">
         <el-input
-          v-model="queryParams.userId"
-          placeholder="请输入用户ID"
+          v-model="queryParams.name"
+          placeholder="请输入设计师名称"
           clearable
           @keyup.enter="handleQuery"
           class="!w-240px"
@@ -91,18 +91,20 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="审核人" prop="checker">
-        <el-input
-          v-model="queryParams.checker"
-          placeholder="请输入审核人"
-          clearable
-          @keyup.enter="handleQuery"
-          class="!w-240px"
-        />
-      </el-form-item>
       <el-form-item label="创建时间" prop="createTime">
         <el-date-picker
           v-model="queryParams.createTime"
+          value-format="YYYY-MM-DD HH:mm:ss"
+          type="daterange"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+          :default-time="[new Date('1 00:00:00'), new Date('1 23:59:59')]"
+          class="!w-220px"
+        />
+      </el-form-item>
+      <el-form-item label="审核时间" prop="checkTime">
+        <el-date-picker
+          v-model="queryParams.checkTime"
           value-format="YYYY-MM-DD HH:mm:ss"
           type="daterange"
           start-placeholder="开始日期"
@@ -131,61 +133,45 @@
     <el-table v-loading="loading" :data="list" :stripe="true" :show-overflow-tooltip="true">
       <el-table-column label="编号" align="center" prop="id" fixed />
       <el-table-column label="作品标题" align="center" prop="title" fixed/>
-      <el-table-column label="用户手机号" align="center" prop="userId" />
+      <el-table-column label="设计师名称" align="center" prop="name" fixed width="100"/>
       <el-table-column label="小区名称" align="center" prop="communityName" fixed/>
-      <el-table-column label="总造价金额" align="center" prop="totalMoney" width="120" fixed/>
-      <el-table-column label="审核状态 " align="center" prop="status" fixed />
+      <el-table-column label="审核状态 " align="center" prop="status" fixed >
+        <template #default="{row}">
+          <el-tag v-if="row.status === 0" type="warning" size="small">待审核</el-tag>
+          <el-tag v-else-if="row.status === 1" type="warning" size="small">已审核</el-tag>
+          <el-tag v-else type="success" size="small">已驳回</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column label="主图" align="center" prop="coverUrl" width="120">
         <template #default="scope">
           <el-image
             :src="scope.row.coverUrl"
-            style="width: 80px; height: 60px"
+            style="width: 60px; height: 60px"
             fit="cover"
             :preview-src-list="[scope.row.coverUrl]"
           />
         </template>
       </el-table-column>
-      <el-table-column label="户型字典" align="center" prop="portfolioHouseType" />
-      <el-table-column label="面积(㎡)" align="center" prop="area" />
-      <el-table-column label="作品标签" align="center" prop="portfolioTagType" />
-      <el-table-column label="作品风格" align="center" prop="designerStyleType" />
-      <el-table-column label="内容" align="center" prop="content" />
-      <el-table-column label="浏览量" align="center" prop="viewCount" />
-      <el-table-column label="点赞量" align="center" prop="likeCount" />
-      <el-table-column label="审核人" align="center" prop="checker" />
-      <el-table-column
-        label="创建时间"
-        align="center"
-        prop="createTime"
-        :formatter="dateFormatter"
-        width="180px"
-      />
-      <el-table-column label="操作" align="center" min-width="120px">
+      <el-table-column label="户型" align="center" prop="portfolioHouseTypeDesc" />
+      <el-table-column label="面积" align="center" prop="area" >
         <template #default="scope">
-          <el-button
-            link
-            type="primary"
-            @click="openForm('update', scope.row.id)"
-            v-hasPermi="['member:portfolio:update']"
-          >
-            编辑
-          </el-button>
-          <el-button
-            link
-            type="primary"
-            @click="openForm('update', scope.row.id)"
-            v-hasPermi="['member:portfolio:check']"
-          >
-            审核
-          </el-button>
-          <el-button
-            link
-            type="danger"
-            @click="handleSort(scope.row.id)"
-            v-hasPermi="['member:portfolio:recommend']"
-          >
-            精选排序
-          </el-button>
+          <span>{{ scope.row.area }} ㎡</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="作品标签" align="center" prop="portfolioTagTypeDesc" />
+      <el-table-column label="作品风格" align="center" prop="designerStyleTypeDesc" />
+      <el-table-column label="创建时间" align="center" prop="createTime" :formatter="dateFormatter" width="180px" />
+      <el-table-column label="审核人" align="center" prop="checker" />
+      <el-table-column label="审核时间" align="center" prop="checkTime" :formatter="dateFormatter" width="180px" />
+      <el-table-column label="驳回原因" align="center" prop="rejectReason" />
+      <el-table-column label="精选排序号" align="center" prop="sortNum" width="100"/>
+      <el-table-column label="操作" align="center" min-width="240px" fixed="right" :show-overflow-tooltip="false">
+        <template #default="scope">
+          <el-button link type="success" @click="openForm('update', scope.row.id)" v-hasPermi="['member:portfolio:update']">编辑</el-button>
+          <el-button link v-if="scope.row.status === 1" type="primary" @click="openCheckForm('detail', scope.row.id)" v-hasPermi="['member:portfolio:detail']">详情</el-button>
+          <el-button link type="success" v-if="scope.row.status === 0" @click="openCheckForm('check', scope.row.id)" v-hasPermi="['member:portfolio:check']">审核</el-button>
+          <el-button link type="danger" @click="handleDelete(scope.row.id)" v-hasPermi="['member:portfolio:delete']">删除</el-button>
+          <el-button link type="danger" v-if="scope.row.status === 1" @click="handleSort(scope.row)" v-hasPermi="['member:portfolio:recommend']">精选排序</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -200,6 +186,9 @@
 
   <!-- 表单弹窗：添加/修改 -->
   <PortfolioForm ref="formRef" @success="getList" />
+
+  <!-- 表单弹窗：详情/审核 -->
+  <CheckAndDetail ref="checkRef" @success="getList" />
 </template>
 
 <script setup lang="ts">
@@ -207,6 +196,7 @@ import { dateFormatter } from '@/utils/formatTime'
 import { PortfolioApi, PortfolioVO } from '@/api/member/portfolio'
 import PortfolioForm from './PortfolioForm.vue'
 import { getIntDictOptions,DICT_TYPE } from "@/utils/dict";
+import { ElMessageBox } from "element-plus";
 
 /** 设计师作品集 列表 */
 defineOptions({ name: 'Portfolio' })
@@ -220,29 +210,19 @@ const total = ref(0) // 列表的总页数
 const queryParams = reactive({
   pageNo: 1,
   pageSize: 10,
-  userId: undefined,
+  name: undefined,
   communityName: undefined,
-  totalMoney: undefined,
   title: undefined,
   status: undefined,
-  coverUrl: undefined,
   portfolioHouseType: undefined,
-  area: undefined,
-  privoce: undefined,
-  city: undefined,
-  region: undefined,
-  address: undefined,
   portfolioTagType: undefined,
   designerStyleType: undefined,
-  content: undefined,
-  viewCount: undefined,
-  likeCount: undefined,
-  sortNum: undefined,
   checker: undefined,
-  createTime: []
+  createTime: [],
+  checkTime: []
 })
 const queryFormRef = ref() // 搜索的表单
-const exportLoading = ref(false) // 导出的加载中
+const checkRef=ref() // 详情/审核的表单
 
 /** 查询列表 */
 const getList = async () => {
@@ -268,17 +248,34 @@ const resetQuery = () => {
   handleQuery()
 }
 
-const handleSort = () => {
-
+const handleSort = (row) => {
+  ElMessageBox.prompt('排序值最大的8个会显示在小程序首页', '请输入排序值', {
+    inputPattern: /^[1-9]\d*$/,
+    inputType: 'number',
+    inputValue:row.sortNum,
+    inputErrorMessage: '请输入排序值'
+  })
+    .then(async ({ value }) => {
+      await PortfolioApi.recommendPortfolio({
+        sortNum: value,
+        id:row.id
+      })
+      message.success('排序成功')
+      resetQuery()
+    })
+    .catch(() => {})
 }
 /** 添加/修改操作 */
 const formRef = ref()
 const openForm = (type: string, id?: number) => {
   formRef.value.open(type, id)
 }
+const openCheckForm = (type: string, id?: number) => {
+  checkRef.value.open(type, id)
+}
 
 /** 删除按钮操作 */
-const handleDelete = async (id: number) => {
+const handleDelete = async (id: any) => {
   try {
     // 删除的二次确认
     await message.delConfirm()

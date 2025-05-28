@@ -1,6 +1,6 @@
 <template>
   <div v-loading="loading" class="flex gap-20px flex-col">
-    <el-card>
+    <el-card :body-style="{ paddingTop: '0',paddingBottom:0 }" class="contract-card">
       <el-collapse v-model="activeNames">
         <el-collapse-item name="info">
           <template #title>
@@ -170,19 +170,28 @@
                     class="file-item"
                   >
                     <!-- 图片预览区域 -->
-                    <div v-if="isImageFile(item.fileUrl)" class="file-image-preview">
-                      <el-image
-                        :src="item.fileUrl"
-                        :preview-src-list="getImageUrls()"
-                        class="work-image"
-                        fit="cover"
-                        :preview-teleported="true"
-                      />
+                    <div v-if="getFileImages(item.fileUrl).length > 0" class="file-image-preview">
+                      <div class="image-gallery">
+                        <el-image
+                          v-for="(imageUrl, imgIndex) in getFileImages(item.fileUrl)"
+                          :key="imgIndex"
+                          :src="imageUrl"
+                          :preview-src-list="getFileImages(item.fileUrl)"
+                          class="work-image"
+                          fit="cover"
+                          :preview-teleported="true"
+                        />
+                      </div>
                     </div>
 
                     <!-- 文件信息区域 -->
                     <div class="file-info">
-                      <div class="file-name">{{ item.fileName || `成果文件${fileIndex + 1}` }}</div>
+                      <div class="file-name">
+                        {{ item.fileName || `成果文件${fileIndex + 1}` }}
+                        <span v-if="getFileCount(item.fileUrl) > 1" class="file-count">
+                          ({{ getFileCount(item.fileUrl) }}个文件)
+                        </span>
+                      </div>
                       <div class="file-meta">
                         <span
                           class="file-status"
@@ -294,11 +303,27 @@ const isImageFile = (url: string) => {
   return /\.(jpg|jpeg|png|gif|webp|bmp)$/i.test(url)
 }
 
-// 获取当前文件列表中所有图片的URLs
-const getImageUrls = () => {
-  return currentFileList.value
-    .filter((item) => isImageFile(item.fileUrl))
-    .map((item) => item.fileUrl)
+// 获取文件中的图片URLs（处理逗号分隔的多张图片）
+const getFileImages = (fileUrl: string) => {
+  if (!fileUrl) return []
+
+  // 分割文件URLs
+  const urls = fileUrl
+    .split(',')
+    .map((url) => url.trim())
+    .filter((url) => url)
+
+  // 过滤出图片文件
+  return urls.filter((url) => isImageFile(url))
+}
+
+// 获取文件总数
+const getFileCount = (fileUrl: string) => {
+  if (!fileUrl) return 0
+  return fileUrl
+    .split(',')
+    .map((url) => url.trim())
+    .filter((url) => url).length
 }
 
 // 获取文件状态文字
@@ -317,13 +342,34 @@ const getFileStatusText = (status: number) => {
 
 // 下载文件
 const downloadFile = (item: any) => {
-  if (item.fileUrl) {
+  if (!item.fileUrl) return
+
+  // 分割文件URLs
+  const urls = item.fileUrl
+    .split(',')
+    .map((url: string) => url.trim())
+    .filter((url: string) => url)
+
+  if (urls.length === 1) {
+    // 单个文件直接下载
     const link = document.createElement('a')
-    link.href = item.fileUrl
+    link.href = urls[0]
     link.download = item.fileName || 'download'
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
+  } else if (urls.length > 1) {
+    // 多个文件逐一下载
+    urls.forEach((url, index) => {
+      setTimeout(() => {
+        const link = document.createElement('a')
+        link.href = url
+        link.download = `${item.fileName || 'file'}_${index + 1}`
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+      }, index * 500) // 间隔500ms下载，避免浏览器阻止
+    })
   }
 }
 
@@ -429,6 +475,7 @@ const parseAttachments = (url) => {
   :deep(.el-collapse-item__header) {
     font-weight: 500;
     color: #409eff;
+    border-bottom: 0 !important;
   }
 
   :deep(.el-collapse-item__content) {
@@ -644,15 +691,30 @@ const parseAttachments = (url) => {
 
 .file-image-preview {
   flex-shrink: 0;
-  width: 80px;
-  height: 80px;
-  overflow: hidden;
+  width: 120px;
   border-radius: 6px;
 
+  .image-gallery {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
   .work-image {
-    width: 100%;
-    height: 100%;
-    border-radius: 6px;
+    width: 56px;
+    height: 56px;
+    border-radius: 4px;
+
+    &:only-child {
+      width: 120px;
+      height: 80px;
+    }
+
+    &:nth-child(1):nth-last-child(2),
+    &:nth-child(2):nth-last-child(1) {
+      width: 56px;
+      height: 56px;
+    }
   }
 }
 
@@ -666,6 +728,13 @@ const parseAttachments = (url) => {
   font-size: 14px;
   font-weight: 500;
   color: #262626;
+
+  .file-count {
+    margin-left: 8px;
+    font-size: 12px;
+    font-weight: 400;
+    color: #8c8c8c;
+  }
 }
 
 .file-meta {

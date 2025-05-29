@@ -1,5 +1,5 @@
 <template>
-  <Dialog v-model="dialogVisible" title="合同精选排序" width="500px">
+  <Dialog v-model="dialogVisible" title="合同精选排序" width="680px">
     <el-form ref="formRef" :model="formData" :rules="formRules" label-width="100px">
       <el-form-item label="排序值" prop="startSort">
         <el-input-number
@@ -12,18 +12,24 @@
         <div class="form-tips">排序值最大的8个会显示在小程序首页</div>
       </el-form-item>
 
-      <el-form-item label="封面图片" prop="coverUrl">
+      <el-form-item label="合同展示金额" prop="caseShowAmount">
+        <el-input-number
+          v-model="formData.caseShowAmount"
+          :min="0"
+          :precision="1"
+          placeholder="请输入合同展示金额"
+          style="width: 100%"
+        />
+      </el-form-item>
+
+      <el-form-item label="封面图片" prop="covers">
         <UploadImg
-          v-model="formData.coverUrl"
+          v-model="formData.covers"
           :limit="1"
           :file-size="10"
-          :file-type="['png', 'jpg', 'jpeg', 'webp']"
           height="120px"
           width="200px"
         />
-        <div class="form-tips"
-          >建议上传 16:9 比例的图片，支持png、jpg、jpeg、webp格式，文件大小不超过5MB</div
-        >
       </el-form-item>
     </el-form>
 
@@ -50,15 +56,20 @@ const formRef = ref()
 const formData = reactive({
   id: 0,
   startSort: 0,
-  coverUrl: ''
+  covers: '',
+  caseShowAmount: 0
 })
 
 // 表单验证规则
 const formRules = {
   startSort: [
     { required: true, message: '请输入排序值', trigger: 'blur' },
-    { type: 'number', min: 0, message: '排序值不能小于0', trigger: 'blur' }
-  ]
+    { type: 'number', min: 0, message: '排序值不能小于0', trigger: 'blur' },
+  ],
+  caseShowAmount: [
+    { required: true, message: '请输入合同展示金额', trigger: 'blur' },
+    { type: 'number', min: 0, message: '合同展示金额不能小于0', trigger: 'blur' },
+  ],
 }
 
 // 发射事件
@@ -71,7 +82,8 @@ const open = (contractData: any) => {
   dialogVisible.value = true
   formData.id = contractData.id
   formData.startSort = contractData.startSort || 0
-  formData.coverUrl = contractData.coverUrl || ''
+  formData.covers = contractData.covers || ''
+  formData.caseShowAmount = contractData.caseShowAmount || 0
 
   // 重置表单验证状态
   nextTick(() => {
@@ -88,7 +100,8 @@ const handleSubmit = async () => {
     await ContractApi.recommendContract({
       id: formData.id,
       startSort: formData.startSort,
-      coverUrl: formData.coverUrl
+      covers: formData.covers,
+      caseShowAmount: formData.caseShowAmount
     })
 
     ElMessage.success('设置排序成功')

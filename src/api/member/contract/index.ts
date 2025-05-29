@@ -10,6 +10,7 @@ export interface ContractVO {
   contractName: string // 合同名称
   memberContractStatus: boolean // 设计合同审核状态 见dict_type
   projectAddress: string // 工程地址
+  communityName: string // 小区名称
   builtArea: number // 建筑面积(㎡)
   measuredArea: number // 实测外框面积(㎡)
   totalAmount: number // 合同总金额(元)

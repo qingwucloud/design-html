@@ -80,7 +80,7 @@
       <el-form-item label="精选排序" prop="startSort">
         <el-select
           v-model="queryParams.startSort"
-          placeholder="请选择精选排序号"
+          placeholder="请选择精选排序"
           clearable
           class="!w-240px"
         >
@@ -144,6 +144,8 @@
           <DictTag :type="DICT_TYPE.MEMBER_CONTRACT_STATUS" :value="row.memberContractStatus" />
         </template>
       </el-table-column>
+
+      <el-table-column label="小区名称" align="center" prop="communityName" width="150" />
       <el-table-column label="工程地址" align="center" prop="projectAddress" width="150" />
       <el-table-column label="合同总金额" align="center" prop="totalAmount" width="100">
         <template #default="{ row }">
@@ -191,7 +193,7 @@
             link
             type="success"
             v-if="[1, 3].includes(scope.row.memberContractStatus)"
-            @click="sortOfActions(scope.row)"
+            @click="handleSort(scope.row)"
           >
             精选排序
           </el-button>
@@ -206,11 +208,15 @@
       @pagination="getList"
     />
   </ContentWrap>
+
+  <!-- 合同排序弹窗 -->
+  <ContractSortDialog ref="sortDialogRef" @success="getList" />
 </template>
 
 <script setup lang="ts">
 import { dateFormatter } from '@/utils/formatTime'
 import { ContractApi, ContractVO } from '@/api/member/contract'
+import ContractSortDialog from './components/ContractSortDialog.vue'
 import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
 
 /** 用户合同 列表 */
@@ -229,11 +235,13 @@ const queryParams = reactive({
   contractNo: undefined,
   contractName: undefined,
   customerMobile: undefined,
+  communityName: undefined,
   createTime: [],
   checkTime: [],
   memberContractStatus: undefined
 })
 const queryFormRef = ref() // 搜索的表单
+const sortDialogRef = ref() // 排序弹窗引用
 
 /** 查询列表 */
 const getList = async () => {
@@ -264,23 +272,10 @@ const resetQuery = () => {
 const handleDetail = (type: string, id?: number) => {
   push({ name: 'MemberContractDetail', params: { type, id } })
 }
-/** 排序按钮操作 */
-const sortOfActions = async (row) => {
-  ElMessageBox.prompt('排序值最大的8个会显示在小程序首页', '请输入排序值', {
-    inputPattern: /^[0-9]\d*$/,
-    inputType: 'number',
-    inputValue: row.startSort,
-    inputErrorMessage: '请输入排序值'
-  })
-    .then(async ({ value }) => {
-      await ContractApi.recommendContract({
-        startSort: value,
-        id: row.id
-      })
-      message.success('排序成功')
-      resetQuery()
-    })
-    .catch(() => {})
+
+/** 精选排序操作 */
+const handleSort = (row: ContractVO) => {
+  sortDialogRef.value?.open(row)
 }
 
 /** 初始化 **/

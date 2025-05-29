@@ -50,8 +50,11 @@
               </el-descriptions-item> -->
 
               <!-- 项目信息 -->
-              <el-descriptions-item label="工程地址" :span="3">
+              <el-descriptions-item label="工程地址" :span="2">
                 {{ contractData?.projectAddress || '' }}
+              </el-descriptions-item>
+              <el-descriptions-item label="小区名称">
+                {{ contractData?.communityName || '' }}
               </el-descriptions-item>
               <el-descriptions-item label="建筑面积">
                 {{ contractData?.builtArea || '' }}㎡

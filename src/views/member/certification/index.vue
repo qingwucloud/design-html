@@ -83,7 +83,7 @@
       <el-form-item label="精选排序" prop="startSort">
         <el-select
           v-model="queryParams.startSort"
-          placeholder="请选择精选排序号"
+          placeholder="请选择精选排序"
           clearable
           class="!w-240px"
         >

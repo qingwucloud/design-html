@@ -1,6 +1,8 @@
 <template>
   <Dialog :title="dialogTitle" v-model="dialogVisible" width="1000px">
+    <!-- 详情和审核表单 -->
     <el-form
+      v-if="formType === 'detail' || formType === 'audit'"
       ref="formRef"
       :model="formData"
       :rules="formRules"
@@ -8,20 +10,6 @@
       disabled
       v-loading="formLoading"
     >
-      <!-- 基本信息 -->
-      <!-- <el-row :gutter="20">
-        <el-col :span="12">
-          <el-form-item label="付款记录ID">
-            <el-input v-model="formData.id" readonly />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="线下订单编号">
-            <el-input v-model="formData.orderNo" readonly />
-          </el-form-item>
-        </el-col>
-      </el-row> -->
-
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item label="合同编号">
@@ -135,14 +123,89 @@
         </el-col>
         <el-col :span="12">
           <el-form-item label="审核时间">
-            <el-input v-model="formData.checkerTime" readonly />
+            <el-input v-model="formData.checkTime" readonly />
           </el-form-item>
         </el-col>
       </el-row>
     </el-form>
+
+    <!-- 结算表单 -->
+    <el-form
+      v-else-if="formType === 'settlement'"
+      ref="settlementFormRef"
+      :model="settlementFormData"
+      :rules="settlementFormRules"
+      label-width="120px"
+      v-loading="formLoading"
+    >
+      <el-row :gutter="20">
+        <el-col :span="24">
+          <el-form-item label="结算说明">
+            <el-text type="info">
+              正在为以下付款记录进行合同设计费结算，请上传相关的付款凭证。
+            </el-text>
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form-item label="合同编号">
+            <el-input v-model="formData.contractNo" disabled />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="合同名称">
+            <el-input v-model="formData.contractName" disabled />
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form-item label="设计师姓名">
+            <el-input v-model="formData.designerName" disabled />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="结算金额">
+            <el-input v-model="formData.amount" disabled>
+              <template #append>元</template>
+            </el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+      <el-row :gutter="20">
+        <el-col :span="24">
+          <el-form-item label="付款凭证" prop="paymentVoucher" required>
+            <UploadImg
+              v-model="settlementFormData.paymentVoucher"
+              :fileSize="10"
+              height="120px"
+              width="120px"
+            />
+            <div class="upload-tip ml-10px">
+              <el-text type="info" size="small">
+                支持 PNG、JPG、JPEG 格式，单个文件不超过 10MB，最多上传 1 张图片
+              </el-text>
+            </div>
+          </el-form-item>
+        </el-col>
+      </el-row>
+    </el-form>
+
     <template #footer>
       <el-button
-        v-if="formType === 'audit' && formData.paymentStatus === 1"
+        v-if="formType === 'settlement'"
+        @click="handleSettlement"
+        type="primary"
+        :loading="formLoading"
+      >
+        确认结算
+      </el-button>
+      <el-button
+        v-else-if="formType === 'audit' && formData.paymentStatus === 1"
         @click="handleAudit"
         type="primary"
         :disabled="formLoading"
@@ -156,24 +219,35 @@
   </Dialog>
 </template>
 <script setup lang="ts">
-import { PaymentRecordApi, PaymentRecordVO } from '@/api/member/paymentrecord'
+import { PaymentRecordApi } from '@/api/member/paymentrecord'
 import { DICT_TYPE } from '@/utils/dict'
-import { dateFormatter } from '@/utils/formatTime'
 import { createImageViewer } from '@/components/ImageViewer'
 import { formatDate } from '@/utils/formatTime'
+import { UploadImg } from '@/components/UploadFile'
 /** 合同付款记录 表单 */
 defineOptions({ name: 'PaymentRecordForm' })
 
-const { t } = useI18n() // 国际化
 const message = useMessage() // 消息弹窗
 
 const dialogVisible = ref(false) // 弹窗的是否展示
 const dialogTitle = ref('') // 弹窗的标题
 const formLoading = ref(false) // 表单的加载中：1）修改时的数据加载；2）提交的按钮禁用
-const formType = ref('') // 表单的类型：detail - 详情；audit - 审核
+const formType = ref('') // 表单的类型：detail - 详情；audit - 审核；settlement - 结算
 const formData = ref<any>({})
 const formRules = reactive({})
 const formRef = ref() // 表单 Ref
+
+// 结算表单相关
+const settlementFormRef = ref() // 结算表单 Ref
+const settlementFormData = ref({
+  ids: [] as number[], // 付款记录ID数组
+  paymentVoucher: '', // 付款凭证
+  type: 3 // 类型固定为3
+})
+
+const settlementFormRules = reactive({
+  paymentVoucher: [{ required: true, message: '请上传付款凭证', trigger: 'change' }]
+})
 
 // 支付凭证图片列表
 const paymentVoucherList = computed(() => {
@@ -190,9 +264,17 @@ const open = async (type: string, data: any) => {
   formType.value = type
 
   if (type === 'detail') {
-    dialogTitle.value = '付款记录详情'
+    dialogTitle.value = '详情'
   } else if (type === 'audit') {
     dialogTitle.value = '审核付款记录'
+  } else if (type === 'settlement') {
+    dialogTitle.value = '合同设计费结算'
+    // 重置结算表单数据
+    settlementFormData.value = {
+      ids: [data.id], // 设置当前记录ID
+      paymentVoucher: '',
+      type: 3,
+    }
   }
 
   console.log(data.payTime)
@@ -201,7 +283,7 @@ const open = async (type: string, data: any) => {
   formData.value = {
     ...data,
     payTime: data.payTime ? formatDate(data.payTime, 'YYYY-MM-DD HH:mm:ss') : '',
-    checkerTime: data.checkerTime ? formatDate(data.checkerTime, 'YYYY-MM-DD HH:mm:ss') : ''
+    checkTime: data.checkTime ? formatDate(data.checkTime, 'YYYY-MM-DD HH:mm:ss') : ''
   }
 }
 
@@ -224,6 +306,38 @@ const handleAudit = async () => {
     emit('success')
   } catch {
     // 用户取消或者接口错误
+  } finally {
+    formLoading.value = false
+  }
+}
+
+/** 结算操作 */
+const handleSettlement = async () => {
+  try {
+    // 表单验证
+    await settlementFormRef.value?.validate()
+
+    // 确认操作
+    await message.confirm('确定进行合同设计费结算吗？')
+    formLoading.value = true
+
+    // 准备提交参数
+    const submitData = {
+      ids: settlementFormData.value.ids,
+      paymentVoucher: settlementFormData.value.paymentVoucher,
+      type: settlementFormData.value.type
+    }
+
+    // 调用结算接口
+    await PaymentRecordApi.settlementPayment(submitData)
+    message.success('结算成功')
+
+    dialogVisible.value = false
+    // 发送操作成功的事件
+    emit('success')
+  } catch (error) {
+    // 用户取消或者接口错误
+    console.error('结算失败:', error)
   } finally {
     formLoading.value = false
   }
@@ -274,5 +388,9 @@ const previewImage = (index: number) => {
 :deep(.el-divider__text) {
   font-weight: 600;
   color: var(--el-text-color-primary);
+}
+
+.upload-tip {
+  margin-top: 8px;
 }
 </style>

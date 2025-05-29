@@ -52,7 +52,6 @@ export default defineComponent({
         return null
       }
       const dictOptions = getDictOptions(props.type)
-      console.log(dictOptions);
       return (
         <div
           class="dict-tag"

@@ -1,6 +1,6 @@
 <template>
   <ContentWrap>
-    <el-tabs v-model="queryParams.type" @tab-click="getList">
+    <el-tabs v-model="tabActive" @tab-change="getList">
       <el-tab-pane label="客户付款审核" name="2" />
       <el-tab-pane label="设计师合同结算" name="3" />
     </el-tabs>
@@ -115,18 +115,18 @@
   <!-- 列表 -->
   <ContentWrap>
     <el-table v-loading="loading" :data="list" :stripe="true" :show-overflow-tooltip="true">
-      <el-table-column label="编号" align="center" prop="id" fixed />
+      <el-table-column label="编号" align="center" prop="id" fixed width="70" />
       <el-table-column label="合同编号" align="center" prop="contractNo" width="170" fixed />
       <el-table-column label="合同名称" align="center" prop="contractName" width="150" fixed />
-      <el-table-column label="合同节点" align="center" prop="nodeName" width="100" fixed />
-      <el-table-column label="客户姓名" align="center" prop="customerName" width="100" fixed />
-      <el-table-column label="设计师姓名" align="center" prop="designerName" width="100" fixed />
-      <el-table-column label="订单付款金额" align="center" prop="amount" fixed width="120" />
-      <el-table-column label="合同总金额" align="center" prop="totalAmount" fixed width="100" />
+      <el-table-column label="合同节点" align="center" prop="nodeName" fixed />
+      <el-table-column label="客户" align="center" prop="customerName" width="80" fixed />
+      <el-table-column label="设计师" align="center" prop="designerName" width="80" fixed />
+      <el-table-column label="付款金额" align="center" prop="amount" fixed />
+      <el-table-column label="合同总金额" align="center" prop="totalAmount" width="100" />
       <el-table-column label="付款比例" align="center" prop="ratio" width="100">
         <template #default="{ row }"> {{ row.ratio }}% </template>
       </el-table-column>
-      <el-table-column label="支付订单编号" align="center" prop="orderNo" width="120" />
+      <el-table-column label="线下订单号" align="center" prop="orderNo" width="120" />
       <el-table-column label="支付状态" align="center" prop="paymentStatus" width="100" fixed>
         <template #default="{ row }">
           <DictTag :type="DICT_TYPE.OFFLINE_ORDER_PAYMENT_STATUS" :value="row.paymentStatus" />
@@ -160,7 +160,7 @@
           <el-button
             link
             type="success"
-            v-if="row.paymentStatus == 1 && row.type == 2"
+            v-if="row.paymentStatus == 1 && tabActive == 2"
             @click="openForm('audit', row)"
             v-hasPermi="['member:payment-record:checkUserOrder']"
           >
@@ -169,8 +169,8 @@
           <el-button
             link
             type="success"
-            v-if="row.paymentStatus == 1 && row.type == 2"
-            @click="openForm('audit', row)"
+            v-if="row.paymentStatus == 0 && tabActive == 3"
+            @click="openForm('settlement', row)"
             v-hasPermi="['member:payment-record:settlement']"
           >
             结算
@@ -188,15 +188,16 @@
   </ContentWrap>
 
   <!-- 表单弹窗：添加/修改 -->
-  <PaymentRecordForm ref="formRef" @success="getList" />
+  <PaymentForm ref="formRef" @success="getList" />
 </template>
 
 <script setup>
 import { dateFormatter } from '@/utils/formatTime'
 import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
 import { PaymentRecordApi } from '@/api/member/paymentrecord'
-import PaymentRecordForm from './PaymentRecordForm.vue'
+import PaymentForm from './PaymentForm.vue'
 
+const tabActive = ref('2') //type: '2', //支付类型：2 客户付款 3 合同设计费结算， 4 设计师邀请佣金结算
 /** 设计师发起支付记录 列表 */
 defineOptions({ name: 'PaymentRecord' })
 
@@ -204,7 +205,6 @@ const loading = ref(true) // 列表的加载中
 const list = ref([]) // 列表的数据
 const total = ref(0) // 列表的总页数
 const queryParams = reactive({
-  type: '2', //支付类型：2 客户付款 3 合同设计费结算， 4 设计师邀请佣金结算
   offlineOrderId: undefined,
   pageNo: 1,
   pageSize: 10,
@@ -224,10 +224,14 @@ const queryParams = reactive({
 const queryFormRef = ref() // 搜索的表单
 
 /** 查询列表 */
-const getList = async () => {
+const getList = async (val) => {
   loading.value = true
+
   try {
-    const data = await PaymentRecordApi.getPaymentRecordPage(queryParams)
+    const data = await PaymentRecordApi.getPaymentRecordPage({
+      ...queryParams,
+      type: val || tabActive.value
+    })
     list.value = data.list
     total.value = data.total
   } finally {

@@ -27,6 +27,6 @@ export const PaymentRecordApi = {
 
   // 支付设计师结算
   settlementPayment: async (params: any) => {
-    return await request.post({ url: `/member/payment-record/settlement`, params })
+    return await request.post({ url: `/member/payment-record/settlement`, data: params })
   }
 }

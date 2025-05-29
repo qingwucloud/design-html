@@ -20,28 +20,9 @@ export const PaymentRecordApi = {
     return await request.get({ url: `/member/payment-record/page`, params })
   },
 
-  // 查询设计师发起支付记录详情
-  getPaymentRecord: async (id: number) => {
-    return await request.get({ url: `/member/payment-record/get?id=` + id })
-  },
 
-  // 新增设计师发起支付记录
-  createPaymentRecord: async (data: PaymentRecordVO) => {
-    return await request.post({ url: `/member/payment-record/create`, data })
-  },
-
-  // 修改设计师发起支付记录
-  updatePaymentRecord: async (data: PaymentRecordVO) => {
-    return await request.put({ url: `/member/payment-record/update`, data })
-  },
-
-  // 删除设计师发起支付记录
-  deletePaymentRecord: async (id: number) => {
-    return await request.delete({ url: `/member/payment-record/delete?id=` + id })
-  },
-
-  // 导出设计师发起支付记录 Excel
-  exportPaymentRecord: async (params) => {
-    return await request.download({ url: `/member/payment-record/export-excel`, params })
+  // 审核用户订单
+  checkUserOrder: async (id:number) => {
+    return await request.put({ url: `/member/payment-record/checkCustomerOrder`, data:{ id } })
   }
 }

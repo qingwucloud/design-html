@@ -85,7 +85,7 @@
           start-placeholder="开始日期"
           end-placeholder="结束日期"
           :default-time="[new Date('1 00:00:00'), new Date('1 23:59:59')]"
-          class="!w-220px"
+          class="!w-240px"
         />
       </el-form-item>
       <el-form-item label="支付时间" prop="payTime">
@@ -96,7 +96,7 @@
           start-placeholder="开始日期"
           end-placeholder="结束日期"
           :default-time="[new Date('1 00:00:00'), new Date('1 23:59:59')]"
-          class="!w-220px"
+          class="!w-240px"
         />
       </el-form-item>
       <el-form-item>
@@ -135,19 +135,27 @@
       />
       <el-table-column label="审核人" align="center" prop="checker" />
       <el-table-column
-        label="创建时间"
+        label="支付时间"
         align="center"
-        prop="createTime"
+        prop="payTime"
         :formatter="dateFormatter"
         width="180px"
       />
-      <el-table-column label="操作" align="center" fixed="right">
+      <el-table-column label="操作" align="center" fixed="right" width="150">
         <template #default="{ row }">
           <el-button
             link
             type="primary"
+            @click="openForm('detail', row)"
+            v-hasPermi="['member:payment-record:query']"
+          >
+            详情
+          </el-button>
+          <el-button
+            link
+            type="success"
             v-if="row.paymentStatus == 1"
-            @click="openForm('update', row.id)"
+            @click="openForm('audit', row)"
             v-hasPermi="['member:payment-record:checkUserOrder']"
           >
             审核
@@ -226,8 +234,8 @@ const resetQuery = () => {
 
 /** 添加/修改操作 */
 const formRef = ref()
-const openForm = (type, id) => {
-  formRef.value.open(type, id)
+const openForm = (type, data) => {
+  formRef.value.open(type, data)
 }
 
 /** 初始化 **/

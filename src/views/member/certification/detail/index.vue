@@ -3,25 +3,25 @@
     <el-row :gutter="10">
       <!-- 左上角：基本信息 -->
       <el-col :span="14" class="detail-info-item">
-         <el-row :gutter="10">
-           <el-col>
-             <UserBasicInfo :user="user">
-               <template #header>
-                 <div class="card-header">
-                   <CardTitle title="基本信息" />
-                 </div>
-               </template>
-             </UserBasicInfo>
-           </el-col>
-           <el-col class="mt-20px">
-             <el-card class="h-full " shadow="never">
-               <template #header>
-                 <CardTitle title="身份证信息" />
-               </template>
-               <UserAccountInfo :user="user" :designerInfo="designerInfo" />
-             </el-card>
-           </el-col>
-         </el-row>
+        <el-row :gutter="10">
+          <el-col>
+            <UserBasicInfo :user="user">
+              <template #header>
+                <div class="card-header">
+                  <CardTitle title="基本信息" />
+                </div>
+              </template>
+            </UserBasicInfo>
+          </el-col>
+          <el-col class="mt-20px">
+            <el-card class="h-full" shadow="never">
+              <template #header>
+                <CardTitle title="身份证信息" />
+              </template>
+              <UserAccountInfo :user="user" :designerInfo="designerInfo" />
+            </el-card>
+          </el-col>
+        </el-row>
       </el-col>
       <!-- 右上角：账户信息 -->
       <el-col :span="10" class="detail-info-item">
@@ -57,6 +57,12 @@
           <el-tab-pane label="推广用户" lazy>
             <UserBrokerageList :bind-user-id="id" />
           </el-tab-pane>
+          <el-tab-pane label="作品集" lazy>
+            <DesignList :bind-user-id="id" />
+          </el-tab-pane>
+          <el-tab-pane label="评论" lazy>
+            <UserCommentList :bind-user-id="id" />
+          </el-tab-pane>
         </el-tabs>
       </el-card>
     </el-row>
@@ -65,41 +71,35 @@
   <!-- 表单弹窗：添加/修改 -->
   <UserForm ref="formRef" @success="getUserData(id)" />
 </template>
-<script lang="ts" setup>
+<script setup>
 import * as WalletApi from '@/api/pay/wallet/balance'
 import * as UserApi from '@/api/member/user'
 import { useTagsViewStore } from '@/store/modules/tagsView'
 import UserForm from '@/views/member/user/UserForm.vue'
 import UserAccountInfo from './UserAccountInfo.vue'
-import UserAddressList from './UserAddressList.vue'
 import UserBasicInfo from './UserBasicInfo.vue'
 import UserBrokerageList from './UserBrokerageList.vue'
-import UserCouponList from './UserCouponList.vue'
-import UserExperienceRecordList from './UserExperienceRecordList.vue'
 import UserOrderList from './UserOrderList.vue'
-import UserPointList from './UserPointList.vue'
-import UserSignList from './UserSignList.vue'
-import UserFavoriteList from './UserFavoriteList.vue'
 import UserAfterSaleList from './UserAftersaleList.vue'
 import UserBalanceList from './UserBalanceList.vue'
 import { CardTitle } from '@/components/Card/index'
 import { ElMessage } from 'element-plus'
 import { CertificationApi } from '@/api/member/certification'
 import DesignerAccountInfo from '@/views/member/certification/detail/DesignerAccountInfo.vue'
-
+import UserCommentList from '../comment/index.vue'
 defineOptions({ name: 'MemberDetail' })
 
 const loading = ref(true) // 加载中
-const user = ref<UserApi.UserVO>({} as UserApi.UserVO)
+const user = ref({})
 
 /** 添加/修改操作 */
 const formRef = ref()
-const openForm = (type: string) => {
+const openForm = (type) => {
   formRef.value.open(type, id)
 }
 const designerInfo = ref({})
 /** 获得用户 */
-const getUserData = async (id: number) => {
+const getUserData = async (id) => {
   loading.value = true
   try {
     user.value = await UserApi.getUser(id)
@@ -124,8 +124,8 @@ const WALLET_INIT_DATA = {
   balance: 0,
   totalExpense: 0,
   totalRecharge: 0
-} as WalletApi.WalletVO // 钱包初始化数据
-const wallet = ref<WalletApi.WalletVO>(WALLET_INIT_DATA) // 钱包信息
+} // 钱包初始化数据
+const wallet = ref(WALLET_INIT_DATA) // 钱包信息
 
 /** 查询用户钱包信息 */
 const getUserWallet = async () => {

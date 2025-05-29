@@ -6,7 +6,7 @@
       :model="queryParams"
       ref="queryFormRef"
       :inline="true"
-      label-width="120px"
+      label-width="100px"
     >
       <el-form-item label="合同编号" prop="contractNo">
         <el-input
@@ -62,31 +62,20 @@
           class="!w-240px"
         />
       </el-form-item>
-      <el-form-item label="合同状态" prop="memberContractStatus">
+      <el-form-item label="支付状态" prop="paymentStatus">
         <el-select
-          v-model="queryParams.memberContractStatus"
+          v-model="queryParams.paymentStatus"
           placeholder="请选择状态"
           clearable
           class="!w-240px"
         >
           <el-option
-            v-for="dict in getIntDictOptions(DICT_TYPE.MEMBER_CONTRACT_STATUS)"
+            v-for="dict in getIntDictOptions(DICT_TYPE.OFFLINE_ORDER_PAYMENT_STATUS)"
             :key="dict.value"
             :label="dict.label"
             :value="dict.value"
           />
         </el-select>
-      </el-form-item>
-      <el-form-item label="创建时间" prop="createTime">
-        <el-date-picker
-          v-model="queryParams.createTime"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          type="daterange"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-          :default-time="[new Date('1 00:00:00'), new Date('1 23:59:59')]"
-          class="!w-220px"
-        />
       </el-form-item>
       <el-form-item label="审核时间" prop="checkTime">
         <el-date-picker
@@ -99,15 +88,20 @@
           class="!w-220px"
         />
       </el-form-item>
+      <el-form-item label="支付时间" prop="payTime">
+        <el-date-picker
+          v-model="queryParams.payTime"
+          value-format="YYYY-MM-DD HH:mm:ss"
+          type="daterange"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+          :default-time="[new Date('1 00:00:00'), new Date('1 23:59:59')]"
+          class="!w-220px"
+        />
+      </el-form-item>
       <el-form-item>
-        <el-button @click="handleQuery">
-          <Icon icon="ep:search" class="mr-5px" />
-          搜索
-        </el-button>
-        <el-button @click="resetQuery">
-          <Icon icon="ep:refresh" class="mr-5px" />
-          重置
-        </el-button>
+        <el-button @click="handleQuery"><Icon icon="ep:search" class="mr-5px" /> 搜索</el-button>
+        <el-button @click="resetQuery"><Icon icon="ep:refresh" class="mr-5px" /> 重置</el-button>
       </el-form-item>
     </el-form>
   </ContentWrap>
@@ -117,30 +111,29 @@
     <el-table v-loading="loading" :data="list" :stripe="true" :show-overflow-tooltip="true">
       <el-table-column label="编号" align="center" prop="id" fixed />
       <el-table-column label="合同编号" align="center" prop="contractNo" width="170" fixed />
-      <el-table-column label="合同名称" align="center" prop="contractName" width="170" fixed />
+      <el-table-column label="合同名称" align="center" prop="contractName" width="150" fixed />
+      <el-table-column label="合同节点" align="center" prop="nodeName" width="100" fixed />
       <el-table-column label="客户姓名" align="center" prop="customerName" width="100" fixed />
-      <el-table-column label="客户电话" align="center" prop="customerMobile" width="100" fixed />
       <el-table-column label="设计师姓名" align="center" prop="designerName" width="100" fixed />
-      <el-table-column label="设计师电话" align="center" prop="designerMobile" width="100" fixed />
-      <el-table-column label="合同状态" align="center" prop="memberContractStatus" width="100" fixed >
+      <el-table-column label="订单付款金额" align="center" prop="amount" fixed width="120" />
+      <el-table-column label="合同总金额" align="center" prop="totalAmount" fixed width="100" />
+      <el-table-column label="付款比例" align="center" prop="ratio" width="100">
+        <template #default="{ row }"> {{ row.ratio }}% </template>
+      </el-table-column>
+      <el-table-column label="支付订单编号" align="center" prop="orderNo" width="120" />
+      <el-table-column label="支付状态" align="center" prop="paymentStatus" width="100" fixed>
         <template #default="{ row }">
-          <DictTag :type="DICT_TYPE.MEMBER_CONTRACT_STATUS" :value="row.memberContractStatus" />
+          <DictTag :type="DICT_TYPE.OFFLINE_ORDER_PAYMENT_STATUS" :value="row.paymentStatus" />
         </template>
       </el-table-column>
-      <el-table-column label="工程地址" align="center" prop="projectAddress" width="150" />
-      <el-table-column label="合同总金额" align="center" prop="totalAmount" width="100">
-        <template #default="{ row }">
-          <span>{{ row.totalAmount }} 元</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="已支付金额" align="center" prop="paidAmount" width="100">
-        <template #default="{ row }">
-          <span>{{ row.paidAmount }} 元</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="审核时间" align="center" prop="checkTime" />
+      <el-table-column
+        label="审核时间"
+        align="center"
+        prop="checkTime"
+        :formatter="dateFormatter"
+        width="180px"
+      />
       <el-table-column label="审核人" align="center" prop="checker" />
-      <el-table-column label="驳回原因" align="center" prop="rejectReason" />
       <el-table-column
         label="创建时间"
         align="center"
@@ -148,25 +141,16 @@
         :formatter="dateFormatter"
         width="180px"
       />
-      <el-table-column label="操作" align="center" min-width="120px" fixed="right">
-        <template #default="scope">
-          <el-button
-            link
-            type="danger"
-            v-if="scope.row.memberContractStatus === 0"
-            @click="handleDetail('check', scope.row.id)"
-            v-hasPermi="['member:contract:check']"
-          >
-            审核
-          </el-button>
+      <el-table-column label="操作" align="center" fixed="right">
+        <template #default="{ row }">
           <el-button
             link
             type="primary"
-            v-if="scope.row.memberContractStatus !== 0"
-            @click="handleDetail('detail', scope.row.id)"
-            v-hasPermi="['member:contract:detail']"
+            v-if="row.paymentStatus == 1"
+            @click="openForm('update', row.id)"
+            v-hasPermi="['member:payment-record:checkUserOrder']"
           >
-            详情
+            审核
           </el-button>
         </template>
       </el-table-column>
@@ -179,20 +163,25 @@
       @pagination="getList"
     />
   </ContentWrap>
+
+  <!-- 表单弹窗：添加/修改 -->
+  <PaymentRecordForm ref="formRef" @success="getList" />
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { dateFormatter } from '@/utils/formatTime'
-import { ContractApi, ContractVO } from '@/api/member/contract'
 import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
+import { PaymentRecordApi } from '@/api/member/paymentrecord'
+import PaymentRecordForm from './PaymentRecordForm.vue'
 
-/** 用户合同 列表 */
-defineOptions({ name: 'Contract' })
-const { push } = useRouter()
+/** 设计师发起支付记录 列表 */
+defineOptions({ name: 'PaymentRecord' })
+
 const loading = ref(true) // 列表的加载中
-const list = ref<ContractVO[]>([]) // 列表的数据
+const list = ref([]) // 列表的数据
 const total = ref(0) // 列表的总页数
 const queryParams = reactive({
+  offlineOrderId: undefined,
   pageNo: 1,
   pageSize: 10,
   designerName: undefined,
@@ -203,7 +192,11 @@ const queryParams = reactive({
   customerMobile: undefined,
   createTime: [],
   checkTime: [],
-  memberContractStatus: undefined
+  paymentStatus: undefined,
+  contractId: undefined,
+  type: undefined,
+  orderId: undefined,
+  payTime: []
 })
 const queryFormRef = ref() // 搜索的表单
 
@@ -211,7 +204,7 @@ const queryFormRef = ref() // 搜索的表单
 const getList = async () => {
   loading.value = true
   try {
-    const data = await ContractApi.getContractPage(queryParams)
+    const data = await PaymentRecordApi.getPaymentRecordPage(queryParams)
     list.value = data.list
     total.value = data.total
   } finally {
@@ -232,9 +225,9 @@ const resetQuery = () => {
 }
 
 /** 添加/修改操作 */
-
-const handleDetail = (type: string, id?: number) => {
-  push({ name: 'MemberContractDetail', params: { type, id } })
+const formRef = ref()
+const openForm = (type, id) => {
+  formRef.value.open(type, id)
 }
 
 /** 初始化 **/

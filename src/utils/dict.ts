@@ -255,4 +255,8 @@ export enum DICT_TYPE {
   DESIGNER_APPOINTMENT_STATUS = "designer_appointment_status", // 用户预约设计师状态
   MEMBER_CONTRACT_STATUS = "member_contract_status", // 设计合同审核状态
   MEMBER_CONTRACT_CONFIRM_STATUS = "member_contract_confirm_status",  // 设计合同用户确认状态
+
+
+  OFFLINE_ORDER_PAYMENT_STATUS = "offline_order_payment_status", // 线下订单支付状态
+  PAYMENT_RECORD_TYPE = "payment_record_type", // 发起付款记录类型
 }

@@ -7,7 +7,7 @@
       <el-descriptions-item label="操作类型">
         <dict-tag :type="DICT_TYPE.SYSTEM_LOGIN_TYPE" :value="detailData.logType" />
       </el-descriptions-item>
-      <el-descriptions-item label="用户名称">
+      <el-descriptions-item label="用户账号">
         {{ detailData.username }}
       </el-descriptions-item>
       <el-descriptions-item label="登录地址">

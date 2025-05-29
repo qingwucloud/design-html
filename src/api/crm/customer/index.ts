@@ -9,7 +9,7 @@ export interface CustomerVO {
   contactLastContent: string // 最后跟进内容
   contactNextTime: Date // 下次联系时间
   ownerUserId: number // 负责人的用户编号
-  ownerUserName?: string // 负责人的用户名称
+  ownerUserName?: string // 负责人的用户账号
   ownerUserDept?: string // 负责人的部门名称
   lockStatus?: boolean
   dealStatus?: boolean

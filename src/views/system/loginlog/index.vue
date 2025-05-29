@@ -1,6 +1,4 @@
 <template>
-
-
   <ContentWrap>
     <!-- 搜索工作栏 -->
     <el-form
@@ -10,10 +8,10 @@
       :inline="true"
       label-width="68px"
     >
-      <el-form-item label="用户名称" prop="username">
+      <el-form-item label="用户账号" prop="username">
         <el-input
           v-model="queryParams.username"
-          placeholder="请输入用户名称"
+          placeholder="请输入用户账号"
           clearable
           @keyup.enter="handleQuery"
           class="!w-240px"
@@ -64,7 +62,7 @@
           <dict-tag :type="DICT_TYPE.SYSTEM_LOGIN_TYPE" :value="scope.row.logType" />
         </template>
       </el-table-column>
-      <el-table-column label="用户名称" align="center" prop="username" width="180" />
+      <el-table-column label="用户账号" align="center" prop="username" width="180" />
       <el-table-column label="登录地址" align="center" prop="userIp" width="180" />
       <el-table-column label="浏览器" align="center" prop="userAgent" />
       <el-table-column label="登陆结果" align="center" prop="result">

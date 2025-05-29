@@ -23,8 +23,8 @@
       <el-form-item label="用户头像" prop="userAvatar">
         <UploadImg v-model="formData.userAvatar" height="60px" width="60px" />
       </el-form-item>
-      <el-form-item label="用户名称" prop="userNickname">
-        <el-input v-model="formData.userNickname" placeholder="请输入用户名称" />
+      <el-form-item label="用户账号" prop="userNickname">
+        <el-input v-model="formData.userNickname" placeholder="请输入用户账号" />
       </el-form-item>
       <el-form-item label="评论内容" prop="content">
         <el-input v-model="formData.content" type="textarea" />
@@ -75,7 +75,7 @@ const formRules = reactive({
   spuId: [{ required: true, message: '商品不能为空', trigger: 'blur' }],
   skuId: [{ required: true, message: '规格不能为空', trigger: 'blur' }],
   userAvatar: [{ required: true, message: '用户头像不能为空', trigger: 'blur' }],
-  userNickname: [{ required: true, message: '用户名称不能为空', trigger: 'blur' }],
+  userNickname: [{ required: true, message: '用户账号不能为空', trigger: 'blur' }],
   content: [{ required: true, message: '评论内容不能为空', trigger: 'blur' }],
   descriptionScores: [{ required: true, message: '描述星级不能为空', trigger: 'blur' }],
   benefitScores: [{ required: true, message: '服务星级不能为空', trigger: 'blur' }]

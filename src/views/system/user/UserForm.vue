@@ -9,8 +9,12 @@
     >
       <el-row>
         <el-col :span="12">
-          <el-form-item v-if="formData.id === undefined" label="用户名称" prop="username">
-            <el-input v-model="formData.username" placeholder="请输入用户名称" @blur="blurUsername" />
+          <el-form-item v-if="formData.id === undefined" label="用户账号" prop="username">
+            <el-input
+              v-model="formData.username"
+              placeholder="请输入用户账号"
+              @blur="blurUsername"
+            />
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -130,10 +134,10 @@ const formData = ref({
 })
 const formRules = reactive<FormRules>({
   username: [
-    { required: true, message: '用户名称不能为空', trigger: 'blur' },
+    { required: true, message: '用户账号不能为空', trigger: 'blur' },
     {
       pattern: /^(?:(?:\+|00)86)?1(?:3[\d]|4[5-79]|5[0-35-9]|6[5-7]|7[0-8]|8[\d]|9[189])\d{8}$/,
-      message: '用户名称为手机号码格式',
+      message: '用户账号为手机号码格式',
       trigger: 'blur'
     }
   ],
@@ -159,7 +163,7 @@ const deptList = ref<Tree[]>([]) // 树形结构
 const postList = ref([] as PostApi.PostVO[]) // 岗位列表
 
 const blurUsername = () => {
-  formData.value.mobile= formData.value.username // 手机号码与用户名保持一致
+  formData.value.mobile = formData.value.username // 手机号码与用户名保持一致
 }
 /** 打开弹窗 */
 const open = async (type: string, id?: number) => {

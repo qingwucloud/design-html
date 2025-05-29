@@ -1,6 +1,4 @@
 <template>
-
-
   <ContentWrap>
     <!-- 搜索工作栏 -->
     <el-form
@@ -24,10 +22,10 @@
           class="!w-240px"
         />
       </el-form-item>
-      <el-form-item label="用户名称" prop="userNickname">
+      <el-form-item label="用户账号" prop="userNickname">
         <el-input
           v-model="queryParams.userNickname"
-          placeholder="请输入用户名称"
+          placeholder="请输入用户账号"
           @keyup.enter="handleQuery"
           class="!w-240px"
         />
@@ -98,7 +96,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="用户名称" align="center" prop="userNickname" width="100" />
+      <el-table-column label="用户账号" align="center" prop="userNickname" width="100" />
       <el-table-column label="商品评分" align="center" prop="descriptionScores" width="90" />
       <el-table-column label="服务评分" align="center" prop="benefitScores" width="90" />
       <el-table-column label="评论内容" align="center" prop="content" min-width="210">

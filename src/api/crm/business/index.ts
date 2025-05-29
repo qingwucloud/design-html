@@ -10,7 +10,7 @@ export interface BusinessVO {
   contactLastTime: Date
   contactNextTime: Date
   ownerUserId: number
-  ownerUserName?: string // 负责人的用户名称
+  ownerUserName?: string // 负责人的用户账号
   ownerUserDept?: string // 负责人的部门名称
   statusTypeId: number
   statusTypeName?: string

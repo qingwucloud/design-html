@@ -80,7 +80,7 @@
           <el-option label="开启" value="1" />
         </el-select>
       </el-form-item>
-      <el-form-item label="精选排序号" prop="startSort">
+      <el-form-item label="精选排序" prop="startSort">
         <el-select
           v-model="queryParams.startSort"
           placeholder="请选择精选排序号"

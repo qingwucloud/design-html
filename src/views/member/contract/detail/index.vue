@@ -111,7 +111,7 @@
       </el-collapse>
     </el-card>
     <!-- 非审核模式：显示节点信息 -->
-    <el-card v-if="!isCheckMode">
+    <el-card v-if="!isCheckMode && !isPendingCheck">
       <CardTitle title="节点信息" />
 
       <!-- 进度节点显示 -->
@@ -307,6 +307,12 @@ const nodeFileMap = ref<Map<number, any[]>>(new Map()) // 存储每个节点的�
 
 // 判断是否为审核模式
 const isCheckMode = computed(() => route.params.type === 'check')
+//是否为待审核 被驳回
+const isPendingCheck = computed(() => {
+  return (
+    contractData.value?.memberContractStatus === 0 || contractData.value?.memberContractStatus === 2
+  )
+})
 
 // 控制合同信息展开状态
 const activeNames = ref('')
@@ -468,28 +474,37 @@ const downloadFile = (item: any) => {
 }
 
 onMounted(async () => {
-  const contractId = Number(route.params.id)
-  contractData.value = await ContractApi.getContract(contractId)
-  parseAttachments(contractData.value.attachmentUrl)
+  try {
+    loading.value = true
+    const contractId = Number(route.params.id)
+    contractData.value = await ContractApi.getContract(contractId)
+    parseAttachments(contractData.value.attachmentUrl)
 
-  // 审核模式下设置合同ID和默认展开合同信息
-  if (isCheckMode.value) {
-    checkFormData.value.id = contractId
-    activeNames.value = 'info' // 审核模式下默认展开合同信息
-  } else {
-    // 非审核模式才加载节点信息
-    contractNodeList.value = await ContractApi.getContractNodeList(contractId)
+    // 审核模式下设置合同ID和默认展开合同信息
+    if (isCheckMode.value || isPendingCheck.value) {
+      checkFormData.value.id = contractId
+      activeNames.value = 'info' // 审核模式下默认展开合同信息
+    } else {
+      // 非审核模式才加载节点信息
+      contractNodeList.value = await ContractApi.getContractNodeList(contractId)
 
-    // 自动选中第一个节点或当前进行中的节点
-    if (contractNodeList.value.length > 0) {
-      // 找到当前进行中的节点
-      const currentNodeIndex = contractNodeList.value.findIndex((node, index) =>
-        isCurrentNode(node, index)
-      )
-      const targetNode =
-        currentNodeIndex >= 0 ? contractNodeList.value[currentNodeIndex] : contractNodeList.value[0]
-      await handleNodeClick(targetNode)
+      // 自动选中第一个节点或当前进行中的节点
+      if (contractNodeList.value.length > 0) {
+        // 找到当前进行中的节点
+        const currentNodeIndex = contractNodeList.value.findIndex((node, index) =>
+          isCurrentNode(node, index)
+        )
+        const targetNode =
+          currentNodeIndex >= 0
+            ? contractNodeList.value[currentNodeIndex]
+            : contractNodeList.value[0]
+        await handleNodeClick(targetNode)
+      }
     }
+  } catch (error) {
+    console.error('加载合同详情失败:', error)
+  } finally {
+    loading.value = false
   }
 })
 

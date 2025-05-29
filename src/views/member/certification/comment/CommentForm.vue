@@ -23,7 +23,7 @@
         <el-rate v-model="formData.benefitScores" />
       </el-form-item>
       <el-form-item label="评论图片" prop="picUrls">
-        <UploadImgs v-model="formData.picUrls" :limit="9" height="60px" width="60px" />
+        <UploadImgs v-model="formData.picUrls" :limit="9" height="80px" width="80px" />
       </el-form-item>
     </el-form>
     <template #footer>
@@ -50,7 +50,7 @@ const formData = ref({
   contractName: undefined,
   contractId: undefined,
   userNickname: undefined,
-  userAvatar: undefined,
+  userAvatar: 'https://80du-design.oss-cn-shenzhen.aliyuncs.com/static/avatar.png',
   descriptionScores: 5,
   benefitScores: 5,
   content: undefined,
@@ -98,7 +98,7 @@ const submitForm = async () => {
     if (formType.value === 'create') {
       await CommentApi.createComment({
         ...formData.value,
-        designerId: route.params.designerId // 绑定的设计师 ID
+        designerId: route.params.id // 绑定的设计师 ID
       })
       message.success(t('common.createSuccess'))
     }
@@ -119,7 +119,7 @@ const resetForm = () => {
     contractName: undefined,
     contractId: undefined,
     userNickname: undefined,
-    userAvatar: undefined,
+    userAvatar: 'https://80du-design.oss-cn-shenzhen.aliyuncs.com/static/avatar.png',
     descriptionScores: 5,
     benefitScores: 5,
     content: undefined,

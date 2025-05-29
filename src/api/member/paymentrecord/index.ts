@@ -20,9 +20,13 @@ export const PaymentRecordApi = {
     return await request.get({ url: `/member/payment-record/page`, params })
   },
 
-
   // 审核用户订单
-  checkUserOrder: async (id:number) => {
-    return await request.put({ url: `/member/payment-record/checkCustomerOrder`, data:{ id } })
+  checkUserOrder: async (id: number) => {
+    return await request.put({ url: `/member/payment-record/checkCustomerOrder`, data: { id } })
+  },
+
+  // 支付设计师结算
+  settlementPayment: async (params: any) => {
+    return await request.post({ url: `/member/payment-record/settlement`, params })
   }
 }

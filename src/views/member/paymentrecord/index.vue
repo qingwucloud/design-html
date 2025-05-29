@@ -1,5 +1,11 @@
 <template>
   <ContentWrap>
+    <el-tabs v-model="queryParams.type" @tab-click="getList">
+      <el-tab-pane label="客户付款审核" name="2" />
+      <el-tab-pane label="设计师合同结算" name="3" />
+    </el-tabs>
+  </ContentWrap>
+  <ContentWrap>
     <!-- 搜索工作栏 -->
     <el-form
       class="-mb-15px"
@@ -154,11 +160,20 @@
           <el-button
             link
             type="success"
-            v-if="row.paymentStatus == 1"
+            v-if="row.paymentStatus == 1 && row.type == 2"
             @click="openForm('audit', row)"
             v-hasPermi="['member:payment-record:checkUserOrder']"
           >
             审核
+          </el-button>
+          <el-button
+            link
+            type="success"
+            v-if="row.paymentStatus == 1 && row.type == 2"
+            @click="openForm('audit', row)"
+            v-hasPermi="['member:payment-record:settlement']"
+          >
+            结算
           </el-button>
         </template>
       </el-table-column>
@@ -189,6 +204,7 @@ const loading = ref(true) // 列表的加载中
 const list = ref([]) // 列表的数据
 const total = ref(0) // 列表的总页数
 const queryParams = reactive({
+  type: '2', //支付类型：2 客户付款 3 合同设计费结算， 4 设计师邀请佣金结算
   offlineOrderId: undefined,
   pageNo: 1,
   pageSize: 10,
@@ -202,7 +218,6 @@ const queryParams = reactive({
   checkTime: [],
   paymentStatus: undefined,
   contractId: undefined,
-  type: undefined,
   orderId: undefined,
   payTime: []
 })

@@ -48,7 +48,7 @@
         />
       </div>
     </el-descriptions-item>
-    <el-descriptions-item span="3">
+    <el-descriptions-item span="3" v-if="designerInfo?.resumes?.length > 0">
       <template #label>
         <descriptions-item-label label=" 工作履历" />
       </template>

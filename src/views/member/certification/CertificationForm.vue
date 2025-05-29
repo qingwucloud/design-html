@@ -60,7 +60,14 @@
         </el-col>
         <el-col :span="12">
           <el-form-item label="履历" prop="resumes">
-            <el-button type="primary" text @click="dialogResumesVisible = true">查看履历</el-button>
+            <el-button
+              type="primary"
+              text
+              @click="dialogResumesVisible = true"
+              v-if="formData.resumes?.length"
+              >查看履历</el-button
+            >
+            <el-button type="primary" text v-else>暂无履历</el-button>
           </el-form-item>
         </el-col>
       </el-row>

@@ -267,7 +267,7 @@ const handleDetail = (type: string, id?: number) => {
 /** 排序按钮操作 */
 const sortOfActions = async (row) => {
   ElMessageBox.prompt('排序值最大的8个会显示在小程序首页', '请输入排序值', {
-    inputPattern: /^[1-9]\d*$/,
+    inputPattern: /^[0-9]\d*$/,
     inputType: 'number',
     inputValue: row.startSort,
     inputErrorMessage: '请输入排序值'

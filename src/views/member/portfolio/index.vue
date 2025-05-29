@@ -309,7 +309,7 @@ const resetQuery = () => {
 
 const handleSort = (row) => {
   ElMessageBox.prompt('排序值最大的8个会显示在小程序首页', '请输入排序值', {
-    inputPattern: /^[1-9]\d*$/,
+    inputPattern: /^[0-9]\d*$/,
     inputType: 'number',
     inputValue: row.sortNum,
     inputErrorMessage: '请输入排序值'

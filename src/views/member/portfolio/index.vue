@@ -156,12 +156,7 @@
       </el-table-column>
       <el-table-column label="主图" align="center" prop="coverUrl" width="120">
         <template #default="scope">
-          <el-image
-            :src="scope.row.coverUrl"
-            style="width: 60px; height: 60px"
-            fit="cover"
-            :preview-src-list="[scope.row.coverUrl]"
-          />
+          <el-image :src="scope.row.coverUrl" style="width: 60px; height: 60px" fit="cover" />
         </template>
       </el-table-column>
       <el-table-column label="户型" align="center" prop="portfolioHouseTypeDesc" />

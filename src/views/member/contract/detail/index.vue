@@ -224,6 +224,9 @@
                         >
                           {{ getFileStatusText(item.confirmStatus) }}
                         </span>
+                        <span v-if="item.confirmTime" class="confirm-time">
+                          确认时间: {{ formatDate(item.confirmTime, 'YYYY-MM-DD HH:mm:ss') }}
+                        </span>
                       </div>
                     </div>
 
@@ -923,6 +926,12 @@ const parseAttachments = (url) => {
     color: #991b1b;
     background: #fee2e2;
   }
+}
+
+.confirm-time {
+  font-size: 12px;
+  color: #666;
+  white-space: nowrap;
 }
 
 .file-actions {

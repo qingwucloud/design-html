@@ -92,6 +92,17 @@
           />
         </el-select>
       </el-form-item>
+      <el-form-item label="精选排序号" prop="sortNum">
+        <el-select
+          v-model="queryParams.sortNum"
+          placeholder="请选择精选排序号"
+          clearable
+          class="!w-240px"
+        >
+          <el-option label="否" :value="0" />
+          <el-option label="是" :value="1" />
+        </el-select>
+      </el-form-item>
       <el-form-item label="创建时间" prop="createTime">
         <el-date-picker
           v-model="queryParams.createTime"
@@ -133,11 +144,11 @@
   <ContentWrap>
     <el-table v-loading="loading" :data="list" :stripe="true" :show-overflow-tooltip="true">
       <el-table-column label="编号" align="center" prop="id" fixed />
-      <el-table-column label="作品标题" align="center" prop="title" fixed width="150"/>
-      <el-table-column label="设计师名称" align="center" prop="name" fixed width="100"/>
-      <el-table-column label="小区名称" align="center" prop="communityName" fixed/>
-      <el-table-column label="审核状态 " align="center" prop="status" fixed >
-        <template #default="{row}">
+      <el-table-column label="作品标题" align="center" prop="title" fixed width="150" />
+      <el-table-column label="设计师名称" align="center" prop="name" fixed width="100" />
+      <el-table-column label="小区名称" align="center" prop="communityName" fixed />
+      <el-table-column label="审核状态 " align="center" prop="status" fixed>
+        <template #default="{ row }">
           <el-tag v-if="row.status === 0" type="warning" size="small">待审核</el-tag>
           <el-tag v-else-if="row.status === 1" type="primary" size="small">已审核</el-tag>
           <el-tag v-else type="danger" size="small">已驳回</el-tag>
@@ -154,25 +165,76 @@
         </template>
       </el-table-column>
       <el-table-column label="户型" align="center" prop="portfolioHouseTypeDesc" />
-      <el-table-column label="面积" align="center" prop="area" >
+      <el-table-column label="面积" align="center" prop="area">
         <template #default="scope">
           <span>{{ scope.row.area }} ㎡</span>
         </template>
       </el-table-column>
       <el-table-column label="作品标签" align="center" prop="portfolioTagTypeDesc" />
       <el-table-column label="作品风格" align="center" prop="designerStyleTypeDesc" />
-      <el-table-column label="创建时间" align="center" prop="createTime" :formatter="dateFormatter" width="180px" />
+      <el-table-column
+        label="创建时间"
+        align="center"
+        prop="createTime"
+        :formatter="dateFormatter"
+        width="180px"
+      />
       <el-table-column label="审核人" align="center" prop="checker" />
-      <el-table-column label="审核时间" align="center" prop="checkTime" :formatter="dateFormatter" width="180px" />
+      <el-table-column
+        label="审核时间"
+        align="center"
+        prop="checkTime"
+        :formatter="dateFormatter"
+        width="180px"
+      />
       <el-table-column label="驳回原因" align="center" prop="rejectReason" />
-      <el-table-column label="精选排序号" align="center" prop="sortNum" width="100"/>
-      <el-table-column label="操作" align="center" min-width="240px" fixed="right" :show-overflow-tooltip="false">
+      <el-table-column label="精选排序号" align="center" prop="sortNum" width="100" />
+      <el-table-column
+        label="操作"
+        align="center"
+        min-width="240px"
+        fixed="right"
+        :show-overflow-tooltip="false"
+      >
         <template #default="scope">
-          <el-button link type="success" @click="openForm('update', scope.row.id)" v-hasPermi="['member:portfolio:update']">编辑</el-button>
-          <el-button link v-if="scope.row.status === 1" type="primary" @click="openCheckForm('detail', scope.row.id)" v-hasPermi="['member:portfolio:detail']">详情</el-button>
-          <el-button link type="success" v-if="scope.row.status === 0" @click="openCheckForm('check', scope.row.id)" v-hasPermi="['member:portfolio:check']">审核</el-button>
-          <el-button link type="danger" @click="handleDelete(scope.row.id)" v-hasPermi="['member:portfolio:delete']">删除</el-button>
-          <el-button link type="danger" v-if="scope.row.status === 1" @click="handleSort(scope.row)" v-hasPermi="['member:portfolio:recommend']">精选排序</el-button>
+          <el-button
+            link
+            type="success"
+            @click="openForm('update', scope.row.id)"
+            v-hasPermi="['member:portfolio:update']"
+            >编辑</el-button
+          >
+          <el-button
+            link
+            v-if="scope.row.status === 1"
+            type="primary"
+            @click="openCheckForm('detail', scope.row.id)"
+            v-hasPermi="['member:portfolio:detail']"
+            >详情</el-button
+          >
+          <el-button
+            link
+            type="success"
+            v-if="scope.row.status === 0"
+            @click="openCheckForm('check', scope.row.id)"
+            v-hasPermi="['member:portfolio:check']"
+            >审核</el-button
+          >
+          <el-button
+            link
+            type="danger"
+            @click="handleDelete(scope.row.id)"
+            v-hasPermi="['member:portfolio:delete']"
+            >删除</el-button
+          >
+          <el-button
+            link
+            type="danger"
+            v-if="scope.row.status === 1"
+            @click="handleSort(scope.row)"
+            v-hasPermi="['member:portfolio:recommend']"
+            >精选排序</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -196,8 +258,8 @@
 import { dateFormatter } from '@/utils/formatTime'
 import { PortfolioApi, PortfolioVO } from '@/api/member/portfolio'
 import PortfolioForm from './PortfolioForm.vue'
-import { getIntDictOptions,DICT_TYPE } from "@/utils/dict";
-import { ElMessageBox } from "element-plus";
+import { getIntDictOptions, DICT_TYPE } from '@/utils/dict'
+import { ElMessageBox } from 'element-plus'
 
 /** 设计师作品集 列表 */
 defineOptions({ name: 'Portfolio' })
@@ -211,6 +273,7 @@ const total = ref(0) // 列表的总页数
 const queryParams = reactive({
   pageNo: 1,
   pageSize: 10,
+  sortNum: undefined,
   name: undefined,
   communityName: undefined,
   title: undefined,
@@ -223,7 +286,7 @@ const queryParams = reactive({
   checkTime: []
 })
 const queryFormRef = ref() // 搜索的表单
-const checkRef=ref() // 详情/审核的表单
+const checkRef = ref() // 详情/审核的表单
 
 /** 查询列表 */
 const getList = async () => {
@@ -253,13 +316,13 @@ const handleSort = (row) => {
   ElMessageBox.prompt('排序值最大的8个会显示在小程序首页', '请输入排序值', {
     inputPattern: /^[1-9]\d*$/,
     inputType: 'number',
-    inputValue:row.sortNum,
+    inputValue: row.sortNum,
     inputErrorMessage: '请输入排序值'
   })
     .then(async ({ value }) => {
       await PortfolioApi.recommendPortfolio({
         sortNum: value,
-        id:row.id
+        id: row.id
       })
       message.success('排序成功')
       resetQuery()

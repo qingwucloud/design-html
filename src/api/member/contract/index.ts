@@ -111,8 +111,12 @@ export const ContractApi = {
   // 审核合同
   checkContract: async (data: ContractCheckVO) => {
     return await request.post({ url: `/member/contract/check`, data })
-  }
+  },
 
+  //设置推荐案例
+  recommendContract: async (data: any) => {
+    return await request.put({ url: `/member/contract/recommend`, data })
+  }
   // 新增用户合同
   // createContract: async (data: ContractVO) => {
   //   return await request.post({ url: `/member/contract/create`, data })

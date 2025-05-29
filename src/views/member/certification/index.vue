@@ -80,6 +80,17 @@
           <el-option label="开启" value="1" />
         </el-select>
       </el-form-item>
+      <el-form-item label="精选排序号" prop="startSort">
+        <el-select
+          v-model="queryParams.startSort"
+          placeholder="请选择精选排序号"
+          clearable
+          class="!w-240px"
+        >
+          <el-option label="否" :value="0" />
+          <el-option label="是" :value="1" />
+        </el-select>
+      </el-form-item>
       <el-form-item label="创建时间" prop="createTime">
         <el-date-picker
           v-model="queryParams.createTime"
@@ -156,7 +167,7 @@
         width="180px"
       />
       <el-table-column label="驳回原因" align="center" prop="rejectReason" />
-      <el-table-column label="精选排序号" align="center" prop="startSort"/>
+      <el-table-column label="精选排序号" align="center" prop="startSort" />
       <el-table-column label="审核人" align="center" prop="checker" />
       <el-table-column label="操作" align="center" min-width="120px">
         <template #default="scope">
@@ -169,7 +180,12 @@
           >
             审核
           </el-button>
-          <el-button @click="openDetail(scope.row.userId)" link type="primary"  v-hasPermi="['member:certification:detail']">
+          <el-button
+            @click="openDetail(scope.row.userId)"
+            link
+            type="primary"
+            v-hasPermi="['member:certification:detail']"
+          >
             详情
           </el-button>
           <el-button
@@ -215,6 +231,7 @@ const total = ref(0) // 列表的总页数
 const queryParams = reactive({
   pageNo: 1,
   pageSize: 10,
+  startSort: undefined,
   name: undefined,
   workExperience: undefined,
   designerGradeType: undefined,
@@ -274,13 +291,13 @@ const sortOfActions = async (row) => {
   ElMessageBox.prompt('排序值最大的8个会显示在小程序首页', '请输入排序值', {
     inputPattern: /^[1-9]\d*$/,
     inputType: 'number',
-    inputValue:row.startSort,
+    inputValue: row.startSort,
     inputErrorMessage: '请输入排序值'
   })
     .then(async ({ value }) => {
       await CertificationApi.recommendCertification({
         startSort: value,
-        id:row.id
+        id: row.id
       })
       message.success('排序成功')
       resetQuery()

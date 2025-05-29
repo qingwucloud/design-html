@@ -77,6 +77,17 @@
           />
         </el-select>
       </el-form-item>
+      <el-form-item label="精选排序号" prop="startSort">
+        <el-select
+          v-model="queryParams.startSort"
+          placeholder="请选择精选排序号"
+          clearable
+          class="!w-240px"
+        >
+          <el-option label="否" :value="0" />
+          <el-option label="是" :value="1" />
+        </el-select>
+      </el-form-item>
       <el-form-item label="创建时间" prop="createTime">
         <el-date-picker
           v-model="queryParams.createTime"
@@ -122,7 +133,13 @@
       <el-table-column label="客户电话" align="center" prop="customerMobile" width="100" fixed />
       <el-table-column label="设计师姓名" align="center" prop="designerName" width="100" fixed />
       <el-table-column label="设计师电话" align="center" prop="designerMobile" width="100" fixed />
-      <el-table-column label="合同状态" align="center" prop="memberContractStatus" width="100" fixed >
+      <el-table-column
+        label="合同状态"
+        align="center"
+        prop="memberContractStatus"
+        width="100"
+        fixed
+      >
         <template #default="{ row }">
           <DictTag :type="DICT_TYPE.MEMBER_CONTRACT_STATUS" :value="row.memberContractStatus" />
         </template>
@@ -148,7 +165,8 @@
         :formatter="dateFormatter"
         width="180px"
       />
-      <el-table-column label="操作" align="center" min-width="120px" fixed="right">
+      <el-table-column label="精选排序号" align="center" prop="startSort" width="100" />
+      <el-table-column label="操作" align="center" min-width="150px" fixed="right">
         <template #default="scope">
           <el-button
             link
@@ -167,6 +185,15 @@
             v-hasPermi="['member:contract:detail']"
           >
             详情
+          </el-button>
+          <el-button
+            v-hasPermi="['member:contract:recommend']"
+            link
+            type="success"
+            v-if="[1, 3].includes(scope.row.memberContractStatus)"
+            @click="sortOfActions(scope.row)"
+          >
+            精选排序
           </el-button>
         </template>
       </el-table-column>
@@ -195,6 +222,7 @@ const total = ref(0) // 列表的总页数
 const queryParams = reactive({
   pageNo: 1,
   pageSize: 10,
+  startSort: undefined,
   designerName: undefined,
   designerMobile: undefined,
   customerName: undefined,
@@ -235,6 +263,24 @@ const resetQuery = () => {
 
 const handleDetail = (type: string, id?: number) => {
   push({ name: 'MemberContractDetail', params: { type, id } })
+}
+/** 排序按钮操作 */
+const sortOfActions = async (row) => {
+  ElMessageBox.prompt('排序值最大的8个会显示在小程序首页', '请输入排序值', {
+    inputPattern: /^[1-9]\d*$/,
+    inputType: 'number',
+    inputValue: row.startSort,
+    inputErrorMessage: '请输入排序值'
+  })
+    .then(async ({ value }) => {
+      await ContractApi.recommendContract({
+        startSort: value,
+        id: row.id
+      })
+      message.success('排序成功')
+      resetQuery()
+    })
+    .catch(() => {})
 }
 
 /** 初始化 **/

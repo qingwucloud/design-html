@@ -8,9 +8,9 @@
       :inline="true"
       label-width="68px"
     >
-      <el-form-item label="合同名称" prop="spuName">
+      <el-form-item label="合同名称" prop="contractName">
         <el-input
-          v-model="queryParams.spuName"
+          v-model="queryParams.contractName"
           placeholder="请输入合同名称"
           @keyup.enter="handleQuery"
           class="!w-240px"
@@ -20,14 +20,6 @@
         <el-input
           v-model="queryParams.userNickname"
           placeholder="请输入用户账号"
-          @keyup.enter="handleQuery"
-          class="!w-240px"
-        />
-      </el-form-item>
-      <el-form-item label="订单编号" prop="orderId">
-        <el-input
-          v-model="queryParams.orderId"
-          placeholder="请输入订单编号"
           @keyup.enter="handleQuery"
           class="!w-240px"
         />
@@ -56,7 +48,7 @@
           type="primary"
           plain
           @click="openForm('create')"
-          v-hasPermi="['product:comment:create']"
+          v-hasPermi="['customer:comment:create']"
         >
           <Icon icon="ep:plus" class="mr-5px" />
           添加虚拟评论
@@ -68,32 +60,12 @@
   <!-- 列表 -->
   <ContentWrap>
     <el-table v-loading="loading" :data="list" :stripe="true" :show-overflow-tooltip="false">
-      <el-table-column label="评论编号" align="center" prop="id" min-width="80" />
-      <el-table-column label="商品信息" align="center" min-width="400">
-        <template #default="scope">
-          <div class="row flex items-center gap-x-4px">
-            <el-image
-              v-if="scope.row.skuPicUrl"
-              :src="scope.row.skuPicUrl"
-              :preview-src-list="[scope.row.skuPicUrl]"
-              class="h-40px w-40px shrink-0"
-              preview-teleported
-            />
-            <div>{{ scope.row.spuName }}</div>
-            <el-tag
-              v-for="property in scope.row.skuProperties"
-              :key="property.propertyId"
-              class="mr-10px"
-            >
-              {{ property.propertyName }}: {{ property.valueName }}
-            </el-tag>
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column label="用户账号" align="center" prop="userNickname" width="100" />
-      <el-table-column label="商品评分" align="center" prop="descriptionScores" width="90" />
-      <el-table-column label="服务评分" align="center" prop="benefitScores" width="90" />
-      <el-table-column label="评论内容" align="center" prop="content" min-width="210">
+      <el-table-column label="编号" align="center" prop="id"  />
+      <el-table-column label="合同名称" align="center" prop="contractName" />
+      <el-table-column label="用户账号" align="center" prop="userNickname"  />
+      <!-- <el-table-column label="商品评分" align="center" prop="descriptionScores" width="90" /> -->
+      <el-table-column label="服务评分" align="center" prop="benefitScores"  />
+      <el-table-column label="评论内容" align="center" prop="content" >
         <template #default="scope">
           <p>{{ scope.row.content }}</p>
           <div class="flex justify-center gap-x-4px">
@@ -109,13 +81,13 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column
+      <!-- <el-table-column
         label="回复内容"
         align="center"
         prop="replyContent"
         min-width="250"
         show-overflow-tooltip
-      />
+      /> -->
       <el-table-column
         label="评论时间"
         align="center"
@@ -129,7 +101,7 @@
             v-model="scope.row.visible"
             :active-value="true"
             :inactive-value="false"
-            v-hasPermi="['product:comment:update']"
+            v-hasPermi="['customer:comment:update']"
             @change="handleVisibleChange(scope.row)"
           />
         </template>
@@ -150,11 +122,16 @@
 
 <script setup lang="ts">
 import { dateFormatter } from '@/utils/formatTime'
-import * as CommentApi from '@/api/mall/product/comment'
+import * as CommentApi from '@/api/member/comment'
 import CommentForm from './CommentForm.vue'
 
 defineOptions({ name: 'DesignerComment' })
-
+const props = defineProps({
+  bindUserId: {
+    type: Number,
+    default: undefined
+  }
+})
 const message = useMessage() // 消息弹窗
 
 const loading = ref(true) // 列表的加载中
@@ -163,10 +140,8 @@ const list = ref([]) // 列表的数据
 const queryParams = reactive({
   pageNo: 1,
   pageSize: 10,
-  replyStatus: null,
-  spuName: null,
+  contractName: null,
   userNickname: null,
-  orderId: null,
   createTime: []
 })
 const queryFormRef = ref() // 搜索的表单

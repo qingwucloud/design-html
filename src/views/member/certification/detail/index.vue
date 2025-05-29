@@ -87,6 +87,7 @@ import { ElMessage } from 'element-plus'
 import { CertificationApi } from '@/api/member/certification'
 import DesignerAccountInfo from '@/views/member/certification/detail/DesignerAccountInfo.vue'
 import UserCommentList from '../comment/index.vue'
+import DesignList from './DesignList.vue'
 defineOptions({ name: 'MemberDetail' })
 
 const loading = ref(true) // 加载中

@@ -1,6 +1,4 @@
 <template>
-
-
   <div class="flex flex-col">
     <!-- 数据对照 -->
     <el-row :gutter="16" class="row">
@@ -67,6 +65,7 @@
 </template>
 <script lang="ts" setup>
 import * as TradeStatisticsApi from '@/api/mall/statistics/trade'
+import { fenToYuan } from '@/utils'
 import * as MemberStatisticsApi from '@/api/mall/statistics/member'
 import { DataComparisonRespVO } from '@/api/mall/statistics/common'
 import { TradeOrderSummaryRespVO } from '@/api/mall/statistics/trade'

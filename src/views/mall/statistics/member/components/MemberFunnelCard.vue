@@ -59,7 +59,7 @@
           <div class="ml-15 h-full flex flex-row gap-x-16">
             <div class="flex flex-col justify-center">
               <div class="font-bold">
-                设计师数量：{{ analyseData?.comparison?.value?.rechargeUserCount || 0 }}
+                充值用户数量：{{ analyseData?.comparison?.value?.rechargeUserCount || 0 }}
               </div>
               <div class="mt-2 text-3.5">
                 环比增长率：{{
@@ -70,16 +70,16 @@
                 }}%
               </div>
             </div>
-            <!-- <div class="flex flex-col justify-center">
+            <div class="flex flex-col justify-center">
               <div class="font-bold">客单价：{{ fenToYuan(analyseData?.atv || 0) }}</div>
-            </div> -->
+            </div>
           </div>
         </div>
         <div
           class="trapezoid3 ml--18 mt-3.25 h-23 w-36 flex flex-col items-center justify-center bg-slate-5 text-3.5 text-white"
         >
           <span class="text-6 font-bold">{{ analyseData?.payUserCount || 0 }}</span>
-          <span>新增预约数</span>
+          <span>成交用户</span>
         </div>
       </div>
     </div>

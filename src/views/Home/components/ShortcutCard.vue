@@ -33,7 +33,7 @@ const router = useRouter() // 路由
 const menuList = [
   { name: '用户管理', icon: 'ep:user-filled', bgColor: 'bg-red-400', routerName: 'MemberUser' },
   {
-    name: '主材管理',
+    name: '商品管理',
     icon: 'fluent-mdl2:product',
     bgColor: 'bg-orange-400',
     routerName: 'ProductSpu'
@@ -46,25 +46,25 @@ const menuList = [
     routerName: 'TradeAfterSale'
   },
   {
-    name: '设计师管理',
+    name: '分销管理',
     icon: 'fa-solid:project-diagram',
     bgColor: 'bg-cyan-500',
     routerName: 'TradeBrokerageUser'
   },
   {
-    name: '作品集管理',
+    name: '优惠券',
     icon: 'ep:ticket',
     bgColor: 'bg-blue-500',
     routerName: 'PromotionCoupon'
   },
   {
-    name: '预约管理',
+    name: '拼团活动',
     icon: 'fa:group',
     bgColor: 'bg-purple-500',
     routerName: 'PromotionBargainActivity'
   },
   {
-    name: '合同管理',
+    name: '佣金提现',
     icon: 'vaadin:money-withdraw',
     bgColor: 'bg-rose-500',
     routerName: 'TradeBrokerageWithdraw'

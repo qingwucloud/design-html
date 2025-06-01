@@ -1,19 +1,23 @@
 <template>
+
+
   <div class="flex flex-col">
     <!-- 数据对照 -->
     <el-row :gutter="16" class="row">
       <el-col :md="6" :sm="12" :xs="24" :loading="loading">
         <ComparisonCard
           tag="今日"
-          title="新增用户"
-          :value="userComparison?.value?.registerUserCount || 0"
-          :reference="userComparison?.reference?.registerUserCount || 0"
+          title="销售额"
+          prefix="￥"
+          :decimals="2"
+          :value="fenToYuan(orderComparison?.value?.orderPayPrice || 0)"
+          :reference="fenToYuan(orderComparison?.reference?.orderPayPrice || 0)"
         />
       </el-col>
       <el-col :md="6" :sm="12" :xs="24" :loading="loading">
         <ComparisonCard
           tag="今日"
-          title="新增设计师"
+          title="用户访问量"
           :value="userComparison?.value?.visitUserCount || 0"
           :reference="userComparison?.reference?.visitUserCount || 0"
         />
@@ -21,17 +25,17 @@
       <el-col :md="6" :sm="12" :xs="24" :loading="loading">
         <ComparisonCard
           tag="今日"
-          title="预约量"
-          :value="userComparison?.value?.registerUserCount || 0"
-          :reference="userComparison?.reference?.registerUserCount || 0"
+          title="订单量"
+          :value="orderComparison?.value?.orderPayCount || 0"
+          :reference="orderComparison?.reference?.orderPayCount || 0"
         />
       </el-col>
       <el-col :md="6" :sm="12" :xs="24" :loading="loading">
         <ComparisonCard
           tag="今日"
-          title="新增合同"
-          :value="orderComparison?.value?.orderPayCount || 0"
-          :reference="orderComparison?.reference?.orderPayCount || 0"
+          title="新增用户"
+          :value="userComparison?.value?.registerUserCount || 0"
+          :reference="userComparison?.reference?.registerUserCount || 0"
         />
       </el-col>
     </el-row>

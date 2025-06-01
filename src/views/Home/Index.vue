@@ -45,16 +45,16 @@
         <OperationDataCard />
       </el-col>
     </el-row>
-    <el-row :gutter="16" class="mb-4">
-      <el-col :md="18" :sm="24">
-        <!-- 会员概览 -->
-        <MemberFunnelCard />
-      </el-col>
-      <el-col :md="6" :sm="24">
-        <!-- 会员终端 -->
-        <MemberTerminalCard />
-      </el-col>
-    </el-row>
+    <!-- <el-row :gutter="16" class="mb-4"> -->
+    <!-- <el-col :md="18" :sm="24"> -->
+    <!-- 会员概览 -->
+    <!-- <MemberFunnelCard /> -->
+    <!-- </el-col> -->
+    <!-- <el-col :md="6" :sm="24"> -->
+    <!-- 会员终端 -->
+    <!-- <MemberTerminalCard /> -->
+    <!-- </el-col> -->
+    <!-- </el-row> -->
     <!-- 交易量趋势 -->
     <TradeTrendCard class="mb-4" />
     <!-- 会员统计 -->
@@ -67,7 +67,6 @@ import * as MemberStatisticsApi from '@/api/mall/statistics/member'
 import { DataComparisonRespVO } from '@/api/mall/statistics/common'
 import { TradeOrderSummaryRespVO } from '@/api/mall/statistics/trade'
 import { MemberCountRespVO } from '@/api/mall/statistics/member'
-import { fenToYuan } from '@/utils'
 import ComparisonCard from './components/ComparisonCard.vue'
 import MemberStatisticsCard from './components/MemberStatisticsCard.vue'
 import OperationDataCard from './components/OperationDataCard.vue'

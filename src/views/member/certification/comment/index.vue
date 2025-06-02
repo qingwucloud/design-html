@@ -60,12 +60,12 @@
   <!-- 列表 -->
   <ContentWrap>
     <el-table v-loading="loading" :data="list" :stripe="true" :show-overflow-tooltip="false">
-      <el-table-column label="编号" align="center" prop="id"  />
+      <el-table-column label="编号" align="center" prop="id" />
       <el-table-column label="合同名称" align="center" prop="contractName" />
-      <el-table-column label="用户账号" align="center" prop="userNickname"  />
+      <el-table-column label="用户账号" align="center" prop="userNickname" />
       <!-- <el-table-column label="商品评分" align="center" prop="descriptionScores" width="90" /> -->
-      <el-table-column label="服务评分" align="center" prop="benefitScores"  />
-      <el-table-column label="评论内容" align="center" prop="content" >
+      <el-table-column label="服务评分" align="center" prop="benefitScores" />
+      <el-table-column label="评论内容" align="center" prop="content">
         <template #default="scope">
           <p>{{ scope.row.content }}</p>
           <div class="flex justify-center gap-x-4px">
@@ -150,7 +150,11 @@ const queryFormRef = ref() // 搜索的表单
 const getList = async () => {
   loading.value = true
   try {
-    const data = await CommentApi.getCommentPage(queryParams)
+    const params = {
+      ...queryParams,
+      designerId: props.bindUserId
+    }
+    const data = await CommentApi.getCommentPage(params)
     // visible 如果为 null，会导致刷新的时候触发 e-switch 的 change 事件
     data.list.forEach((item) => {
       if (!item.visible) {

@@ -69,6 +69,7 @@ const formData = ref({
 const formRules = reactive({
   // spuId: [{ required: true, message: '商品不能为空', trigger: 'blur' }],
   // skuId: [{ required: true, message: '规格不能为空', trigger: 'blur' }],
+  designerId: [{ required: true, message: '设计师不能为空', trigger: 'blur' }],
   userAvatar: [{ required: true, message: '用户头像不能为空', trigger: 'blur' }],
   userNickname: [{ required: true, message: '用户账号不能为空', trigger: 'blur' }],
   content: [{ required: true, message: '评论内容不能为空', trigger: 'blur' }],

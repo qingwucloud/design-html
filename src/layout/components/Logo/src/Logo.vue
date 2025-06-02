@@ -67,13 +67,11 @@ watch(
       to="/"
     >
       <img
-        class="h-[calc(var(--logo-height)-20px)] w-[calc(var(--logo-height)-20px)] mr-10px"
-        src="@/assets/imgs/logo.png"
-      />
-      <div
         v-if="show"
-        class="text-4 text-[#333] truncate text-nowrap font-semibold"
-      >
+        class="h-50px w-150px p-8px"
+        src="https://80du-design.oss-cn-shenzhen.aliyuncs.com/static/logo.png"
+      />
+      <div v-if="!show" class="text-4 text-[#333] truncate text-nowrap font-semibold">
         {{ title }}
       </div>
     </router-link>

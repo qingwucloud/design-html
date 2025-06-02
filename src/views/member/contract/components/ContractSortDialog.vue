@@ -1,15 +1,14 @@
 <template>
   <Dialog v-model="dialogVisible" title="合同精选排序" width="680px">
-    <el-form ref="formRef" :model="formData" :rules="formRules" label-width="100px">
+    <el-form ref="formRef" :model="formData" :rules="formRules" label-width="140px">
       <el-form-item label="排序值" prop="startSort">
         <el-input-number
           v-model="formData.startSort"
           :min="0"
           :precision="0"
           placeholder="请输入排序值"
-          style="width: 100%"
         />
-        <div class="form-tips">排序值最大的8个会显示在小程序首页</div>
+        <div class="form-tips ml-10px">排序值最大的8个会显示在小程序首页</div>
       </el-form-item>
 
       <el-form-item label="合同展示金额" prop="caseShowAmount">
@@ -18,8 +17,9 @@
           :min="0"
           :precision="1"
           placeholder="请输入合同展示金额"
-          style="width: 100%"
-        />
+        >
+          <template #append>元</template>
+        </el-input-number>
       </el-form-item>
 
       <el-form-item label="封面图片" prop="covers">
@@ -62,14 +62,8 @@ const formData = reactive({
 
 // 表单验证规则
 const formRules = {
-  startSort: [
-    { required: true, message: '请输入排序值', trigger: 'blur' },
-    { type: 'number', min: 0, message: '排序值不能小于0', trigger: 'blur' },
-  ],
-  caseShowAmount: [
-    { required: true, message: '请输入合同展示金额', trigger: 'blur' },
-    { type: 'number', min: 0, message: '合同展示金额不能小于0', trigger: 'blur' },
-  ],
+  startSort: [{ required: true, message: '请输入排序值', trigger: 'blur' }],
+  caseShowAmount: [{ required: true, message: '请输入合同展示金额', trigger: 'blur' }]
 }
 
 // 发射事件

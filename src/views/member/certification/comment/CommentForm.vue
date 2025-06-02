@@ -7,6 +7,16 @@
       :rules="formRules"
       label-width="100px"
     >
+      <el-form-item label="设计师" prop="designerId" v-if="!route.params.id">
+        <el-select v-model="formData.designerId" filterable placeholder="请选择设计师">
+          <el-option
+            v-for="item in designerList"
+            :key="item.userId"
+            :label="item.name + '-' + item.mobile"
+            :value="item.userId"
+          />
+        </el-select>
+      </el-form-item>
       <el-form-item label="用户头像" prop="userAvatar">
         <UploadImg v-model="formData.userAvatar" height="60px" width="60px" />
       </el-form-item>
@@ -35,7 +45,7 @@
 <script setup>
 import * as CommentApi from '@/api/member/comment'
 import * as ProductSpuApi from '@/api/mall/product/spu'
-
+import { CertificationApi } from '@/api/member/certification'
 const { t } = useI18n() // 国际化
 const message = useMessage() // 消息弹窗
 const route = useRoute() // 路由
@@ -66,13 +76,18 @@ const formRules = reactive({
   benefitScores: [{ required: true, message: '服务星级不能为空', trigger: 'blur' }]
 })
 const formRef = ref() // 表单 Ref
-
+const designerList = ref([]) // 设计师列表
 /** 打开弹窗 */
 const open = async (type, id) => {
   dialogVisible.value = true
   dialogTitle.value = t('action.' + type)
   formType.value = type
   resetForm()
+  let data = await CertificationApi.getAllDesignerUserPage()
+  designerList.value = data
+  if (route.params.id) {
+    formData.value.designerId = route.params.id
+  }
   // 修改时，设置数据
   // if (id) {
   //   formLoading.value = true
@@ -97,8 +112,7 @@ const submitForm = async () => {
   try {
     if (formType.value === 'create') {
       await CommentApi.createComment({
-        ...formData.value,
-        designerId: route.params.id // 绑定的设计师 ID
+        ...formData.value
       })
       message.success(t('common.createSuccess'))
     }

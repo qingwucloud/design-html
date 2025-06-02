@@ -8,6 +8,7 @@ export interface ContractVO {
   appointmentId: number // 关联预约记录ID
   contractNo: string // 合同编号
   contractName: string // 合同名称
+  contractType: number // 合同类型 见dict_type
   memberContractStatus: boolean // 设计合同审核状态 见dict_type
   projectAddress: string // 工程地址
   communityName: string // 小区名称

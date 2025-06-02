@@ -12,6 +12,9 @@
               <el-descriptions-item label="合同编号">
                 {{ contractData?.contractNo || '' }}
               </el-descriptions-item>
+              <el-descriptions-item label="合同类型">
+                <DictTag :type="DICT_TYPE.CONTRACT_TYPE" :value="contractData?.contractType" />
+              </el-descriptions-item>
               <el-descriptions-item label="合同状态">
                 <div class="contract-status-container">
                   <DictTag

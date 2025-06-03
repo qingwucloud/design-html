@@ -110,9 +110,9 @@
       <el-descriptions-item label="商品总额: ">
         {{ fenToYuan(formData.totalPrice!) }} 元
       </el-descriptions-item>
-      <el-descriptions-item label="运费金额: ">
+      <!-- <el-descriptions-item label="运费金额: ">
         {{ fenToYuan(formData.deliveryPrice!) }} 元
-      </el-descriptions-item>
+      </el-descriptions-item> -->
       <el-descriptions-item label="订单调价: ">
         {{ fenToYuan(formData.adjustPrice!) }} 元
       </el-descriptions-item>

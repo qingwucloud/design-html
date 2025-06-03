@@ -3,21 +3,21 @@
     <!-- 订单信息 -->
     <el-descriptions title="订单信息">
       <el-descriptions-item label="订单号: ">{{ formData.orderNo }}</el-descriptions-item>
-      <el-descriptions-item label="配送方式: ">
+      <!-- <el-descriptions-item label="配送方式: ">
         <dict-tag :type="DICT_TYPE.TRADE_DELIVERY_TYPE" :value="formData.order.deliveryType" />
       </el-descriptions-item>
       <el-descriptions-item label="订单类型: ">
         <dict-tag :type="DICT_TYPE.TRADE_ORDER_TYPE" :value="formData.order.type" />
-      </el-descriptions-item>
+      </el-descriptions-item> -->
       <el-descriptions-item label="收货人: ">
         {{ formData.order.receiverName }}
       </el-descriptions-item>
-      <el-descriptions-item label="买家留言: ">
+      <!-- <el-descriptions-item label="买家留言: ">
         {{ formData.order.userRemark }}
       </el-descriptions-item>
       <el-descriptions-item label="订单来源: ">
         <dict-tag :type="DICT_TYPE.TERMINAL" :value="formData.order.terminal" />
-      </el-descriptions-item>
+      </el-descriptions-item> -->
       <el-descriptions-item label="联系电话: ">
         {{ formData.order.receiverMobile }}
       </el-descriptions-item>
@@ -25,9 +25,9 @@
       <el-descriptions-item label="支付单号: ">
         {{ formData.order.payOrderId }}
       </el-descriptions-item>
-      <el-descriptions-item label="付款方式: ">
+      <!-- <el-descriptions-item label="付款方式: ">
         <dict-tag :type="DICT_TYPE.PAY_CHANNEL_CODE" :value="formData.order.payChannelCode" />
-      </el-descriptions-item>
+      </el-descriptions-item> -->
       <el-descriptions-item label="买家: ">{{ formData?.user?.nickname }}</el-descriptions-item>
     </el-descriptions>
 
@@ -79,9 +79,9 @@
       </el-descriptions-item>
       <el-descriptions-item>
         <template #label><span style="color: red">提醒: </span></template>
-        如果未发货，请点击同意退款给买家。<br />
-        如果实际已发货，请主动与买家联系。<br />
-        如果订单整体退款后，优惠券和余额会退还给买家.
+        如果未收货，请点击同意退款给买家。<br />
+        如果实际已收货，请主动与买家联系。<br />
+        <!-- 如果订单整体退款后，优惠券和余额会退还给买家. -->
       </el-descriptions-item>
     </el-descriptions>
 

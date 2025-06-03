@@ -1,6 +1,6 @@
 <template>
   <ContentWrap>
-    <el-tabs v-model="tabActive" @tab-change="getList">
+    <el-tabs v-model="tabActive" @tab-change="changeTab">
       <el-tab-pane label="客户付款审核" name="2" />
       <el-tab-pane label="设计师合同结算" name="3" />
     </el-tabs>
@@ -223,14 +223,18 @@ const queryParams = reactive({
 })
 const queryFormRef = ref() // 搜索的表单
 
+const changeTab= (val) => {
+  tabActive.value = val
+  getList()
+}
 /** 查询列表 */
-const getList = async (val) => {
+const getList = async () => {
   loading.value = true
 
   try {
     const data = await PaymentRecordApi.getPaymentRecordPage({
       ...queryParams,
-      type: val || tabActive.value
+      type: tabActive.value
     })
     list.value = data.list
     total.value = data.total

@@ -129,7 +129,7 @@
   <!-- 列表 -->
   <ContentWrap>
     <el-table v-loading="loading" :data="list" :stripe="true" :show-overflow-tooltip="true">
-      <el-table-column label="编号" align="center" prop="id" />
+      <el-table-column label="编号" align="center" prop="userId" />
       <el-table-column label="用户名" align="center" prop="name" />
       <el-table-column label="工作经验" align="center" prop="workExperience">
         <template #default="scope">

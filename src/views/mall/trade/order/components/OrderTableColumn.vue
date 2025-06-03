@@ -17,9 +17,9 @@
         <div :style="{ width: orderTableHeadWidthList[4] + 'px' }" class="flex justify-center">
           买家/收货人
         </div>
-        <div :style="{ width: orderTableHeadWidthList[5] + 'px' }" class="flex justify-center">
+        <!-- <div :style="{ width: orderTableHeadWidthList[5] + 'px' }" class="flex justify-center">
           配送方式
-        </div>
+        </div> -->
         <div :style="{ width: orderTableHeadWidthList[6] + 'px' }" class="flex justify-center">
           订单状态
         </div>

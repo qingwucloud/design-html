@@ -198,6 +198,16 @@
                     <Icon icon="ep:takeaway-box" />
                     发货
                   </el-dropdown-item>
+                  <el-dropdown-item
+                    v-if="
+                      row.status! === TradeOrderStatusEnum.UNDELIVERED.status &&
+                      row.deliveryType === DeliveryTypeEnum.PICK_UP.type
+                    "
+                    command="handlePickUp"
+                  >
+                    <Icon icon="ep:takeaway-box" />
+                    核销
+                  </el-dropdown-item>
                   <el-dropdown-item command="remark">
                     <Icon icon="ep:chat-line-square" />
                     备注
@@ -235,7 +245,7 @@ import { DeliveryTypeEnum, TradeOrderStatusEnum } from '@/utils/constants'
 import { OrderTableColumn } from './components'
 
 defineOptions({ name: 'TradeOrder' })
-
+const message = useMessage() // 消息弹窗
 const { currentRoute, push } = useRouter() // 路由跳转
 const loading = ref(true) // 列表的加载中
 const total = ref(2) // 列表的总页数
@@ -277,6 +287,19 @@ const inputChangeSelect = (val: string) => {
         delete queryParams.value[item1.value]
       }
     })
+}
+
+/** 核销 */
+const handlePickUp = async (row) => {
+  try {
+    // 二次确认
+    await message.confirm('确认核销订单吗？')
+    // 提交
+    await TradeOrderApi.pickUpOrder(row.id!)
+    message.success('核销成功')
+    // 刷新列表
+    await getList()
+  } catch {}
 }
 
 /** 查询列表 */
@@ -331,6 +354,9 @@ const handleCommand = (command: string, row: TradeOrderApi.OrderVO) => {
       break
     case 'delivery':
       deliveryFormRef.value?.open(row)
+      break
+    case 'handlePickUp':
+      handlePickUp(row)
       break
   }
 }

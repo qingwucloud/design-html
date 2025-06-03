@@ -45,7 +45,7 @@ const data = reactive({
   productAlertStock: { name: '库存预警', value: 0, routerName: 'ProductSpu' },
   productForSale: { name: '上架主材', value: 0, routerName: 'ProductSpu' },
   productInWarehouse: { name: '仓库主材', value: 0, routerName: 'ProductSpu' },
-  withdrawAuditing: { name: '提现待审核', value: 0, routerName: 'TradeBrokerageWithdraw' }
+  withdrawAuditing: { name: '待结算', value: 0, routerName: 'PaymentRecord' }
 })
 
 /** 查询订单数据 */

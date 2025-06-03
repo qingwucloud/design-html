@@ -94,13 +94,13 @@
               <el-table-column label="商品" prop="spuName" width="auto">
                 <template #default="{ row }">
                   {{ row.spuName }}
-                  <el-tag
+                  <!-- <el-tag
                     v-for="property in row.properties"
                     :key="property.propertyId"
                     class="mr-10px"
                   >
                     {{ property.propertyName }}: {{ property.valueName }}
-                  </el-tag>
+                  </el-tag> -->
                 </template>
               </el-table-column>
               <el-table-column label="商品原价" prop="price" width="150">

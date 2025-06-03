@@ -1,7 +1,4 @@
 <template>
-
-
-
   <!-- 搜索 -->
   <ContentWrap>
     <el-form
@@ -158,13 +155,13 @@
             />
             <span class="mr-10px">{{ item.spuName }}</span>
             <div class="flex flex-col flex-wrap gap-1">
-              <el-tag
+              <!-- <el-tag
                 v-for="property in item.properties"
                 :key="property.propertyId"
                 class="mr-10px"
               >
                 {{ property.propertyName }}: {{ property.valueName }}
-              </el-tag>
+              </el-tag> -->
               <span>{{ floatToFixed2(item.price) }} 元 x {{ item.count }}</span>
             </div>
           </div>

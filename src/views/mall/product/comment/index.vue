@@ -86,13 +86,13 @@
               preview-teleported
             />
             <div>{{ scope.row.spuName }}</div>
-            <el-tag
+            <!-- <el-tag
               v-for="property in scope.row.skuProperties"
               :key="property.propertyId"
               class="mr-10px"
             >
               {{ property.propertyName }}: {{ property.valueName }}
-            </el-tag>
+            </el-tag> -->
           </div>
         </template>
       </el-table-column>

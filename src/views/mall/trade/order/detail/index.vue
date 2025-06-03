@@ -79,9 +79,9 @@
               <el-table-column label="商品" prop="spuName" width="auto">
                 <template #default="{ row }">
                   {{ row.spuName }}
-                  <el-tag v-for="property in row.properties" :key="property.propertyId">
+                  <!-- <el-tag v-for="property in row.properties" :key="property.propertyId">
                     {{ property.propertyName }}: {{ property.valueName }}
-                  </el-tag>
+                  </el-tag> -->
                 </template>
               </el-table-column>
               <el-table-column label="商品原价" prop="price" width="150">
@@ -339,7 +339,9 @@ onMounted(async () => {
     }
   } else if (formData.value.deliveryType === DeliveryTypeEnum.PICK_UP.type) {
     if (formData.value.pickUpStoreId) {
-      pickUpStore.value = await DeliveryPickUpStoreApi.getDeliveryPickUpStore(formData.value.pickUpStoreId)
+      pickUpStore.value = await DeliveryPickUpStoreApi.getDeliveryPickUpStore(
+        formData.value.pickUpStoreId
+      )
     }
   }
 })
@@ -394,11 +396,11 @@ onMounted(async () => {
 
   .el-timeline-right-content {
     display: flex;
-    align-items: center;
     min-height: 30px;
     padding: 10px;
-    border-radius: var(--el-card-border-radius);
     background-color: var(--app-content-bg-color);
+    border-radius: var(--el-card-border-radius);
+    align-items: center;
 
     &::before {
       position: absolute;

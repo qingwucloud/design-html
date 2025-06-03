@@ -4,21 +4,21 @@
     <el-descriptions title="订单信息">
       <el-descriptions-item label="订单号: ">{{ formData.no }}</el-descriptions-item>
       <el-descriptions-item label="买家: ">{{ formData?.user?.nickname }}</el-descriptions-item>
-      <el-descriptions-item label="订单类型: ">
+      <!-- <el-descriptions-item label="订单类型: ">
         <dict-tag :type="DICT_TYPE.TRADE_ORDER_TYPE" :value="formData.type!" />
       </el-descriptions-item>
       <el-descriptions-item label="订单来源: ">
         <dict-tag :type="DICT_TYPE.TERMINAL" :value="formData.terminal!" />
-      </el-descriptions-item>
-      <el-descriptions-item label="买家留言: ">{{ formData.userRemark }}</el-descriptions-item>
+      </el-descriptions-item> -->
+      <!-- <el-descriptions-item label="买家留言: ">{{ formData.userRemark }}</el-descriptions-item> -->
       <el-descriptions-item label="商家备注: ">{{ formData.remark }}</el-descriptions-item>
       <el-descriptions-item label="支付单号: ">{{ formData.payOrderId }}</el-descriptions-item>
       <el-descriptions-item label="付款方式: ">
         <dict-tag :type="DICT_TYPE.PAY_CHANNEL_CODE" :value="formData.payChannelCode!" />
       </el-descriptions-item>
-      <el-descriptions-item v-if="formData.brokerageUser" label="推广用户: ">
+      <!-- <el-descriptions-item v-if="formData.brokerageUser" label="推广用户: ">
         {{ formData.brokerageUser?.nickname }}
-      </el-descriptions-item>
+      </el-descriptions-item> -->
     </el-descriptions>
 
     <!-- 订单状态 -->
@@ -38,7 +38,7 @@
         <!-- 待发货 -->
         <template v-if="formData.status! === TradeOrderStatusEnum.UNDELIVERED.status">
           <!-- 快递发货 -->
-          <el-button
+          <!-- <el-button
             v-if="formData.deliveryType === DeliveryTypeEnum.EXPRESS.type"
             type="primary"
             @click="delivery"
@@ -51,7 +51,7 @@
             @click="updateAddress"
           >
             修改地址
-          </el-button>
+          </el-button> -->
           <!-- 到店自提 -->
           <el-button
             v-if="formData.deliveryType === DeliveryTypeEnum.PICK_UP.type && showPickUp"
@@ -64,9 +64,9 @@
       </el-descriptions-item>
       <el-descriptions-item>
         <template #label><span style="color: red">提醒: </span></template>
-        买家付款成功后，货款将直接进入您的商户号（微信、支付宝）<br />
-        请及时关注你发出的包裹状态，确保可以配送至买家手中 <br />
-        如果买家表示没收到货或货物有问题，请及时联系买家处理，友好协商
+        买家付款成功后，货款将直接进入您的商户号<br />
+        <!-- 请及时关注你发出的包裹状态，确保可以配送至买家手中 <br />
+        如果买家表示没收到货或货物有问题，请及时联系买家处理，友好协商 -->
       </el-descriptions-item>
     </el-descriptions>
 
@@ -118,22 +118,22 @@
       </el-descriptions-item>
       <el-descriptions-item v-for="item in 1" :key="item" label-class-name="no-colon" />
       <!-- 第二层 -->
-      <el-descriptions-item>
+      <!-- <el-descriptions-item>
         <template #label><span style="color: red">优惠劵优惠: </span></template>
         {{ fenToYuan(formData.couponPrice!) }} 元
-      </el-descriptions-item>
-      <el-descriptions-item>
+      </el-descriptions-item> -->
+      <!-- <el-descriptions-item>
         <template #label><span style="color: red">VIP 优惠: </span></template>
         {{ fenToYuan(formData.vipPrice!) }} 元
-      </el-descriptions-item>
-      <el-descriptions-item>
+      </el-descriptions-item> -->
+      <!-- <el-descriptions-item>
         <template #label><span style="color: red">活动优惠: </span></template>
         {{ fenToYuan(formData.discountPrice!) }} 元
-      </el-descriptions-item>
-      <el-descriptions-item>
+      </el-descriptions-item> -->
+      <!-- <el-descriptions-item>
         <template #label><span style="color: red">积分抵扣: </span></template>
         {{ fenToYuan(formData.pointPrice!) }} 元
-      </el-descriptions-item>
+      </el-descriptions-item> -->
       <!-- 第三层 -->
       <el-descriptions-item v-for="item in 3" :key="item" label-class-name="no-colon" />
       <el-descriptions-item label="应付金额: ">
@@ -143,13 +143,13 @@
 
     <!-- 物流信息 -->
     <el-descriptions :column="4" title="收货信息">
-      <el-descriptions-item label="配送方式: ">
+      <!-- <el-descriptions-item label="配送方式: ">
         <dict-tag :type="DICT_TYPE.TRADE_DELIVERY_TYPE" :value="formData.deliveryType!" />
-      </el-descriptions-item>
-      <el-descriptions-item label="收货人: ">{{ formData.receiverName }}</el-descriptions-item>
+      </el-descriptions-item> -->
+      <el-descriptions-item label="联系人: ">{{ formData.receiverName }}</el-descriptions-item>
       <el-descriptions-item label="联系电话: ">{{ formData.receiverMobile }}</el-descriptions-item>
       <!-- 快递配送 -->
-      <div v-if="formData.deliveryType === DeliveryTypeEnum.EXPRESS.type">
+      <!-- <div v-if="formData.deliveryType === DeliveryTypeEnum.EXPRESS.type">
         <el-descriptions-item v-if="formData.receiverDetailAddress" label="收货地址: ">
           {{ formData.receiverAreaName }} {{ formData.receiverDetailAddress }}
           <el-link
@@ -180,13 +180,13 @@
             </el-timeline-item>
           </el-timeline>
         </el-descriptions-item>
-      </div>
+      </div> -->
       <!-- 自提门店 -->
-      <div v-if="formData.deliveryType === DeliveryTypeEnum.PICK_UP.type">
+      <!-- <div v-if="formData.deliveryType === DeliveryTypeEnum.PICK_UP.type">
         <el-descriptions-item v-if="formData.pickUpStoreId" label="自提门店: ">
           {{ pickUpStore?.name }}
         </el-descriptions-item>
-      </div>
+      </div> -->
     </el-descriptions>
 
     <!-- 订单日志 -->

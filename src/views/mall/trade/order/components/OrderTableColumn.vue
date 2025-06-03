@@ -45,8 +45,8 @@
             >
               <span class="mr-20px">订单号：{{ scope.row.no }} </span>
               <span class="mr-20px">下单时间：{{ formatDate(scope.row.createTime) }}</span>
-              <span>订单来源：</span>
-              <dict-tag :type="DICT_TYPE.TERMINAL" :value="scope.row.terminal" class="mr-20px" />
+              <!-- <span>订单来源：</span>
+              <dict-tag :type="DICT_TYPE.TERMINAL" :value="scope.row.terminal" class="mr-20px" /> -->
               <span>支付方式：</span>
               <dict-tag
                 v-if="scope.row.payChannelCode"
@@ -58,8 +58,8 @@
               <span v-if="scope.row.payTime" class="mr-20px">
                 支付时间：{{ formatDate(scope.row.payTime) }}
               </span>
-              <span>订单类型：</span>
-              <dict-tag :type="DICT_TYPE.TRADE_ORDER_TYPE" :value="scope.row.type" />
+              <!-- <span>订单类型：</span>
+              <dict-tag :type="DICT_TYPE.TRADE_ORDER_TYPE" :value="scope.row.type" /> -->
             </div>
           </template>
           <template #default="{ row }">
@@ -85,13 +85,13 @@
                   </span>
                 </ElTooltip>
               </div>
-              <el-tag
+              <!-- <el-tag
                 v-for="property in row.properties"
                 :key="property.propertyId"
                 class="mb-[10px] mr-[10px]"
               >
                 {{ property.propertyName }}: {{ property.valueName }}
-              </el-tag>
+              </el-tag> -->
             </div>
           </template>
         </el-table-column>
@@ -115,8 +115,12 @@
         </el-table-column>
         <el-table-column label="买家/收货人" min-width="160">
           <template #default>
+            <div class="flex flex-col">
+              <span>买家：{{ scope.row.user?.nickname }}</span>
+              <span> 联系人：{{ scope.row.receiverName }} {{ scope.row.receiverMobile }} </span>
+            </div>
             <!-- 快递发货  -->
-            <div
+            <!-- <div
               v-if="scope.row.deliveryType === DeliveryTypeEnum.EXPRESS.type"
               class="flex flex-col"
             >
@@ -125,9 +129,9 @@
                 收货人：{{ scope.row.receiverName }} {{ scope.row.receiverMobile }}
                 {{ scope.row.receiverAreaName }} {{ scope.row.receiverDetailAddress }}
               </span>
-            </div>
+            </div> -->
             <!-- 自提  -->
-            <div
+            <!-- <div
               v-if="scope.row.deliveryType === DeliveryTypeEnum.PICK_UP.type"
               class="flex flex-col"
             >
@@ -143,14 +147,14 @@
                 自提门店:
                 {{ pickUpStoreList.find((p) => p.id === scope.row.pickUpStoreId)?.detailAddress }}
               </span>
-            </div>
+            </div> -->
           </template>
         </el-table-column>
-        <el-table-column align="center" label="配送方式" width="120">
+        <!-- <el-table-column align="center" label="配送方式" width="120">
           <template #default>
             <dict-tag :type="DICT_TYPE.TRADE_DELIVERY_TYPE" :value="scope.row.deliveryType" />
           </template>
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column align="center" label="订单状态" width="120">
           <template #default>
             <dict-tag :type="DICT_TYPE.TRADE_ORDER_STATUS" :value="scope.row.status" />

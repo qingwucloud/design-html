@@ -1,7 +1,4 @@
 <template>
-
-
-
   <!-- 搜索 -->
   <ContentWrap>
     <el-form
@@ -21,7 +18,7 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="支付方式" prop="payChannelCode">
+      <!-- <el-form-item label="支付方式" prop="payChannelCode">
         <el-select
           v-model="queryParams.payChannelCode"
           class="!w-280px"
@@ -35,7 +32,7 @@
             :value="dict.value"
           />
         </el-select>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="创建时间" prop="createTime">
         <el-date-picker
           v-model="queryParams.createTime"
@@ -47,7 +44,7 @@
           value-format="YYYY-MM-DD HH:mm:ss"
         />
       </el-form-item>
-      <el-form-item label="订单来源" prop="terminal">
+      <!-- <el-form-item label="订单来源" prop="terminal">
         <el-select v-model="queryParams.terminal" class="!w-280px" clearable placeholder="全部">
           <el-option
             v-for="dict in getIntDictOptions(DICT_TYPE.TERMINAL)"
@@ -66,8 +63,8 @@
             :value="dict.value"
           />
         </el-select>
-      </el-form-item>
-      <el-form-item label="配送方式" prop="deliveryType">
+      </el-form-item> -->
+      <!-- <el-form-item label="配送方式" prop="deliveryType">
         <el-select v-model="queryParams.deliveryType" class="!w-280px" clearable placeholder="全部">
           <el-option
             v-for="dict in getIntDictOptions(DICT_TYPE.TRADE_DELIVERY_TYPE)"
@@ -90,8 +87,8 @@
             :value="item.id"
           />
         </el-select>
-      </el-form-item>
-      <el-form-item
+      </el-form-item> -->
+      <!-- <el-form-item
         v-if="queryParams.deliveryType === DeliveryTypeEnum.PICK_UP.type"
         label="自提门店"
         prop="pickUpStoreId"
@@ -110,8 +107,8 @@
             :value="item.id"
           />
         </el-select>
-      </el-form-item>
-      <el-form-item
+      </el-form-item> -->
+      <!-- <el-form-item
         v-if="queryParams.deliveryType === DeliveryTypeEnum.PICK_UP.type"
         label="核销码"
         prop="pickUpVerifyCode"
@@ -123,7 +120,7 @@
           placeholder="请输入自提核销码"
           @keyup.enter="handleQuery"
         />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="聚合搜索">
         <el-input
           v-show="true"

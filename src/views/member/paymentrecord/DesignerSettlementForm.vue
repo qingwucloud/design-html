@@ -209,6 +209,7 @@ import { DICT_TYPE } from '@/utils/dict'
 import { createImageViewer } from '@/components/ImageViewer'
 import { formatDate } from '@/utils/formatTime'
 import { UploadImg } from '@/components/UploadFile'
+import { copyBankInfo } from '@/utils/clipboard'
 
 /** 设计师合同结算表单 */
 defineOptions({ name: 'DesignerSettlementForm' })
@@ -311,22 +312,7 @@ const previewImage = (index: number) => {
   })
 }
 
-/** 复制银行信息 */
-const copyBankInfo = async (row: any) => {
-  try {
-    const bankInfo = `账户名称：${row.bankAccountName || ''}
-银行名称：${row.bankName || ''}
-银行卡号：${row.bankNumber || ''}
-银行渠道：${row.bankChanel || ''}
-银行预留手机：${row.bankMobile || ''}`
 
-    await navigator.clipboard.writeText(bankInfo)
-    message.success('银行信息已复制到剪贴板')
-  } catch (err) {
-    console.error('复制失败:', err)
-    message.error('复制失败，请手动复制')
-  }
-}
 </script>
 
 <style lang="scss" scoped>

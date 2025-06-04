@@ -40,7 +40,12 @@
             <template #default="{ row }">
               <div class="bank-number-cell">
                 <span>{{ row.bankNumber }}</span>
-                <el-button size="small" type="text" @click="copyBankInfo(row)" class="copy-btn">
+                <el-button
+                  size="small"
+                  type="text"
+                  @click="copyBankInfo(row)"
+                  class="copy-btn"
+                >
                   复制
                 </el-button>
               </div>
@@ -88,6 +93,7 @@
 <script setup lang="ts">
 import { PaymentRecordApi } from '@/api/member/paymentrecord'
 import { UploadImg } from '@/components/UploadFile'
+import { copyBankInfo } from '@/utils/clipboard'
 
 /** 批量结算表单 */
 defineOptions({ name: 'BatchSettlementForm' })
@@ -120,22 +126,6 @@ const totalAmount = computed(() => {
   }, 0)
 })
 
-/** 复制银行信息 */
-const copyBankInfo = async (row: any) => {
-  try {
-    const bankInfo = `账户名称：${row.bankAccountName || ''}
-银行名称：${row.bankName || ''}
-银行卡号：${row.bankNumber || ''}
-银行渠道：${row.bankChanel || ''}
-银行预留手机：${row.bankMobile || ''}`
-
-    await navigator.clipboard.writeText(bankInfo)
-    message.success('银行信息已复制到剪贴板')
-  } catch (err) {
-    console.error('复制失败:', err)
-    message.error('复制失败，请手动复制')
-  }
-}
 
 /** 打开弹窗 */
 const open = async (dataList: any[]) => {

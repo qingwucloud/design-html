@@ -74,7 +74,7 @@
           <el-form-item label="银行卡号">
             <el-input v-model="formData.bankNumber" :disabled="true">
               <template #append>
-                <el-button @click="copyBankInfo" size="small">复制</el-button>
+                <el-button @click="copyBankInfo(formData)" size="small">复制</el-button>
               </template>
             </el-input>
           </el-form-item>
@@ -189,6 +189,7 @@ import { DICT_TYPE } from '@/utils/dict'
 import { createImageViewer } from '@/components/ImageViewer'
 import { formatDate } from '@/utils/formatTime'
 import { UploadImg } from '@/components/UploadFile'
+import { copyBankInfo } from '@/utils/clipboard'
 /** 佣金记录 表单 */
 defineOptions({ name: 'CommissionRecordForm' })
 
@@ -284,25 +285,6 @@ const previewImage = (index: number) => {
     urlList: paymentVoucherList.value,
     initialIndex: index
   })
-}
-
-/** 复制银行信息 */
-const copyBankInfo = async () => {
-  try {
-    const bankInfo = [
-      `账户名称：${formData.value.bankAccountName || ''}`,
-      `银行名称：${formData.value.bankName || ''}`,
-      `银行卡号：${formData.value.bankNumber || ''}`,
-      `银行渠道：${formData.value.bankChanel || ''}`,
-      `银行预留手机：${formData.value.bankMobile || ''}`
-    ].join('\n')
-
-    await navigator.clipboard.writeText(bankInfo)
-    message.success('银行信息已复制到剪贴板')
-  } catch (error) {
-    console.error('复制失败:', error)
-    message.error('复制失败，请手动复制')
-  }
 }
 </script>
 

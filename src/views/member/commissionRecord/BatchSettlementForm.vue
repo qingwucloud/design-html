@@ -90,6 +90,7 @@
 <script setup lang="ts">
 import { PaymentRecordApi } from '@/api/member/paymentrecord'
 import { UploadImg } from '@/components/UploadFile'
+import { copyBankInfo } from '@/utils/clipboard'
 
 /** 批量结算表单 */
 defineOptions({ name: 'BatchSettlementForm' })
@@ -175,25 +176,6 @@ const handleSubmit = async () => {
     console.error('批量结算失败:', error)
   } finally {
     formLoading.value = false
-  }
-}
-
-/** 复制银行信息 */
-const copyBankInfo = async (row: any) => {
-  try {
-    const bankInfo = [
-      `账户名称：${row.bankAccountName || ''}`,
-      `银行名称：${row.bankName || ''}`,
-      `银行卡号：${row.bankNumber || ''}`,
-      `银行渠道：${row.bankChanel || ''}`,
-      `预留手机：${row.bankMobile || ''}`
-    ].join('\n')
-
-    await navigator.clipboard.writeText(bankInfo)
-    message.success('银行信息已复制到剪贴板')
-  } catch (error) {
-    console.error('复制失败:', error)
-    message.error('复制失败，请手动复制')
   }
 }
 </script>

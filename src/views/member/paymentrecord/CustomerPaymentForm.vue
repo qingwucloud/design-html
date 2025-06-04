@@ -2,6 +2,8 @@
   <Dialog :title="dialogTitle" v-model="dialogVisible" width="1000px">
     <!-- 客户付款审核表单 -->
     <el-form ref="formRef" :model="formData" label-width="120px" v-loading="formLoading">
+      <!-- 合同信息 -->
+      <el-divider content-position="left">合同信息</el-divider>
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item label="合同编号">
@@ -30,6 +32,8 @@
         </el-col>
       </el-row>
 
+      <!-- 客户信息 -->
+      <el-divider content-position="left">客户信息</el-divider>
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item label="客户姓名">
@@ -56,6 +60,8 @@
         </el-col>
       </el-row>
 
+      <!-- 付款信息 -->
+      <el-divider content-position="left">付款信息</el-divider>
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item label="付款金额">
@@ -89,6 +95,8 @@
         </el-col>
       </el-row>
 
+      <!-- 支付凭证 -->
+      <el-divider content-position="left" v-if="paymentVoucherList.length > 0">支付凭证</el-divider>
       <!-- 已有支付凭证 -->
       <el-form-item label="支付凭证" v-if="paymentVoucherList.length > 0">
         <div class="voucher-images">
@@ -254,5 +262,22 @@ const previewImage = (index: number) => {
 :deep(.el-divider__text) {
   font-weight: 600;
   color: var(--el-text-color-primary);
+}
+</style>
+<style>
+.el-dialog {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  max-width: calc(100% - 30px);
+  max-height: calc(100% - 30px);
+  margin: 0 !important;
+  transform: translate(-50%, -50%);
+  flex-direction: column;
+}
+
+.el-dialog__body {
+  overflow: auto;
 }
 </style>

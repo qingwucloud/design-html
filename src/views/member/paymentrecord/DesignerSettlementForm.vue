@@ -1,12 +1,10 @@
 <template>
-  <Dialog
-    :title="dialogTitle"
-    v-model="dialogVisible"
-    width="1000px"
-    :top="formType === 'detail' ? undefined : '3vh'"
-  >
+  <Dialog :title="dialogTitle" v-model="dialogVisible" width="1000px">
     <!-- 设计师合同结算表单 -->
     <el-form ref="formRef" :model="formData" label-width="120px" v-loading="formLoading">
+      <!-- 付款记录详情 -->
+      <el-divider content-position="left">付款记录详情</el-divider>
+
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item label="合同编号">
@@ -78,6 +76,50 @@
         </el-col>
       </el-row>
 
+      <!-- 银行信息 -->
+      <el-divider content-position="left">银行信息</el-divider>
+
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form-item label="账户名称">
+            <el-input v-model="formData.bankAccountName" :disabled="true" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="银行名称">
+            <el-input v-model="formData.bankName" :disabled="true" />
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form-item label="银行卡号">
+            <el-input v-model="formData.bankNumber" :disabled="true">
+              <template #append>
+                <el-button @click="copyBankInfo(formData)" size="small">复制</el-button>
+              </template>
+            </el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="银行渠道">
+            <el-input v-model="formData.bankChanel" :disabled="true" />
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form-item label="银行预留手机">
+            <el-input v-model="formData.bankMobile" :disabled="true" />
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+      <!-- 结算信息 -->
+      <el-divider content-position="left">结算信息</el-divider>
+
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item label="支付状态">
@@ -87,53 +129,32 @@
             />
           </el-form-item>
         </el-col>
-        <el-col :span="12">
+        <el-col :span="12" v-if="formData.payTime">
           <el-form-item label="支付时间">
             <el-input v-model="formData.payTime" :disabled="true" />
           </el-form-item>
         </el-col>
       </el-row>
 
-      <el-row :gutter="20">
-        <el-col :span="12">
-          <el-form-item label="银行名称">
-            <el-input v-model="formData.bankName" :disabled="true" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="银行卡号">
-            <el-input v-model="formData.bankNumber" :disabled="true">
-              <template #append>
-                <el-button @click="copyBankInfo" size="small">复制</el-button>
-              </template>
-            </el-input>
-          </el-form-item>
-        </el-col>
-      </el-row>
-
-      <el-row :gutter="20">
-        <el-col :span="12">
-          <el-form-item label="银行预留手机号">
-            <el-input v-model="formData.bankMobile" :disabled="true" />
-          </el-form-item>
-        </el-col>
-      </el-row>
-
       <!-- 已有支付凭证 -->
-      <el-form-item label="支付凭证" v-if="paymentVoucherList.length > 0">
-        <div class="voucher-images">
-          <el-image
-            v-for="(url, index) in paymentVoucherList"
-            :key="index"
-            :src="url"
-            :preview-src-list="paymentVoucherList"
-            :initial-index="index"
-            fit="cover"
-            class="voucher-image"
-            @click="previewImage(index)"
-          />
-        </div>
-      </el-form-item>
+      <el-row :gutter="20" v-if="paymentVoucherList.length > 0">
+        <el-col :span="24">
+          <el-form-item label="支付凭证">
+            <div class="voucher-images">
+              <el-image
+                v-for="(url, index) in paymentVoucherList"
+                :key="index"
+                :src="url"
+                :preview-src-list="paymentVoucherList"
+                :initial-index="index"
+                fit="cover"
+                class="voucher-image"
+                @click="previewImage(index)"
+              />
+            </div>
+          </el-form-item>
+        </el-col>
+      </el-row>
 
       <!-- 结算操作 -->
       <template v-if="formType === 'settlement'">
@@ -291,19 +312,18 @@ const previewImage = (index: number) => {
 }
 
 /** 复制银行信息 */
-const copyBankInfo = async () => {
+const copyBankInfo = async (row: any) => {
   try {
-    const bankInfo = [
-      `银行名称：${formData.value.bankName || ''}`,
-      `银行卡号：${formData.value.bankNumber || ''}`,
-      `银行预留手机号：${formData.value.bankMobile || ''}`,
-      `设计师姓名：${formData.value.designerName || ''}`
-    ].join('\n')
+    const bankInfo = `账户名称：${row.bankAccountName || ''}
+银行名称：${row.bankName || ''}
+银行卡号：${row.bankNumber || ''}
+银行渠道：${row.bankChanel || ''}
+银行预留手机：${row.bankMobile || ''}`
 
     await navigator.clipboard.writeText(bankInfo)
     message.success('银行信息已复制到剪贴板')
-  } catch (error) {
-    console.error('复制失败:', error)
+  } catch (err) {
+    console.error('复制失败:', err)
     message.error('复制失败，请手动复制')
   }
 }
@@ -349,5 +369,22 @@ const copyBankInfo = async () => {
 
 .upload-tip {
   margin-top: 8px;
+}
+</style>
+<style>
+.el-dialog {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  max-width: calc(100% - 30px);
+  max-height: calc(100% - 30px);
+  margin: 0 !important;
+  transform: translate(-50%, -50%);
+  flex-direction: column;
+}
+
+.el-dialog__body {
+  overflow: auto;
 }
 </style>

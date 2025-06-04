@@ -7,6 +7,9 @@
       label-width="120px"
       v-loading="formLoading"
     >
+      <!-- 结算说明 -->
+      <el-divider content-position="left">结算说明</el-divider>
+
       <el-row :gutter="20">
         <el-col :span="24">
           <el-form-item label="结算说明">
@@ -17,25 +20,42 @@
         </el-col>
       </el-row>
 
+      <!-- 批量记录详情 -->
+      <el-divider content-position="left">批量记录详情</el-divider>
+
       <!-- 批量记录列表 -->
       <div class="batch-records">
         <el-table :data="batchData" border size="small" max-height="300px">
-          <el-table-column label="合同编号" prop="contractNo" width="150" />
-          <el-table-column label="合同名称" prop="contractName" />
-          <el-table-column label="节点名称" prop="nodeName" />
-          <el-table-column label="付款金额" prop="amount" width="80">
+          <el-table-column label="合同编号" prop="contractNo" width="120" />
+          <el-table-column label="合同名称" prop="contractName" width="150" />
+          <el-table-column label="节点名称" prop="nodeName" width="100" />
+          <el-table-column label="付款金额" prop="amount" width="100">
             <template #default="{ row }"> ¥{{ Number(row.amount || 0).toFixed(2) }} </template>
           </el-table-column>
           <el-table-column label="客户" prop="customerName" width="80" />
           <el-table-column label="设计师" prop="designerName" width="80" />
-          <el-table-column label="银行名称" prop="bankName" width="120" />
-          <el-table-column label="银行卡号" prop="bankNumber" width="160" />
-          <el-table-column label="银行预留手机" prop="bankMobile" width="100" />
+          <el-table-column label="账户名称" prop="bankAccountName" width="100" />
+          <el-table-column label="银行名称" prop="bankName" width="130" />
+          <el-table-column label="银行卡号" prop="bankNumber" width="180">
+            <template #default="{ row }">
+              <div class="bank-number-cell">
+                <span>{{ row.bankNumber }}</span>
+                <el-button size="small" type="text" @click="copyBankInfo(row)" class="copy-btn">
+                  复制
+                </el-button>
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column label="银行渠道" prop="bankChanel" width="100" />
+          <el-table-column label="银行预留手机" prop="bankMobile" width="120" />
         </el-table>
         <div class="batch-summary">
           <el-text type="primary" size="large"> 总计金额：¥{{ totalAmount.toFixed(2) }} </el-text>
         </div>
       </div>
+
+      <!-- 结算操作 -->
+      <el-divider content-position="left">结算操作</el-divider>
 
       <el-row :gutter="20">
         <el-col :span="24">
@@ -99,6 +119,23 @@ const totalAmount = computed(() => {
     return Math.round(total * 100 + amount * 100) / 100
   }, 0)
 })
+
+/** 复制银行信息 */
+const copyBankInfo = async (row: any) => {
+  try {
+    const bankInfo = `账户名称：${row.bankAccountName || ''}
+银行名称：${row.bankName || ''}
+银行卡号：${row.bankNumber || ''}
+银行渠道：${row.bankChanel || ''}
+银行预留手机：${row.bankMobile || ''}`
+
+    await navigator.clipboard.writeText(bankInfo)
+    message.success('银行信息已复制到剪贴板')
+  } catch (err) {
+    console.error('复制失败:', err)
+    message.error('复制失败，请手动复制')
+  }
+}
 
 /** 打开弹窗 */
 const open = async (dataList: any[]) => {
@@ -164,11 +201,46 @@ const handleSubmit = async () => {
   }
 }
 
+.bank-number-cell {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .copy-btn {
+    min-height: auto;
+    padding: 0;
+    margin-left: 8px;
+    font-size: 12px;
+    color: #409eff;
+
+    &:hover {
+      color: #66b1ff;
+    }
+  }
+}
+
 .upload-tip {
   margin-top: 8px;
 }
 
 :deep(.el-form-item__label) {
   font-weight: 500;
+}
+</style>
+<style>
+.el-dialog {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  max-width: calc(100% - 30px);
+  max-height: calc(100% - 30px);
+  margin: 0 !important;
+  transform: translate(-50%, -50%);
+  flex-direction: column;
+}
+
+.el-dialog__body {
+  overflow: auto;
 }
 </style>

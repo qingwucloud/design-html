@@ -84,14 +84,23 @@
   <ContentWrap>
     <el-table v-loading="loading" :data="list" :stripe="true" :show-overflow-tooltip="true">
       <el-table-column label="编号" align="center" prop="id" />
+      <el-table-column label="客户名" align="center" prop="userName" />
       <el-table-column label="客户手机号" align="center" prop="userMobile" />
       <el-table-column label="预约设计师" align="center" prop="designerName" />
-      <el-table-column label="预约设计师电话" align="center" prop="designerMobile"  width="150"/>
+      <el-table-column label="预约设计师电话" align="center" prop="designerMobile" width="150" />
       <el-table-column label="指派设计师" align="center" prop="assignedDesignerName" />
-      <el-table-column label="指派设计师电话" align="center" prop="assignedDesignerMobile"  width="150"/>
-      <el-table-column label="预约状态" align="center" prop="designerAppointmentStatus" >
-        <template #default="{row}">
-          <DictTag :type="DICT_TYPE.DESIGNER_APPOINTMENT_STATUS" :value="row.designerAppointmentStatus" />
+      <el-table-column
+        label="指派设计师电话"
+        align="center"
+        prop="assignedDesignerMobile"
+        width="150"
+      />
+      <el-table-column label="预约状态" align="center" prop="designerAppointmentStatus">
+        <template #default="{ row }">
+          <DictTag
+            :type="DICT_TYPE.DESIGNER_APPOINTMENT_STATUS"
+            :value="row.designerAppointmentStatus"
+          />
         </template>
       </el-table-column>
       <el-table-column label="备注" align="center" prop="memberRemark" />
@@ -111,8 +120,14 @@
         width="180px"
       />
       <el-table-column label="操作" align="center" min-width="120px">
-        <template #default="{row}">
-          <el-button v-if="[0,1].includes(row.designerAppointmentStatus)" link type="primary" @click="openForm(row)" v-hasPermi="['member:designer-appointment:assigned']">
+        <template #default="{ row }">
+          <el-button
+            v-if="[0, 1].includes(row.designerAppointmentStatus)"
+            link
+            type="primary"
+            @click="openForm(row)"
+            v-hasPermi="['member:designer-appointment:assigned']"
+          >
             指派
           </el-button>
         </template>
@@ -135,7 +150,7 @@
 import { dateFormatter } from '@/utils/formatTime'
 import { DesignerAppointmentApi, DesignerAppointmentVO } from '@/api/member/designerappointment'
 import DesignerAppointmentForm from './DesignerAppointmentForm.vue'
-import { getIntDictOptions,DICT_TYPE } from "@/utils/dict";
+import { getIntDictOptions, DICT_TYPE } from '@/utils/dict'
 
 /** 客户预约设计师 列表 */
 defineOptions({ name: 'DesignerAppointment' })
@@ -153,7 +168,7 @@ const queryParams = reactive({
   memberRemark: undefined,
   checker: undefined,
   createTime: [],
-  checkTime:[]
+  checkTime: []
 })
 const queryFormRef = ref() // 搜索的表单
 
@@ -184,7 +199,7 @@ const resetQuery = () => {
 /** 添加/修改操作 */
 const formRef = ref()
 const openForm = (data) => {
-  formRef.value.open( data)
+  formRef.value.open(data)
 }
 
 /** 初始化 **/

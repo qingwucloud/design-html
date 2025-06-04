@@ -1,36 +1,42 @@
 <template>
-  <Dialog :title="dialogTitle" v-model="dialogVisible" width="1000px">
-    <!-- 详情和审核表单 -->
-    <el-form
-      v-if="formType === 'detail' || formType === 'audit'"
-      ref="formRef"
-      :model="formData"
-      :rules="formRules"
-      label-width="120px"
-      disabled
-      v-loading="formLoading"
-    >
+  <Dialog :title="dialogTitle" v-model="dialogVisible" width="1000px" top="2vh">
+    <!-- 统一的表单（详情、审核和结算） -->
+    <el-form ref="formRef" :model="formData" label-width="120px" v-loading="formLoading">
+      <!-- <el-row :gutter="20">
+        <el-col :span="24" v-if="formType === 'settlement'">
+          <el-form-item label="结算说明">
+            <el-text type="info">
+              正在为以下付款记录进行合同设计费结算，请上传相关的付款凭证。
+            </el-text>
+          </el-form-item>
+        </el-col> -->
+      <!-- </el-row> -->
+
+      <!-- 付款记录详情信息 -->
+      <el-divider content-position="left">付款记录详情</el-divider>
+
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item label="合同编号">
-            <el-input v-model="formData.contractNo" readonly />
+            <el-input v-model="formData.contractNo" :disabled="true" />
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="合同名称">
-            <el-input v-model="formData.contractName" readonly />
+            <el-input v-model="formData.contractName" :disabled="true" />
           </el-form-item>
         </el-col>
       </el-row>
+
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item label="合同节点">
-            <el-input v-model="formData.nodeName" readonly />
+            <el-input v-model="formData.nodeName" :disabled="true" />
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="合同总金额">
-            <el-input v-model="formData.totalAmount" readonly>
+            <el-input v-model="formData.totalAmount" :disabled="true">
               <template #append>元</template>
             </el-input>
           </el-form-item>
@@ -40,24 +46,25 @@
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item label="客户姓名">
-            <el-input v-model="formData.customerName" readonly />
+            <el-input v-model="formData.customerName" :disabled="true" />
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="客户电话">
-            <el-input v-model="formData.customerMobile" readonly />
+            <el-input v-model="formData.customerMobile" :disabled="true" />
           </el-form-item>
         </el-col>
       </el-row>
+
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item label="设计师姓名">
-            <el-input v-model="formData.designerName" readonly />
+            <el-input v-model="formData.designerName" :disabled="true" />
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="设计师电话">
-            <el-input v-model="formData.designerMobile" readonly />
+            <el-input v-model="formData.designerMobile" :disabled="true" />
           </el-form-item>
         </el-col>
       </el-row>
@@ -65,19 +72,20 @@
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item label="付款金额">
-            <el-input v-model="formData.amount" readonly>
+            <el-input v-model="formData.amount" :disabled="true">
               <template #append>元</template>
             </el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="付款比例">
-            <el-input v-model="formData.ratio" readonly>
+            <el-input v-model="formData.ratio" :disabled="true">
               <template #append>%</template>
             </el-input>
           </el-form-item>
         </el-col>
       </el-row>
+
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item label="支付状态">
@@ -89,14 +97,14 @@
         </el-col>
         <el-col :span="12">
           <el-form-item label="支付时间">
-            <el-input v-model="formData.payTime" readonly />
+            <el-input v-model="formData.payTime" :disabled="true" />
           </el-form-item>
         </el-col>
       </el-row>
 
-      <!-- 支付凭证 -->
-      <el-form-item label="支付凭证">
-        <div v-if="paymentVoucherList.length > 0" class="voucher-images">
+      <!-- 已有支付凭证 -->
+      <el-form-item label="已有支付凭证" v-if="paymentVoucherList.length > 0">
+        <div class="voucher-images">
           <el-image
             v-for="(url, index) in paymentVoucherList"
             :key="index"
@@ -108,91 +116,59 @@
             @click="previewImage(index)"
           />
         </div>
-        <div v-else class="no-voucher">
+      </el-form-item>
+      <el-form-item label="支付凭证" v-else>
+        <div class="no-voucher">
           <el-text type="info">暂无支付凭证</el-text>
         </div>
       </el-form-item>
 
       <!-- 审核信息 -->
-      <el-divider content-position="left" v-if="formData.paymentStatus == 2">审核信息</el-divider>
-      <el-row :gutter="20" v-if="formData.paymentStatus == 2">
-        <el-col :span="12">
-          <el-form-item label="审核人">
-            <el-input v-model="formData.checker" readonly />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="审核时间">
-            <el-input v-model="formData.checkTime" readonly />
-          </el-form-item>
-        </el-col>
-      </el-row>
-    </el-form>
+      <template v-if="formData.paymentStatus == 2">
+        <el-divider content-position="left">审核信息</el-divider>
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="审核人">
+              <el-input v-model="formData.checker" :disabled="true" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="审核时间">
+              <el-input v-model="formData.checkTime" :disabled="true" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </template>
 
-    <!-- 结算表单 -->
-    <el-form
-      v-else-if="formType === 'settlement'"
-      ref="settlementFormRef"
-      :model="settlementFormData"
-      :rules="settlementFormRules"
-      label-width="120px"
-      v-loading="formLoading"
-    >
-      <el-row :gutter="20">
-        <el-col :span="24">
-          <el-form-item label="结算说明">
-            <el-text type="info">
-              正在为以下付款记录进行合同设计费结算，请上传相关的付款凭证。
-            </el-text>
-          </el-form-item>
-        </el-col>
-      </el-row>
+      <!-- 结算操作 -->
+      <template v-if="formType === 'settlement'">
+        <el-divider content-position="left">结算操作</el-divider>
 
-      <el-row :gutter="20">
-        <el-col :span="12">
-          <el-form-item label="合同编号">
-            <el-input v-model="formData.contractNo" disabled />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="合同名称">
-            <el-input v-model="formData.contractName" disabled />
-          </el-form-item>
-        </el-col>
-      </el-row>
-
-      <el-row :gutter="20">
-        <el-col :span="12">
-          <el-form-item label="设计师姓名">
-            <el-input v-model="formData.designerName" disabled />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="结算金额">
-            <el-input v-model="formData.amount" disabled>
-              <template #append>元</template>
-            </el-input>
-          </el-form-item>
-        </el-col>
-      </el-row>
-
-      <el-row :gutter="20">
-        <el-col :span="24">
-          <el-form-item label="付款凭证" prop="paymentVoucher" required>
-            <UploadImg
-              v-model="settlementFormData.paymentVoucher"
-              :fileSize="10"
-              height="120px"
-              width="120px"
-            />
-            <div class="upload-tip ml-10px">
-              <el-text type="info" size="small">
-                支持 PNG、JPG、JPEG 格式，单个文件不超过 10MB，最多上传 1 张图片
-              </el-text>
-            </div>
-          </el-form-item>
-        </el-col>
-      </el-row>
+        <el-form
+          ref="settlementFormRef"
+          :model="settlementFormData"
+          :rules="settlementFormRules"
+          label-width="120px"
+        >
+          <el-row :gutter="20">
+            <el-col :span="24">
+              <el-form-item label="付款凭证" prop="paymentVoucher" required>
+                <UploadImg
+                  v-model="settlementFormData.paymentVoucher"
+                  :fileSize="10"
+                  height="80px"
+                  width="80px"
+                />
+                <div class="upload-tip ml-10px">
+                  <el-text type="info" size="small">
+                    支持 PNG、JPG、JPEG 格式，单个文件不超过 10MB，最多上传 1 张图片
+                  </el-text>
+                </div>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
+      </template>
     </el-form>
 
     <template #footer>
@@ -234,7 +210,6 @@ const dialogTitle = ref('') // 弹窗的标题
 const formLoading = ref(false) // 表单的加载中：1）修改时的数据加载；2）提交的按钮禁用
 const formType = ref('') // 表单的类型：detail - 详情；audit - 审核；settlement - 结算
 const formData = ref<any>({})
-const formRules = reactive({})
 const formRef = ref() // 表单 Ref
 
 // 结算表单相关
@@ -273,7 +248,7 @@ const open = async (type: string, data: any) => {
     settlementFormData.value = {
       ids: [data.id], // 设置当前记录ID
       paymentVoucher: '',
-      type: 3,
+      type: 3
     }
   }
 

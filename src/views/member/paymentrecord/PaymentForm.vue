@@ -1,5 +1,10 @@
 <template>
-  <Dialog :title="dialogTitle" v-model="dialogVisible" width="1000px" top="2vh">
+  <Dialog
+    :title="dialogTitle"
+    v-model="dialogVisible"
+    width="1000px"
+    :top="formType === 'settlement' ? '3vh' : undefined"
+  >
     <!-- 统一的表单（详情、审核和结算） -->
     <el-form ref="formRef" :model="formData" label-width="120px" v-loading="formLoading">
       <!-- <el-row :gutter="20">
@@ -13,7 +18,7 @@
       <!-- </el-row> -->
 
       <!-- 付款记录详情信息 -->
-      <el-divider content-position="left">付款记录详情</el-divider>
+      <!-- <el-divider content-position="left">付款记录详情</el-divider> -->
 
       <el-row :gutter="20">
         <el-col :span="12">
@@ -103,7 +108,7 @@
       </el-row>
 
       <!-- 已有支付凭证 -->
-      <el-form-item label="已有支付凭证" v-if="paymentVoucherList.length > 0">
+      <el-form-item label="支付凭证" v-if="paymentVoucherList.length > 0">
         <div class="voucher-images">
           <el-image
             v-for="(url, index) in paymentVoucherList"
@@ -115,11 +120,6 @@
             class="voucher-image"
             @click="previewImage(index)"
           />
-        </div>
-      </el-form-item>
-      <el-form-item label="支付凭证" v-else>
-        <div class="no-voucher">
-          <el-text type="info">暂无支付凭证</el-text>
         </div>
       </el-form-item>
 

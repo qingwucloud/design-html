@@ -1,5 +1,10 @@
 <template>
-  <Dialog :title="dialogTitle" v-model="dialogVisible" width="1000px" top="2vh">
+  <Dialog
+    :title="dialogTitle"
+    v-model="dialogVisible"
+    width="1000px"
+    :top="formType === 'settlement' ? '3vh' : undefined"
+  >
     <!-- 统一的表单（详情和结算） -->
     <el-form ref="formRef" :model="formData" label-width="120px" v-loading="formLoading">
       <el-row :gutter="20">
@@ -11,7 +16,7 @@
       </el-row>
 
       <!-- 佣金记录详情信息 -->
-      <el-divider content-position="left">佣金记录详情</el-divider>
+      <!-- <el-divider content-position="left">佣金记录详情</el-divider> -->
 
       <el-row :gutter="20">
         <el-col :span="12">

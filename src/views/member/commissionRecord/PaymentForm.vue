@@ -84,10 +84,31 @@
 
       <el-row :gutter="20">
         <el-col :span="12">
+          <el-form-item label="银行名称">
+            <el-input v-model="formData.bankName" :disabled="true" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="银行卡号">
+            <el-input v-model="formData.bankNumber" :disabled="true" />
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form-item label="银行预留手机">
+            <el-input v-model="formData.bankMobile" :disabled="true" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
           <el-form-item label="结算批次号" v-if="formData.settlementBatchNo">
             <el-input v-model="formData.settlementBatchNo" :disabled="true" />
           </el-form-item>
         </el-col>
+      </el-row>
+
+      <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item label="结算时间" v-if="formData.settlementTime">
             <el-input v-model="formData.settlementTime" :disabled="true" />

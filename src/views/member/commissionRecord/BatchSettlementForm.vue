@@ -1,5 +1,5 @@
 <template>
-  <Dialog :title="dialogTitle" v-model="dialogVisible" width="1000px">
+  <Dialog :title="dialogTitle" v-model="dialogVisible" width="1080px">
     <el-form
       ref="formRef"
       :model="formData"
@@ -38,6 +38,9 @@
               ¥{{ Number(row.sourceAmount || 0).toFixed(2) }}
             </template>
           </el-table-column>
+          <el-table-column label="银行名称" prop="bankName" width="120" />
+          <el-table-column label="银行卡号" prop="bankNumber" width="180" />
+          <el-table-column label="银行预留手机" prop="bankMobile" width="120" />
         </el-table>
         <div class="batch-summary">
           <el-text type="primary" size="large"> 总计金额：¥{{ totalAmount.toFixed(2) }} </el-text>

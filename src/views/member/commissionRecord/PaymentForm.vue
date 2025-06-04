@@ -95,8 +95,7 @@
         </el-col>
       </el-row>
 
-      <!-- 已有支付凭证 -->
-      <el-form-item label="已有支付凭证" v-if="paymentVoucherList.length > 0">
+      <el-form-item label="支付凭证" v-if="paymentVoucherList.length > 0">
         <div class="voucher-images">
           <el-image
             v-for="(url, index) in paymentVoucherList"
@@ -108,11 +107,6 @@
             class="voucher-image"
             @click="previewImage(index)"
           />
-        </div>
-      </el-form-item>
-      <el-form-item label="支付凭证" v-else>
-        <div class="no-voucher">
-          <el-text type="info">暂无支付凭证</el-text>
         </div>
       </el-form-item>
 

@@ -3,23 +3,10 @@
     :title="dialogTitle"
     v-model="dialogVisible"
     width="1000px"
-    :top="formType === 'settlement' ? '3vh' : undefined"
+    :top="formType === 'detail' ? undefined : '3vh'"
   >
-    <!-- 统一的表单（详情、审核和结算） -->
+    <!-- 设计师合同结算表单 -->
     <el-form ref="formRef" :model="formData" label-width="120px" v-loading="formLoading">
-      <!-- <el-row :gutter="20">
-        <el-col :span="24" v-if="formType === 'settlement'">
-          <el-form-item label="结算说明">
-            <el-text type="info">
-              正在为以下付款记录进行合同设计费结算，请上传相关的付款凭证。
-            </el-text>
-          </el-form-item>
-        </el-col> -->
-      <!-- </el-row> -->
-
-      <!-- 付款记录详情信息 -->
-      <!-- <el-divider content-position="left">付款记录详情</el-divider> -->
-
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item label="合同编号">
@@ -107,6 +94,27 @@
         </el-col>
       </el-row>
 
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form-item label="银行名称">
+            <el-input v-model="formData.bankName" :disabled="true" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="银行卡号">
+            <el-input v-model="formData.bankNumber" :disabled="true" />
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form-item label="银行预留手机号">
+            <el-input v-model="formData.bankMobile" :disabled="true" />
+          </el-form-item>
+        </el-col>
+      </el-row>
+
       <!-- 已有支付凭证 -->
       <el-form-item label="支付凭证" v-if="paymentVoucherList.length > 0">
         <div class="voucher-images">
@@ -122,23 +130,6 @@
           />
         </div>
       </el-form-item>
-
-      <!-- 审核信息 -->
-      <template v-if="formData.paymentStatus == 2">
-        <el-divider content-position="left">审核信息</el-divider>
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="审核人">
-              <el-input v-model="formData.checker" :disabled="true" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="审核时间">
-              <el-input v-model="formData.checkTime" :disabled="true" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </template>
 
       <!-- 结算操作 -->
       <template v-if="formType === 'settlement'">
@@ -180,35 +171,29 @@
       >
         确认结算
       </el-button>
-      <el-button
-        v-else-if="formType === 'audit' && formData.paymentStatus === 1"
-        @click="handleAudit"
-        type="primary"
-        :disabled="formLoading"
-      >
-        审核通过
-      </el-button>
       <el-button @click="dialogVisible = false">
         {{ formType === 'detail' ? '关闭' : '取消' }}
       </el-button>
     </template>
   </Dialog>
 </template>
+
 <script setup lang="ts">
 import { PaymentRecordApi } from '@/api/member/paymentrecord'
 import { DICT_TYPE } from '@/utils/dict'
 import { createImageViewer } from '@/components/ImageViewer'
 import { formatDate } from '@/utils/formatTime'
 import { UploadImg } from '@/components/UploadFile'
-/** 合同付款记录 表单 */
-defineOptions({ name: 'PaymentRecordForm' })
+
+/** 设计师合同结算表单 */
+defineOptions({ name: 'DesignerSettlementForm' })
 
 const message = useMessage() // 消息弹窗
 
 const dialogVisible = ref(false) // 弹窗的是否展示
 const dialogTitle = ref('') // 弹窗的标题
 const formLoading = ref(false) // 表单的加载中：1）修改时的数据加载；2）提交的按钮禁用
-const formType = ref('') // 表单的类型：detail - 详情；audit - 审核；settlement - 结算
+const formType = ref('') // 表单的类型：detail - 详情；settlement - 结算
 const formData = ref<any>({})
 const formRef = ref() // 表单 Ref
 
@@ -240,8 +225,6 @@ const open = async (type: string, data: any) => {
 
   if (type === 'detail') {
     dialogTitle.value = '详情'
-  } else if (type === 'audit') {
-    dialogTitle.value = '审核付款记录'
   } else if (type === 'settlement') {
     dialogTitle.value = '合同设计费结算'
     // 重置结算表单数据
@@ -251,8 +234,6 @@ const open = async (type: string, data: any) => {
       type: 3
     }
   }
-
-  console.log(data.payTime)
 
   // 设置表单数据，格式化时间字段
   formData.value = {
@@ -264,29 +245,8 @@ const open = async (type: string, data: any) => {
 
 defineExpose({ open }) // 提供 open 方法，用于打开弹窗
 
-/** 审核操作 */
-const emit = defineEmits(['success']) // 定义 success 事件，用于操作成功后的回调
-const handleAudit = async () => {
-  try {
-    // 审核确认
-    await message.confirm('确定审核通过该付款记录吗？')
-    formLoading.value = true
-
-    // 调用审核接口
-    await PaymentRecordApi.checkUserOrder(formData.value.id)
-    message.success('审核成功')
-
-    dialogVisible.value = false
-    // 发送操作成功的事件
-    emit('success')
-  } catch {
-    // 用户取消或者接口错误
-  } finally {
-    formLoading.value = false
-  }
-}
-
 /** 结算操作 */
+const emit = defineEmits(['success']) // 定义 success 事件，用于操作成功后的回调
 const handleSettlement = async () => {
   try {
     // 表单验证

@@ -209,7 +209,8 @@
     />
   </ContentWrap>
   <!-- 表单弹窗：添加/修改 -->
-  <PaymentForm ref="formRef" @success="getList" />
+  <CustomerPaymentForm ref="customerFormRef" @success="getList" />
+  <DesignerSettlementForm ref="designerFormRef" @success="getList" />
 
   <!-- 批量结算弹窗 -->
   <BatchSettlementForm ref="batchSettlementRef" @success="handleBatchSettlementSuccess" />
@@ -219,7 +220,8 @@
 import { dateFormatter } from '@/utils/formatTime'
 import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
 import { PaymentRecordApi } from '@/api/member/paymentrecord'
-import PaymentForm from './PaymentForm.vue'
+import CustomerPaymentForm from './CustomerPaymentForm.vue'
+import DesignerSettlementForm from './DesignerSettlementForm.vue'
 import BatchSettlementForm from './BatchSettlementForm.vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
@@ -280,10 +282,17 @@ const resetQuery = () => {
 }
 
 /** 添加/修改操作 */
-const formRef = ref()
+const customerFormRef = ref()
+const designerFormRef = ref()
 const batchSettlementRef = ref()
 const openForm = (type, data) => {
-  formRef.value.open(type, data)
+  if (tabActive.value === '2') {
+    // 客户付款审核
+    customerFormRef.value.open(type, data)
+  } else if (tabActive.value === '3') {
+    // 设计师合同结算
+    designerFormRef.value.open(type, data)
+  }
 }
 
 /** 批量结算操作 */

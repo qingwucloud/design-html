@@ -188,65 +188,7 @@
               </div>
 
               <!-- 工作成果 -->
-              <div class="work-results">
-                <h5 class="results-title">工作成果</h5>
-                <div v-if="currentFileList.length > 0" class="file-list">
-                  <div
-                    v-for="(item, fileIndex) in currentFileList"
-                    :key="fileIndex"
-                    class="file-item"
-                  >
-                    <!-- 图片预览区域 -->
-                    <div v-if="getFileImages(item.fileUrl).length > 0" class="file-image-preview">
-                      <div class="image-gallery">
-                        <el-image
-                          v-for="(imageUrl, imgIndex) in getFileImages(item.fileUrl)"
-                          :key="imgIndex"
-                          :src="imageUrl"
-                          :preview-src-list="getFileImages(item.fileUrl)"
-                          class="work-image"
-                          fit="cover"
-                          :preview-teleported="true"
-                        />
-                      </div>
-                    </div>
-
-                    <!-- 文件信息区域 -->
-                    <div class="file-info">
-                      <div class="file-name">
-                        {{ item.fileName || `成果文件${fileIndex + 1}` }}
-                        <span v-if="getFileCount(item.fileUrl) > 1" class="file-count">
-                          ({{ getFileCount(item.fileUrl) }}个文件)
-                        </span>
-                      </div>
-                      <div class="file-meta">
-                        <span
-                          class="file-status"
-                          :class="{
-                            'status-pending': item.confirmStatus === 0,
-                            'status-approved': item.confirmStatus === 1,
-                            'status-rejected': item.confirmStatus === 2
-                          }"
-                        >
-                          {{ getFileStatusText(item.confirmStatus) }}
-                        </span>
-                        <span v-if="item.confirmTime" class="confirm-time">
-                          确认时间: {{ formatDate(item.confirmTime, 'YYYY-MM-DD HH:mm:ss') }}
-                        </span>
-                      </div>
-                    </div>
-
-                    <!-- 操作按钮区域 -->
-                    <div class="file-actions">
-                      <el-button type="primary" link @click="downloadFile(item)">
-                        <el-icon><Download /></el-icon>
-                        下载
-                      </el-button>
-                    </div>
-                  </div>
-                </div>
-                <el-empty v-else description="暂无成果文件" :image-size="60" />
-              </div>
+              <WorkResults :file-list="currentFileList" />
             </div>
           </div>
         </div>
@@ -300,7 +242,8 @@ import { CardTitle } from '@/components/Card'
 import { AppNodeConfigRes, ContractApi } from '@/api/member/contract'
 import { DICT_TYPE } from '@/utils/dict'
 import { formatDate } from '@/utils/formatTime'
-import { Check, Download, ArrowDown, Document, InfoFilled } from '@element-plus/icons-vue'
+import WorkResults from './components/WorkResults.vue'
+import { Check, ArrowDown, Document, InfoFilled } from '@element-plus/icons-vue'
 
 defineOptions({ name: 'MemberDetail' })
 const loading = ref(false) // 加载中
@@ -403,82 +346,6 @@ const loadNodeFiles = async (nodeId: number) => {
   } catch (error) {
     console.error('加载工作成果失败:', error)
     currentFileList.value = []
-  }
-}
-
-// 判断是否为图片文件
-const isImageFile = (url: string) => {
-  if (!url) return false
-  return /\.(jpg|jpeg|png|gif|webp|bmp)$/i.test(url)
-}
-
-// 获取文件中的图片URLs（处理逗号分隔的多张图片）
-const getFileImages = (fileUrl: string) => {
-  if (!fileUrl) return []
-
-  // 分割文件URLs
-  const urls = fileUrl
-    .split(',')
-    .map((url) => url.trim())
-    .filter((url) => url)
-
-  // 过滤出图片文件
-  return urls.filter((url) => isImageFile(url))
-}
-
-// 获取文件总数
-const getFileCount = (fileUrl: string) => {
-  if (!fileUrl) return 0
-  return fileUrl
-    .split(',')
-    .map((url) => url.trim())
-    .filter((url) => url).length
-}
-
-// 获取文件状态文字
-const getFileStatusText = (status: number) => {
-  switch (status) {
-    case 0:
-      return '未确认'
-    case 1:
-      return '已确认'
-    case 2:
-      return '已驳回'
-    default:
-      return '未知状态'
-  }
-}
-
-// 下载文件
-const downloadFile = (item: any) => {
-  if (!item.fileUrl) return
-
-  // 分割文件URLs
-  const urls = item.fileUrl
-    .split(',')
-    .map((url: string) => url.trim())
-    .filter((url: string) => url)
-
-  if (urls.length === 1) {
-    // 单个文件直接下载
-    const link = document.createElement('a')
-    link.href = urls[0]
-    link.download = item.fileName || 'download'
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-  } else if (urls.length > 1) {
-    // 多个文件逐一下载
-    urls.forEach((url, index) => {
-      setTimeout(() => {
-        const link = document.createElement('a')
-        link.href = url
-        link.download = `${item.fileName || 'file'}_${index + 1}`
-        document.body.appendChild(link)
-        link.click()
-        document.body.removeChild(link)
-      }, index * 500) // 间隔500ms下载，避免浏览器阻止
-    })
   }
 }
 
@@ -820,129 +687,6 @@ const parseAttachments = (url) => {
       color: #262626;
     }
   }
-}
-
-.work-results {
-  margin-top: 16px;
-
-  .results-title {
-    margin: 0 0 12px;
-    font-size: 14px;
-    font-weight: 600;
-    color: #262626;
-  }
-}
-
-.file-list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.file-item {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  padding: 16px;
-  background: #fff;
-  border: 1px solid #e8e8e8;
-  border-radius: 8px;
-  transition: all 0.3s ease;
-  gap: 16px;
-
-  &:hover {
-    border-color: #1890ff;
-    box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
-  }
-}
-
-.file-image-preview {
-  flex-shrink: 0;
-  width: 120px;
-  border-radius: 6px;
-
-  .image-gallery {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px;
-  }
-
-  .work-image {
-    width: 56px;
-    height: 56px;
-    border-radius: 4px;
-
-    &:only-child {
-      width: 120px;
-      height: 80px;
-    }
-
-    &:nth-child(1):nth-last-child(2),
-    &:nth-child(2):nth-last-child(1) {
-      width: 56px;
-      height: 56px;
-    }
-  }
-}
-
-.file-info {
-  flex: 1;
-  min-width: 0;
-}
-
-.file-name {
-  margin-bottom: 4px;
-  font-size: 14px;
-  font-weight: 500;
-  color: #262626;
-
-  .file-count {
-    margin-left: 8px;
-    font-size: 12px;
-    font-weight: 400;
-    color: #8c8c8c;
-  }
-}
-
-.file-meta {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 12px;
-  color: #8c8c8c;
-}
-
-.file-status {
-  padding: 2px 6px;
-  font-size: 11px;
-  font-weight: 500;
-  border-radius: 4px;
-
-  &.status-pending {
-    color: #92400e;
-    background: #fef3c7;
-  }
-
-  &.status-approved {
-    color: #065f46;
-    background: #d1fae5;
-  }
-
-  &.status-rejected {
-    color: #991b1b;
-    background: #fee2e2;
-  }
-}
-
-.confirm-time {
-  font-size: 12px;
-  color: #666;
-  white-space: nowrap;
-}
-
-.file-actions {
-  display: flex;
-  gap: 8px;
 }
 
 /* 审核表单样式 */

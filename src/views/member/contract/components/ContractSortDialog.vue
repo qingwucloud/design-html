@@ -63,7 +63,8 @@ const formData = reactive({
 // 表单验证规则
 const formRules = {
   startSort: [{ required: true, message: '请输入排序值', trigger: 'blur' }],
-  caseShowAmount: [{ required: true, message: '请输入合同展示金额', trigger: 'blur' }]
+  caseShowAmount: [{ required: true, message: '请输入合同展示金额', trigger: 'blur' }],
+  covers: [{ required: true, message: '请上传封面图片', trigger: 'change' }]
 }
 
 // 发射事件

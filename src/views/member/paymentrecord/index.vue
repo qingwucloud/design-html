@@ -41,7 +41,7 @@
           class="!w-240px"
         />
       </el-form-item>
-      <el-form-item label="设计师手机号" prop="designerName">
+      <!-- <el-form-item label="设计师手机号" prop="designerName">
         <el-input
           v-model="queryParams.designerMobile"
           placeholder="请输入设计师手机号"
@@ -49,7 +49,7 @@
           @keyup.enter="handleQuery"
           class="!w-240px"
         />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="客户姓名" prop="customerName">
         <el-input
           v-model="queryParams.customerName"
@@ -59,7 +59,7 @@
           class="!w-240px"
         />
       </el-form-item>
-      <el-form-item label="客户手机号" prop="customerMobile">
+      <!-- <el-form-item label="客户手机号" prop="customerMobile">
         <el-input
           v-model="queryParams.customerMobile"
           placeholder="请输入客户手机号"
@@ -67,7 +67,7 @@
           @keyup.enter="handleQuery"
           class="!w-240px"
         />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="支付状态" prop="paymentStatus">
         <el-select
           v-model="queryParams.paymentStatus"
@@ -143,12 +143,12 @@
       <el-table-column label="合同节点" align="center" prop="nodeName" width="150" fixed />
       <el-table-column label="客户" align="center" prop="customerName" width="80" fixed />
       <el-table-column label="设计师" align="center" prop="designerName" width="80" fixed />
-      <el-table-column label="付款金额" align="center" prop="amount" fixed />
-      <el-table-column label="合同总金额" align="center" prop="totalAmount" width="100" />
+      <!-- <el-table-column label="付款金额" align="center" prop="amount" fixed />
+      <el-table-column label="合同总金额" align="center" prop="totalAmount" width="100" /> -->
       <el-table-column label="付款比例" align="center" prop="ratio" width="100">
         <template #default="{ row }"> {{ row.ratio }}% </template>
       </el-table-column>
-      <el-table-column label="线下订单号" align="center" prop="orderNo" width="120" />
+      <!-- <el-table-column label="线下订单号" align="center" prop="orderNo" width="120" /> -->
       <el-table-column label="支付状态" align="center" prop="paymentStatus" width="100" fixed>
         <template #default="{ row }">
           <DictTag :type="DICT_TYPE.OFFLINE_ORDER_PAYMENT_STATUS" :value="row.paymentStatus" />

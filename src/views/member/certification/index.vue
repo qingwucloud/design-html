@@ -17,7 +17,7 @@
           class="!w-240px"
         />
       </el-form-item>
-      <el-form-item label="设计师等级" prop="designerGradeType">
+      <!-- <el-form-item label="设计师等级" prop="designerGradeType">
         <el-select
           v-model="queryParams.designerGradeType"
           placeholder="请选择设计师等级"
@@ -31,7 +31,7 @@
             :value="dict.value"
           />
         </el-select>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="擅长风格" prop="designerStyleType">
         <el-select
           v-model="queryParams.designerStyleType"
@@ -137,9 +137,9 @@
           <span>{{ scope.row.workExperience }} 年</span>
         </template>
       </el-table-column>
-      <el-table-column label="设计师等级" align="center" prop="designerGradeTypeDesc" />
+      <!-- <el-table-column label="设计师等级" align="center" prop="designerGradeTypeDesc" /> -->
       <el-table-column label="评分" align="center" prop="score" />
-      <el-table-column label="擅长风格" align="center" prop="designerStyleTypeDesc" />
+      <!-- <el-table-column label="擅长风格" align="center" prop="designerStyleTypeDesc" /> -->
       <el-table-column
         label="申请时间"
         align="center"

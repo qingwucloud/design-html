@@ -26,7 +26,7 @@
           class="!w-240px"
         />
       </el-form-item>
-      <el-form-item label="邀请人手机号" prop="inviterMobile">
+      <!-- <el-form-item label="邀请人手机号" prop="inviterMobile">
         <el-input
           v-model="queryParams.inviterMobile"
           placeholder="请输入邀请人手机号"
@@ -34,7 +34,7 @@
           @keyup.enter="handleQuery"
           class="!w-240px"
         />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="被邀请人姓名" prop="inviteeName">
         <el-input
           v-model="queryParams.inviteeName"
@@ -44,7 +44,7 @@
           class="!w-240px"
         />
       </el-form-item>
-      <el-form-item label="被邀请人手机号" prop="inviteeMobile">
+      <!-- <el-form-item label="被邀请人手机号" prop="inviteeMobile">
         <el-input
           v-model="queryParams.inviteeMobile"
           placeholder="请输入被邀请人手机号"
@@ -52,8 +52,8 @@
           @keyup.enter="handleQuery"
           class="!w-240px"
         />
-      </el-form-item>
-      <el-form-item label="支付状态" prop="paymentStatus">
+      </el-form-item> -->
+      <!-- <el-form-item label="支付状态" prop="paymentStatus">
         <el-select
           v-model="queryParams.paymentStatus"
           placeholder="请选择状态"
@@ -67,7 +67,7 @@
             :value="dict.value"
           />
         </el-select>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="结算批次号" prop="settlementBatchNo">
         <el-input
           v-model="queryParams.settlementBatchNo"
@@ -123,10 +123,10 @@
         width="180"
         fixed
       />
-      <el-table-column label="合同名称" align="center" prop="contractName" width="150" fixed />
-      <el-table-column label="邀请人" align="center" prop="inviterName" width="100" fixed />
-      <el-table-column label="被邀请人" align="center" prop="inviteeName" width="100" fixed />
-      <el-table-column label="佣金金额" align="center" prop="commissionAmount" width="120" fixed>
+      <el-table-column label="合同名称" align="center" prop="contractName" />
+      <el-table-column label="邀请人" align="center" prop="inviterName" />
+      <el-table-column label="被邀请人" align="center" prop="inviteeName" />
+      <el-table-column label="佣金金额" align="center" prop="commissionAmount">
         <template #default="{ row }">
           ¥{{ Number(row.commissionAmount || 0).toFixed(2) }}
         </template>
@@ -136,15 +136,15 @@
           {{ (Number(row.commissionRate || 0) * 100).toFixed(2) }}%
         </template>
       </el-table-column>
-      <el-table-column label="合同金额" align="center" prop="sourceAmount" width="120">
+      <!-- <el-table-column label="合同金额" align="center" prop="sourceAmount" width="120">
         <template #default="{ row }"> ¥{{ Number(row.sourceAmount || 0).toFixed(2) }} </template>
-      </el-table-column>
-      <el-table-column label="佣金类型" align="center" prop="commissionType" width="100">
+      </el-table-column> -->
+      <!-- <el-table-column label="佣金类型" align="center" prop="commissionType" width="100">
         <template #default="{ row }">
           <DictTag :type="DICT_TYPE.COMMISSION_TYPE" :value="row.commissionType" />
         </template>
-      </el-table-column>
-      <el-table-column label="支付状态" align="center" prop="paymentStatus" width="100" fixed>
+      </el-table-column> -->
+      <el-table-column label="支付状态" align="center" prop="paymentStatus">
         <template #default="{ row }">
           <DictTag :type="DICT_TYPE.OFFLINE_ORDER_PAYMENT_STATUS" :value="row.paymentStatus" />
         </template>

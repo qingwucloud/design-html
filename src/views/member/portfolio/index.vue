@@ -47,7 +47,7 @@
           <el-option label="已驳回" value="2" />
         </el-select>
       </el-form-item>
-      <el-form-item label="户型" prop="portfolioHouseType">
+      <!-- <el-form-item label="户型" prop="portfolioHouseType">
         <el-select
           v-model="queryParams.portfolioHouseType"
           placeholder="请选择户型"
@@ -61,8 +61,8 @@
             :value="dict.value"
           />
         </el-select>
-      </el-form-item>
-      <el-form-item label="作品标签" prop="portfolioTagType">
+      </el-form-item> -->
+      <!-- <el-form-item label="作品标签" prop="portfolioTagType">
         <el-select
           v-model="queryParams.portfolioTagType"
           placeholder="请选择作品标签"
@@ -91,7 +91,7 @@
             :value="dict.value"
           />
         </el-select>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="精选排序" prop="sortNum">
         <el-select
           v-model="queryParams.sortNum"
@@ -143,30 +143,30 @@
   <!-- 列表 -->
   <ContentWrap>
     <el-table v-loading="loading" :data="list" :stripe="true" :show-overflow-tooltip="true">
-      <el-table-column label="编号" align="center" prop="id" fixed />
-      <el-table-column label="作品标题" align="center" prop="title" fixed width="150" />
-      <el-table-column label="设计师名称" align="center" prop="name" fixed width="100" />
-      <el-table-column label="小区名称" align="center" prop="communityName" fixed />
-      <el-table-column label="审核状态 " align="center" prop="status" fixed>
+      <el-table-column label="编号" align="center" prop="id" />
+      <el-table-column label="作品标题" align="center" prop="title" />
+      <el-table-column label="设计师名称" align="center" prop="name" />
+      <el-table-column label="小区名称" align="center" prop="communityName" />
+      <el-table-column label="审核状态 " align="center" prop="status">
         <template #default="{ row }">
           <el-tag v-if="row.status === 0" type="warning" size="small">待审核</el-tag>
           <el-tag v-else-if="row.status === 1" type="primary" size="small">已审核</el-tag>
           <el-tag v-else type="danger" size="small">已驳回</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="主图" align="center" prop="coverUrl" width="120">
+      <!-- <el-table-column label="主图" align="center" prop="coverUrl" width="120">
         <template #default="scope">
           <el-image :src="scope.row.coverUrl" style="width: 60px; height: 60px" fit="cover" />
         </template>
-      </el-table-column>
-      <el-table-column label="户型" align="center" prop="portfolioHouseTypeDesc" />
+      </el-table-column> -->
+      <!-- <el-table-column label="户型" align="center" prop="portfolioHouseTypeDesc" />
       <el-table-column label="面积" align="center" prop="area">
         <template #default="scope">
           <span>{{ scope.row.area }} ㎡</span>
         </template>
-      </el-table-column>
-      <el-table-column label="作品标签" align="center" prop="portfolioTagTypeDesc" />
-      <el-table-column label="作品风格" align="center" prop="designerStyleTypeDesc" />
+      </el-table-column> -->
+      <!-- <el-table-column label="作品标签" align="center" prop="portfolioTagTypeDesc" />
+      <el-table-column label="作品风格" align="center" prop="designerStyleTypeDesc" /> -->
       <el-table-column
         label="创建时间"
         align="center"

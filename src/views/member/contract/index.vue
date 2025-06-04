@@ -130,9 +130,9 @@
       <el-table-column label="合同编号" align="center" prop="contractNo" width="170" fixed />
       <el-table-column label="合同名称" align="center" prop="contractName" width="170" fixed />
       <el-table-column label="客户姓名" align="center" prop="customerName" width="100" fixed />
-      <el-table-column label="客户电话" align="center" prop="customerMobile" width="120" fixed />
+      <!-- <el-table-column label="客户电话" align="center" prop="customerMobile" width="120" fixed /> -->
       <el-table-column label="设计师姓名" align="center" prop="designerName" width="100" fixed />
-      <el-table-column label="设计师电话" align="center" prop="designerMobile" width="120" fixed />
+      <!-- <el-table-column label="设计师电话" align="center" prop="designerMobile" width="120" fixed /> -->
       <el-table-column
         label="合同状态"
         align="center"
@@ -146,18 +146,24 @@
       </el-table-column>
 
       <el-table-column label="小区名称" align="center" prop="communityName" width="150" />
-      <el-table-column label="工程地址" align="center" prop="projectAddress" width="150" />
+      <!-- <el-table-column label="工程地址" align="center" prop="projectAddress" width="150" /> -->
       <el-table-column label="合同总金额" align="center" prop="totalAmount" width="100">
         <template #default="{ row }">
           <span>{{ row.totalAmount }} 元</span>
         </template>
       </el-table-column>
-      <el-table-column label="已支付金额" align="center" prop="paidAmount" width="100">
+      <!-- <el-table-column label="已支付金额" align="center" prop="paidAmount" width="100">
         <template #default="{ row }">
           <span>{{ row.paidAmount }} 元</span>
         </template>
-      </el-table-column>
-      <el-table-column label="审核时间" align="center" prop="checkTime" />
+      </el-table-column> -->
+      <el-table-column
+        label="审核时间"
+        width="180px"
+        align="center"
+        :formatter="dateFormatter"
+        prop="checkTime"
+      />
       <el-table-column label="审核人" align="center" prop="checker" />
       <el-table-column label="驳回原因" align="center" prop="rejectReason" />
       <el-table-column

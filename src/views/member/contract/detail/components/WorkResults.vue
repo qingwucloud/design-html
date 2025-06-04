@@ -339,7 +339,10 @@ const downloadFile = (item: FileItem) => {
 }
 
 .file-preview {
+  display: flex;
+  flex-direction: column;
   flex-shrink: 0;
+  gap: 8px;
   width: 120px;
   border-radius: 6px;
 }

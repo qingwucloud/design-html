@@ -258,5 +258,6 @@ export enum DICT_TYPE {
 
   OFFLINE_ORDER_PAYMENT_STATUS = 'offline_order_payment_status', // 线下订单支付状态
   PAYMENT_RECORD_TYPE = 'payment_record_type', // 发起付款记录类型
-  CONTRACT_TYPE = 'contract_type' // 合同类型
+  CONTRACT_TYPE = 'contract_type', // 合同类型
+  COMMISSION_TYPE = 'commission_type' // 佣金类型
 }

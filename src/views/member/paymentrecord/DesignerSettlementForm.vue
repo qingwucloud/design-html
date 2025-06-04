@@ -102,7 +102,11 @@
         </el-col>
         <el-col :span="12">
           <el-form-item label="银行卡号">
-            <el-input v-model="formData.bankNumber" :disabled="true" />
+            <el-input v-model="formData.bankNumber" :disabled="true">
+              <template #append>
+                <el-button @click="copyBankInfo" size="small">复制</el-button>
+              </template>
+            </el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -284,6 +288,24 @@ const previewImage = (index: number) => {
     urlList: paymentVoucherList.value,
     initialIndex: index
   })
+}
+
+/** 复制银行信息 */
+const copyBankInfo = async () => {
+  try {
+    const bankInfo = [
+      `银行名称：${formData.value.bankName || ''}`,
+      `银行卡号：${formData.value.bankNumber || ''}`,
+      `银行预留手机号：${formData.value.bankMobile || ''}`,
+      `设计师姓名：${formData.value.designerName || ''}`
+    ].join('\n')
+
+    await navigator.clipboard.writeText(bankInfo)
+    message.success('银行信息已复制到剪贴板')
+  } catch (error) {
+    console.error('复制失败:', error)
+    message.error('复制失败，请手动复制')
+  }
 }
 </script>
 

@@ -108,13 +108,35 @@
       <el-form-item>
         <el-button @click="handleQuery"><Icon icon="ep:search" class="mr-5px" /> 搜索</el-button>
         <el-button @click="resetQuery"><Icon icon="ep:refresh" class="mr-5px" /> 重置</el-button>
+        <!-- 批量操作按钮 -->
+        <el-button
+          v-if="selectedRows.length > 0 && tabActive == 3"
+          type="primary"
+          @click="handleBatchSettlement"
+          v-hasPermi="['member:payment-record:settlement']"
+        >
+          批量结算 ({{ selectedRows.length }})
+        </el-button>
       </el-form-item>
     </el-form>
   </ContentWrap>
 
   <!-- 列表 -->
   <ContentWrap>
-    <el-table v-loading="loading" :data="list" :stripe="true" :show-overflow-tooltip="true">
+    <el-table
+      v-loading="loading"
+      :data="list"
+      :stripe="true"
+      :show-overflow-tooltip="true"
+      @selection-change="handleSelectionChange"
+    >
+      <!-- 多选列 -->
+      <el-table-column
+        type="selection"
+        width="55"
+        :selectable="rowSelectable"
+        v-if="tabActive == 3"
+      />
       <el-table-column label="编号" align="center" prop="id" fixed width="70" />
       <el-table-column label="合同编号" align="center" prop="contractNo" width="170" fixed />
       <el-table-column label="合同名称" align="center" prop="contractName" width="150" fixed />
@@ -186,9 +208,11 @@
       @pagination="getList"
     />
   </ContentWrap>
-
   <!-- 表单弹窗：添加/修改 -->
   <PaymentForm ref="formRef" @success="getList" />
+
+  <!-- 批量结算弹窗 -->
+  <BatchSettlementForm ref="batchSettlementRef" @success="handleBatchSettlementSuccess" />
 </template>
 
 <script setup>
@@ -196,6 +220,8 @@ import { dateFormatter } from '@/utils/formatTime'
 import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
 import { PaymentRecordApi } from '@/api/member/paymentrecord'
 import PaymentForm from './PaymentForm.vue'
+import BatchSettlementForm from './BatchSettlementForm.vue'
+import { ElMessage, ElMessageBox } from 'element-plus'
 
 const tabActive = ref('2') //type: '2', //支付类型：2 客户付款 3 合同设计费结算， 4 设计师邀请佣金结算
 /** 设计师发起支付记录 列表 */
@@ -222,11 +248,9 @@ const queryParams = reactive({
   payTime: []
 })
 const queryFormRef = ref() // 搜索的表单
+// 多选相关
+const selectedRows = ref([]) // 选中的行数据
 
-const changeTab= (val) => {
-  tabActive.value = val
-  getList()
-}
 /** 查询列表 */
 const getList = async () => {
   loading.value = true
@@ -257,8 +281,47 @@ const resetQuery = () => {
 
 /** 添加/修改操作 */
 const formRef = ref()
+const batchSettlementRef = ref()
 const openForm = (type, data) => {
   formRef.value.open(type, data)
+}
+
+/** 批量结算操作 */
+const handleBatchSettlement = async () => {
+  if (selectedRows.value.length === 0) {
+    ElMessage.warning('请选择要结算的记录')
+    return
+  }
+
+  // 打开批量结算弹窗
+  batchSettlementRef.value.open(selectedRows.value)
+}
+
+/** 批量结算成功回调 */
+const handleBatchSettlementSuccess = () => {
+  selectedRows.value = [] // 清空选中的行
+  getList() // 刷新列表
+}
+
+/** 行可选中性处理 */
+const rowSelectable = (row) => {
+  if (tabActive.value == 3) {
+    // 设计师合同结算：只有支付状态为0（未结算）的记录可以选中
+    return row.paymentStatus === 0
+  }
+  return false
+}
+
+// 处理多选变化
+const handleSelectionChange = (selection) => {
+  selectedRows.value = selection
+}
+
+const changeTab = (val) => {
+  tabActive.value = val
+  // 切换tab时清空选中的行
+  selectedRows.value = []
+  getList()
 }
 
 /** 初始化 **/

@@ -38,9 +38,21 @@
               ¥{{ Number(row.sourceAmount || 0).toFixed(2) }}
             </template>
           </el-table-column>
+          <!-- 银行信息分组 -->
+          <el-table-column label="账户名称" prop="bankAccountName" width="120" />
           <el-table-column label="银行名称" prop="bankName" width="120" />
-          <el-table-column label="银行卡号" prop="bankNumber" width="180" />
-          <el-table-column label="银行预留手机" prop="bankMobile" width="120" />
+          <el-table-column label="银行卡号" prop="bankNumber" width="180">
+            <template #default="{ row }">
+              <div class="bank-number-cell">
+                <span>{{ row.bankNumber }}</span>
+                <el-button @click="copyBankInfo(row)" size="small" text type="primary">
+                  复制
+                </el-button>
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column label="银行渠道" prop="bankChanel" width="120" />
+          <el-table-column label="预留手机" prop="bankMobile" width="120" />
         </el-table>
         <div class="batch-summary">
           <el-text type="primary" size="large"> 总计金额：¥{{ totalAmount.toFixed(2) }} </el-text>
@@ -165,6 +177,25 @@ const handleSubmit = async () => {
     formLoading.value = false
   }
 }
+
+/** 复制银行信息 */
+const copyBankInfo = async (row: any) => {
+  try {
+    const bankInfo = [
+      `账户名称：${row.bankAccountName || ''}`,
+      `银行名称：${row.bankName || ''}`,
+      `银行卡号：${row.bankNumber || ''}`,
+      `银行渠道：${row.bankChanel || ''}`,
+      `预留手机：${row.bankMobile || ''}`
+    ].join('\n')
+
+    await navigator.clipboard.writeText(bankInfo)
+    message.success('银行信息已复制到剪贴板')
+  } catch (error) {
+    console.error('复制失败:', error)
+    message.error('复制失败，请手动复制')
+  }
+}
 </script>
 
 <style lang="scss" scoped>
@@ -177,6 +208,20 @@ const handleSubmit = async () => {
     text-align: right;
     background-color: #f5f7fa;
     border-radius: 4px;
+  }
+}
+
+.bank-number-cell {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+
+  span {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }
 

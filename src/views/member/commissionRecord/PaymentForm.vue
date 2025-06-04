@@ -1,22 +1,9 @@
 <template>
-  <Dialog
-    :title="dialogTitle"
-    v-model="dialogVisible"
-    width="1000px"
-    :top="formType === 'settlement' ? '3vh' : undefined"
-  >
+  <Dialog :title="dialogTitle" v-model="dialogVisible" width="1000px">
     <!-- 统一的表单（详情和结算） -->
     <el-form ref="formRef" :model="formData" label-width="120px" v-loading="formLoading">
-      <el-row :gutter="20">
-        <el-col :span="24" v-if="formType === 'settlement'">
-          <el-form-item label="结算说明">
-            <el-text type="info"> 正在为以下佣金记录进行结算，请上传相关的付款凭证。 </el-text>
-          </el-form-item>
-        </el-col>
-      </el-row>
-
-      <!-- 佣金记录详情信息 -->
-      <!-- <el-divider content-position="left">佣金记录详情</el-divider> -->
+      <!-- 佣金记录详情 -->
+      <el-divider content-position="left">佣金记录详情</el-divider>
 
       <el-row :gutter="20">
         <el-col :span="12">
@@ -25,8 +12,10 @@
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="佣金类型">
-            <DictTag :type="DICT_TYPE.COMMISSION_TYPE" :value="formData.commissionType" />
+          <el-form-item label="合同金额">
+            <el-input v-model="formData.sourceAmount" :disabled="true">
+              <template #append>元</template>
+            </el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -64,30 +53,23 @@
         </el-col>
       </el-row>
 
-      <el-row :gutter="20">
-        <el-col :span="12">
-          <el-form-item label="合同金额">
-            <el-input v-model="formData.sourceAmount" :disabled="true">
-              <template #append>元</template>
-            </el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="支付状态">
-            <DictTag
-              :type="DICT_TYPE.OFFLINE_ORDER_PAYMENT_STATUS"
-              :value="formData.paymentStatus"
-            />
-          </el-form-item>
-        </el-col>
-      </el-row>
+      <!-- 银行信息 -->
+      <el-divider content-position="left">银行信息</el-divider>
 
       <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form-item label="账户名称">
+            <el-input v-model="formData.bankAccountName" :disabled="true" />
+          </el-form-item>
+        </el-col>
         <el-col :span="12">
           <el-form-item label="银行名称">
             <el-input v-model="formData.bankName" :disabled="true" />
           </el-form-item>
         </el-col>
+      </el-row>
+
+      <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item label="银行卡号">
             <el-input v-model="formData.bankNumber" :disabled="true">
@@ -95,6 +77,11 @@
                 <el-button @click="copyBankInfo" size="small">复制</el-button>
               </template>
             </el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="银行渠道">
+            <el-input v-model="formData.bankChanel" :disabled="true" />
           </el-form-item>
         </el-col>
       </el-row>
@@ -105,35 +92,50 @@
             <el-input v-model="formData.bankMobile" :disabled="true" />
           </el-form-item>
         </el-col>
+      </el-row>
+
+      <!-- 结算信息 -->
+      <el-divider content-position="left">结算信息</el-divider>
+
+      <el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item label="结算批次号" v-if="formData.settlementBatchNo">
+          <el-form-item label="支付状态">
+            <DictTag
+              :type="DICT_TYPE.OFFLINE_ORDER_PAYMENT_STATUS"
+              :value="formData.paymentStatus"
+            />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12" v-if="formData.settlementBatchNo">
+          <el-form-item label="结算批次号">
             <el-input v-model="formData.settlementBatchNo" :disabled="true" />
           </el-form-item>
         </el-col>
       </el-row>
 
-      <el-row :gutter="20">
+      <el-row :gutter="20" v-if="formData.settlementTime">
         <el-col :span="12">
-          <el-form-item label="结算时间" v-if="formData.settlementTime">
+          <el-form-item label="结算时间">
             <el-input v-model="formData.settlementTime" :disabled="true" />
           </el-form-item>
         </el-col>
+        <el-col :span="12">
+          <el-form-item label="支付凭证" v-if="paymentVoucherList.length > 0">
+            <div class="voucher-images">
+              <el-image
+                v-for="(url, index) in paymentVoucherList"
+                :key="index"
+                :src="url"
+                :preview-src-list="paymentVoucherList"
+                :initial-index="index"
+                fit="cover"
+                class="voucher-image"
+                @click="previewImage(index)"
+              />
+            </div>
+          </el-form-item>
+        </el-col>
       </el-row>
-
-      <el-form-item label="支付凭证" v-if="paymentVoucherList.length > 0">
-        <div class="voucher-images">
-          <el-image
-            v-for="(url, index) in paymentVoucherList"
-            :key="index"
-            :src="url"
-            :preview-src-list="paymentVoucherList"
-            :initial-index="index"
-            fit="cover"
-            class="voucher-image"
-            @click="previewImage(index)"
-          />
-        </div>
-      </el-form-item>
 
       <!-- 结算操作 -->
       <template v-if="formType === 'settlement'">
@@ -288,10 +290,11 @@ const previewImage = (index: number) => {
 const copyBankInfo = async () => {
   try {
     const bankInfo = [
+      `账户名称：${formData.value.bankAccountName || ''}`,
       `银行名称：${formData.value.bankName || ''}`,
       `银行卡号：${formData.value.bankNumber || ''}`,
-      `银行预留手机：${formData.value.bankMobile || ''}`,
-      `邀请人姓名：${formData.value.inviterName || ''}`
+      `银行渠道：${formData.value.bankChanel || ''}`,
+      `银行预留手机：${formData.value.bankMobile || ''}`
     ].join('\n')
 
     await navigator.clipboard.writeText(bankInfo)
@@ -343,5 +346,23 @@ const copyBankInfo = async () => {
 
 .upload-tip {
   margin-top: 8px;
+}
+</style>
+
+<style>
+.el-dialog {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  max-width: calc(100% - 30px);
+  max-height: calc(100% - 30px);
+  margin: 0 !important;
+  transform: translate(-50%, -50%);
+  flex-direction: column;
+}
+
+.el-dialog__body {
+  overflow: auto;
 }
 </style>

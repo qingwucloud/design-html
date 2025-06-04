@@ -130,9 +130,9 @@
       <el-table-column label="合同编号" align="center" prop="contractNo" width="170" fixed />
       <el-table-column label="合同名称" align="center" prop="contractName" width="170" fixed />
       <el-table-column label="客户姓名" align="center" prop="customerName" width="100" fixed />
-      <el-table-column label="客户电话" align="center" prop="customerMobile" width="100" fixed />
+      <el-table-column label="客户电话" align="center" prop="customerMobile" width="120" fixed />
       <el-table-column label="设计师姓名" align="center" prop="designerName" width="100" fixed />
-      <el-table-column label="设计师电话" align="center" prop="designerMobile" width="100" fixed />
+      <el-table-column label="设计师电话" align="center" prop="designerMobile" width="120" fixed />
       <el-table-column
         label="合同状态"
         align="center"

@@ -140,7 +140,7 @@
       <el-table-column label="编号" align="center" prop="id" fixed width="70" />
       <el-table-column label="合同编号" align="center" prop="contractNo" width="170" fixed />
       <el-table-column label="合同名称" align="center" prop="contractName" width="150" fixed />
-      <el-table-column label="合同节点" align="center" prop="nodeName" fixed />
+      <el-table-column label="合同节点" align="center" prop="nodeName" width="150" fixed />
       <el-table-column label="客户" align="center" prop="customerName" width="80" fixed />
       <el-table-column label="设计师" align="center" prop="designerName" width="80" fixed />
       <el-table-column label="付款金额" align="center" prop="amount" fixed />

@@ -1,5 +1,5 @@
 <template>
-  <Dialog :title="dialogTitle" v-model="dialogVisible" width="1000px">
+  <Dialog :title="dialogTitle" v-model="dialogVisible" width="1080px">
     <el-form
       ref="formRef"
       :model="formData"
@@ -23,11 +23,14 @@
           <el-table-column label="合同编号" prop="contractNo" width="150" />
           <el-table-column label="合同名称" prop="contractName" />
           <el-table-column label="节点名称" prop="nodeName" />
-          <el-table-column label="付款金额" prop="amount" width="100">
+          <el-table-column label="付款金额" prop="amount" width="80">
             <template #default="{ row }"> ¥{{ Number(row.amount || 0).toFixed(2) }} </template>
           </el-table-column>
-          <el-table-column label="客户" prop="customerName" width="100" />
-          <el-table-column label="设计师" prop="designerName" width="100" />
+          <el-table-column label="客户" prop="customerName" width="80" />
+          <el-table-column label="设计师" prop="designerName" width="80" />
+          <el-table-column label="银行名称" prop="bankName" width="120" />
+          <el-table-column label="银行卡号" prop="bankNumber" width="160" />
+          <el-table-column label="银行预留手机" prop="bankMobile" width="100" />
         </el-table>
         <div class="batch-summary">
           <el-text type="primary" size="large"> 总计金额：¥{{ totalAmount.toFixed(2) }} </el-text>

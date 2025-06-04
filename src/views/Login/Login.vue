@@ -29,7 +29,7 @@
         </Transition>
         <div class="copyright"
           ><a  href="https://beian.miit.gov.cn/" target="”_blank”"
-            >80duycsj.com 版权所有@2025 湘ICP备1111111号-1</a
+            >80duycsj.com 版权所有@2025 湘ICP备2025122206号</a
           ></div
         >
       </div>

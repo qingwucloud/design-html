@@ -106,7 +106,7 @@
                       @click="openPdf(pdf)"
                     >
                       <el-icon><Document /></el-icon>
-                      <div class="pdf-name">PDF文档{{ index + 1 }}</div>
+                      <div class="pdf-name">{{ getFileNameFromUrl(pdf) }}</div>
                     </div>
                   </div>
                 </div>
@@ -276,6 +276,9 @@ const checkFormData = ref({
   memberContractStatus: 1, // 默认通过
   rejectReason: ''
 })
+const getFileNameFromUrl = (url: string): string => {
+  return url.split('?')[1]?.split('=')[1] || ''
+}
 
 // 审核表单规则
 const checkFormRules = {

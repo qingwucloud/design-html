@@ -52,7 +52,7 @@
                 @click="openFile(docUrl)"
               >
                 <el-icon size="24"><Document /></el-icon>
-                <span class="file-type-label">文档</span>
+                <span class="file-type-label">{{ getFileNameFromUrl(docUrl) || '文档' }}</span>
               </div>
               <!-- 音频文件 -->
               <div
@@ -62,7 +62,7 @@
                 @click="openFile(audioUrl)"
               >
                 <el-icon size="24"><Microphone /></el-icon>
-                <span class="file-type-label">音频</span>
+                <span class="file-type-label">{{ getFileNameFromUrl(audioUrl) || '音频' }}</span>
               </div>
               <!-- 其他文件 -->
               <div
@@ -72,7 +72,7 @@
                 @click="openFile(otherUrl)"
               >
                 <el-icon size="24"><Document /></el-icon>
-                <span class="file-type-label">文件</span>
+                <span class="file-type-label">{{ getFileNameFromUrl(otherUrl) || '文件' }}</span>
               </div>
             </div>
           </div>
@@ -191,6 +191,11 @@ const isDocumentFile = (url: string) => {
   return /\.(pdf|doc|docx|xls|xlsx|ppt|pptx|txt|zip|rar|7z)$/i.test(url)
 }
 
+// 从URL中提取文件名
+const getFileNameFromUrl = (url: string): string => {
+  return url.split('?')[1]?.split('=')[1] || ''
+}
+
 // 获取文件类型
 const getFileType = (url: string) => {
   if (isImageFile(url)) return 'image'
@@ -283,7 +288,9 @@ const downloadFile = (item: FileItem) => {
     // 单个文件直接下载
     const link = document.createElement('a')
     link.href = urls[0]
-    link.download = item.fileName || 'download'
+    // 使用新的文件名提取方法
+    const fileName = getFileNameFromUrl(urls[0]) || item.fileName || 'download'
+    link.download = fileName
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
@@ -293,7 +300,9 @@ const downloadFile = (item: FileItem) => {
       setTimeout(() => {
         const link = document.createElement('a')
         link.href = url
-        link.download = `${item.fileName || 'file'}_${index + 1}`
+        // 使用新的文件名提取方法
+        const fileName = getFileNameFromUrl(url) || `${item.fileName || 'file'}_${index + 1}`
+        link.download = fileName
         document.body.appendChild(link)
         link.click()
         document.body.removeChild(link)
@@ -343,7 +352,8 @@ const downloadFile = (item: FileItem) => {
   flex-direction: column;
   flex-shrink: 0;
   gap: 8px;
-  width: 120px;
+  max-width: 300px;
+  min-width: 120px;
   border-radius: 6px;
 }
 
@@ -355,8 +365,8 @@ const downloadFile = (item: FileItem) => {
   }
 
   .work-image {
-    width: 56px;
-    height: 56px;
+    width: 64px;
+    height: 64px;
     border-radius: 4px;
 
     &:only-child {
@@ -366,8 +376,8 @@ const downloadFile = (item: FileItem) => {
 
     &:nth-child(1):nth-last-child(2),
     &:nth-child(2):nth-last-child(1) {
-      width: 56px;
-      height: 56px;
+      width: 64px;
+      height: 64px;
     }
   }
 }
@@ -391,6 +401,7 @@ const downloadFile = (item: FileItem) => {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
+    max-width: 100%;
   }
 
   .file-icon-item {
@@ -398,8 +409,8 @@ const downloadFile = (item: FileItem) => {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 56px;
-    height: 56px;
+    width: 64px;
+    height: 64px;
     padding: 4px;
     cursor: pointer;
     background: #f5f5f5;
@@ -413,9 +424,13 @@ const downloadFile = (item: FileItem) => {
     }
 
     .file-type-label {
+      max-width: 100%;
       margin-top: 4px;
+      overflow: hidden;
       font-size: 10px;
       color: #666;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     &.document {

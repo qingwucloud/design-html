@@ -134,6 +134,14 @@
               确认时间: {{ formatDate(new Date(Number(item.confirmTime)), 'YYYY-MM-DD HH:mm:ss') }}
             </span>
           </div>
+          <!-- 其他链接 -->
+          <div v-if="item.otherLinks" class="other-links">
+            <span class="other-links-label">其他链接：</span>
+            <el-button type="primary" link @click="openOtherLink(item.otherLinks)">
+              <el-icon><Document /></el-icon>
+              查看详情
+            </el-button>
+          </div>
         </div>
 
         <!-- 操作按钮区域 -->
@@ -159,6 +167,7 @@ interface FileItem {
   fileUrl: string
   confirmStatus: number
   confirmTime?: string
+  otherLinks?: string
 }
 
 interface Props {
@@ -272,6 +281,13 @@ const getFileStatusText = (status: number) => {
 // 打开文件
 const openFile = (url: string) => {
   window.open(url, '_blank')
+}
+
+// 打开其他链接
+const openOtherLink = (url: string) => {
+  if (url) {
+    window.open(url, '_blank')
+  }
 }
 
 // 下载文件
@@ -556,6 +572,18 @@ const downloadFile = (item: FileItem) => {
   font-size: 12px;
   color: #666;
   white-space: nowrap;
+}
+
+.other-links {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+
+  .other-links-label {
+    font-size: 12px;
+    color: #666;
+  }
 }
 
 .file-actions {

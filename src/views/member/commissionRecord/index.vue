@@ -120,7 +120,7 @@
         label="结算批次号"
         align="center"
         prop="settlementBatchNo"
-        width="150"
+        width="180"
         fixed
       />
       <el-table-column label="合同名称" align="center" prop="contractName" width="150" fixed />

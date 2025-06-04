@@ -72,7 +72,7 @@
           <div class="flex justify-between items-center">
             <div class="flex items-center text-gray-500 text-13px">
               <Icon icon="ep:document" class="mr-5px" />
-              <span>{{ segment.documentName || '未知文档' }}</span>
+              <span>{{ segment.documentName || '文档' }}</span>
             </div>
             <el-button size="small" @click="toggleExpand(segment)">
               {{ segment.expanded ? '收起' : '展开' }}

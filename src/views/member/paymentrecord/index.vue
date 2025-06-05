@@ -137,31 +137,37 @@
         :selectable="rowSelectable"
         v-if="tabActive == 3"
       />
-      <el-table-column label="编号" align="center" prop="id" fixed width="70" />
-      <el-table-column label="合同编号" align="center" prop="contractNo" width="170" fixed />
-      <el-table-column label="合同名称" align="center" prop="contractName" width="150" fixed />
-      <el-table-column label="合同节点" align="center" prop="nodeName" width="150" fixed />
-      <el-table-column label="客户" align="center" prop="customerName" width="80" fixed />
-      <el-table-column label="设计师" align="center" prop="designerName" width="80" fixed />
-      <!-- <el-table-column label="付款金额" align="center" prop="amount" fixed />
-      <el-table-column label="合同总金额" align="center" prop="totalAmount" width="100" /> -->
-      <el-table-column label="付款比例" align="center" prop="ratio" width="100">
-        <template #default="{ row }"> {{ row.ratio }}% </template>
-      </el-table-column>
-      <!-- <el-table-column label="线下订单号" align="center" prop="orderNo" width="120" /> -->
-      <el-table-column label="支付状态" align="center" prop="paymentStatus" width="100" fixed>
+      <el-table-column label="编号" align="center" prop="id" width="70" />
+      <el-table-column label="合同编号" align="center" prop="contractNo" width="170" />
+      <el-table-column label="合同名称" align="center" prop="contractName" />
+      <el-table-column label="合同节点" align="center" prop="nodeName" />
+      <el-table-column label="客户" align="center" prop="customerName" />
+      <el-table-column label="设计师" align="center" prop="designerName" />
+      <el-table-column label="支付状态" align="center" prop="paymentStatus">
         <template #default="{ row }">
           <DictTag :type="DICT_TYPE.OFFLINE_ORDER_PAYMENT_STATUS" :value="row.paymentStatus" />
         </template>
       </el-table-column>
-      <el-table-column
+      <el-table-column label="合同总金额" align="center" prop="totalAmount">
+        <template #default="{ row }"> {{ row.totalAmount }}元 </template>
+      </el-table-column>
+      <el-table-column label="付款比例" align="center" prop="ratio">
+        <template #default="{ row }"> {{ row.ratio }}% </template>
+      </el-table-column>
+      <el-table-column label="付款金额" align="center" prop="amount">
+        <template #default="{ row }"> {{ row.amount }}元 </template>
+      </el-table-column>
+
+      <!-- <el-table-column label="线下订单号" align="center" prop="orderNo" width="120" /> -->
+
+      <!-- <el-table-column
         label="审核时间"
         align="center"
         prop="checkTime"
         :formatter="dateFormatter"
         width="180px"
-      />
-      <el-table-column label="审核人" align="center" prop="checker" />
+      /> -->
+      <!-- <el-table-column label="审核人" align="center" prop="checker" /> -->
       <el-table-column
         label="支付时间"
         align="center"
@@ -169,6 +175,7 @@
         :formatter="dateFormatter"
         width="180px"
       />
+
       <el-table-column label="操作" align="center" fixed="right" width="150">
         <template #default="{ row }">
           <el-button

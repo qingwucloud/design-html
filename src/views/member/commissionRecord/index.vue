@@ -128,7 +128,7 @@
       <el-table-column label="被邀请人" align="center" prop="inviteeName" />
       <el-table-column label="佣金金额" align="center" prop="commissionAmount">
         <template #default="{ row }">
-          ¥{{ Number(row.commissionAmount || 0).toFixed(2) }}
+          {{row.commissionAmount }}元
         </template>
       </el-table-column>
       <el-table-column label="佣金比例" align="center" prop="commissionRate" width="100">

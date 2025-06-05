@@ -139,6 +139,7 @@
         v-if="tabActive == 3"
       />
       <el-table-column label="编号" align="center" prop="id" width="70" />
+      <el-table-column label="订单号" align="center" prop="orderNo" width="170" />
       <el-table-column label="合同编号" align="center" prop="contractNo" width="170" />
       <el-table-column label="合同名称" align="center" prop="contractName" />
       <el-table-column label="合同节点" align="center" prop="nodeName" />
@@ -167,8 +168,6 @@
       >
         <template #default="{ row }"> {{ row.amount }}元 </template>
       </el-table-column>
-
-      <!-- <el-table-column label="线下订单号" align="center" prop="orderNo" width="120" /> -->
 
       <!-- <el-table-column
         label="审核时间"

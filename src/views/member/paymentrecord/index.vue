@@ -128,8 +128,10 @@
       v-loading="loading"
       :data="list"
       :stripe="true"
+      ref="tableRef"
       :show-overflow-tooltip="true"
       @selection-change="handleSelectionChange"
+      @row-click="handleRowChick"
     >
       <!-- 多选列 -->
       <el-table-column
@@ -252,6 +254,7 @@ import WholeProjectSettlementForm from './WholeProjectSettlementForm.vue'
 import BatchSettlementForm from './BatchSettlementForm.vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
+const tableRef = ref() // 表格的引用
 const tabActive = ref('2') //type: '2', //支付类型：2 客户付款 3 合同设计费结算， 4 全案申请结算
 /** 设计师发起支付记录 列表 */
 defineOptions({ name: 'PaymentRecord' })
@@ -345,16 +348,53 @@ const handleBatchSettlementSuccess = () => {
 
 /** 行可选中性处理 */
 const rowSelectable = (row) => {
-  if (tabActive.value == 3) {
-    // 设计师合同结算：只有支付状态为0（未结算）的记录可以选中
-    return row.paymentStatus === 0
+  if (!tabActive.value == 3) return false
+  // 设计师合同结算：只有支付状态为0（未结算）的记录可以选中
+  if (row.paymentStatus !== 0) {
+    return false
   }
-  return false
+
+  // 如果已经选中了行，判断新选中的行是否与已选中行的合同编号一致
+  if (selectedRows.value.length > 0 && row.contractNo !== selectedRows.value[0].contractNo) {
+    return false
+  }
+
+  return true
 }
 
 // 处理多选变化
 const handleSelectionChange = (selection) => {
   selectedRows.value = selection
+
+  // 当取消选择所有行时，重新加载表格以恢复可选状态
+  if (selection.length === 0) {
+    getList()
+  }
+}
+
+const handleRowChick = (row, e) => {
+  if (e.label === '操作') return
+
+  // 首先检查该行是否可选中
+  if (!rowSelectable(row)) {
+    // 如果不可选中，显示提示信息
+    ElMessage.warning('只能选择相同合同编号且未结算的记录')
+    return
+  }
+
+  const selected = selectedRows.value.some((item) => item.id === row.id)
+  if (!selected) {
+    // 没有被选中
+    selectedRows.value.push(row)
+    tableRef.value.toggleRowSelection(row)
+  } else {
+    // 已勾选了,去除掉勾选
+    const finArr = selectedRows.value.filter((item) => {
+      return item.id !== row.id
+    })
+    selectedRows.value = finArr
+    tableRef.value.toggleRowSelection(row, false)
+  }
 }
 
 const changeTab = (val) => {
@@ -369,3 +409,9 @@ onMounted(() => {
   getList()
 })
 </script>
+
+<style lang="scss" scoped>
+:deep(.el-table__header-wrapper .el-checkbox) {
+  display: none;
+}
+</style>

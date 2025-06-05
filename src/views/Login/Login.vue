@@ -28,8 +28,8 @@
           </div>
         </Transition>
         <div class="copyright"
-          ><a  href="https://beian.miit.gov.cn/" target="”_blank”"
-            >80duycsj.com 版权所有@2025 湘ICP备2025122206号</a
+          ><a href="https://beian.miit.gov.cn/" target="”_blank”"
+            >80duycsj.com 版权所有@2025 湘ICP备2025122206号-2</a
           ></div
         >
       </div>
@@ -91,13 +91,13 @@ $prefix-cls: #{$namespace}-login;
   }
 }
 
-.copyright{
+.copyright {
   text-align: center;
 
-  a{
+  a {
     font-size: 13px;
     color: #999;
-    text-decoration:none;
+    text-decoration: none;
   }
 }
 </style>

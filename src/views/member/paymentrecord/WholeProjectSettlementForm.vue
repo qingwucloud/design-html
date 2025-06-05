@@ -1,6 +1,6 @@
 <template>
   <Dialog :title="dialogTitle" v-model="dialogVisible" width="1000px">
-    <!-- 设计师合同结算表单 -->
+    <!-- 全案申请结算表单 -->
     <el-form ref="formRef" :model="formData" label-width="120px" v-loading="formLoading">
       <!-- 记录详情 -->
       <el-divider content-position="left">记录详情</el-divider>
@@ -20,13 +20,15 @@
 
       <el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item label="合同节点">
-            <el-input v-model="formData.nodeName" :disabled="true" />
+          <el-form-item label="合同总金额">
+            <el-input v-model="formData.totalAmount" :disabled="true">
+              <template #append>元</template>
+            </el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="合同总金额">
-            <el-input v-model="formData.totalAmount" :disabled="true">
+          <el-form-item label="申请金额">
+            <el-input v-model="formData.amount" :disabled="true">
               <template #append>元</template>
             </el-input>
           </el-form-item>
@@ -55,23 +57,6 @@
         <el-col :span="12">
           <el-form-item label="设计师电话">
             <el-input v-model="formData.designerMobile" :disabled="true" />
-          </el-form-item>
-        </el-col>
-      </el-row>
-
-      <el-row :gutter="20">
-        <el-col :span="12">
-          <el-form-item label="结算金额">
-            <el-input v-model="formData.amount" :disabled="true">
-              <template #append>元</template>
-            </el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="结算比例">
-            <el-input v-model="formData.ratio" :disabled="true">
-              <template #append>%</template>
-            </el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -211,8 +196,8 @@ import { formatDate } from '@/utils/formatTime'
 import { UploadImg } from '@/components/UploadFile'
 import { copyBankInfo } from '@/utils/clipboard'
 
-/** 设计师合同结算表单 */
-defineOptions({ name: 'DesignerSettlementForm' })
+/** 全案申请结算表单 */
+defineOptions({ name: 'WholeProjectSettlementForm' })
 
 const message = useMessage() // 消息弹窗
 
@@ -228,7 +213,7 @@ const settlementFormRef = ref() // 结算表单 Ref
 const settlementFormData = ref({
   ids: [] as number[], // 付款记录ID数组
   paymentVoucher: '', // 付款凭证
-  type: 3 // 类型固定为3
+  type: 4 // 类型固定为4（全案申请结算）
 })
 
 const settlementFormRules = reactive({
@@ -252,12 +237,12 @@ const open = async (type: string, data: any) => {
   if (type === 'detail') {
     dialogTitle.value = '详情'
   } else if (type === 'settlement') {
-    dialogTitle.value = '合同设计费结算'
+    dialogTitle.value = '全案申请结算'
     // 重置结算表单数据
     settlementFormData.value = {
       ids: [data.id], // 设置当前记录ID
       paymentVoucher: '',
-      type: 3
+      type: 4
     }
   }
 
@@ -279,7 +264,7 @@ const handleSettlement = async () => {
     await settlementFormRef.value?.validate()
 
     // 确认操作
-    await message.confirm('确定进行合同设计费结算吗？')
+    await message.confirm('确定进行全案申请结算吗？')
     formLoading.value = true
 
     // 准备提交参数

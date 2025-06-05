@@ -84,7 +84,7 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="审核时间" prop="checkTime">
+      <!-- <el-form-item label="审核时间" prop="checkTime">
         <el-date-picker
           v-model="queryParams.checkTime"
           value-format="YYYY-MM-DD HH:mm:ss"
@@ -94,8 +94,8 @@
           :default-time="[new Date('1 00:00:00'), new Date('1 23:59:59')]"
           class="!w-240px"
         />
-      </el-form-item>
-      <el-form-item label="支付时间" prop="payTime">
+      </el-form-item> -->
+      <el-form-item :label="tabActive == 2 ? '支付时间' : '创建时间'" prop="payTime">
         <el-date-picker
           v-model="queryParams.payTime"
           value-format="YYYY-MM-DD HH:mm:ss"
@@ -152,7 +152,12 @@
       <el-table-column label="合同总金额" align="center" prop="totalAmount">
         <template #default="{ row }"> {{ row.totalAmount }}元 </template>
       </el-table-column>
-      <el-table-column :label="tabActive == 2 ? '付款比例' : '结算比例'"  v-if="tabActive != 4" align="center" prop="ratio">
+      <el-table-column
+        :label="tabActive == 2 ? '付款比例' : '结算比例'"
+        v-if="tabActive != 4"
+        align="center"
+        prop="ratio"
+      >
         <template #default="{ row }"> {{ row.ratio }}% </template>
       </el-table-column>
       <el-table-column
@@ -174,7 +179,7 @@
       /> -->
       <!-- <el-table-column label="审核人" align="center" prop="checker" /> -->
       <el-table-column
-        label="支付时间"
+        :label="tabActive == 2 ? '支付时间' : '创建时间'"
         align="center"
         prop="payTime"
         :formatter="dateFormatter"
@@ -209,6 +214,15 @@
           >
             结算
           </el-button>
+          <el-button
+            link
+            type="success"
+            v-if="row.paymentStatus == 0 && tabActive == 4"
+            @click="openForm('settlement', row)"
+            v-hasPermi="['member:payment-record:settlement']"
+          >
+            结算
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -223,6 +237,7 @@
   <!-- 表单弹窗：添加/修改 -->
   <CustomerPaymentForm ref="customerFormRef" @success="getList" />
   <DesignerSettlementForm ref="designerFormRef" @success="getList" />
+  <WholeProjectSettlementForm ref="wholeProjectFormRef" @success="getList" />
 
   <!-- 批量结算弹窗 -->
   <BatchSettlementForm ref="batchSettlementRef" @success="handleBatchSettlementSuccess" />
@@ -234,10 +249,11 @@ import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
 import { PaymentRecordApi } from '@/api/member/paymentrecord'
 import CustomerPaymentForm from './CustomerPaymentForm.vue'
 import DesignerSettlementForm from './DesignerSettlementForm.vue'
+import WholeProjectSettlementForm from './WholeProjectSettlementForm.vue'
 import BatchSettlementForm from './BatchSettlementForm.vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
-const tabActive = ref('2') //type: '2', //支付类型：2 客户付款 3 合同设计费结算， 4 设计师邀请佣金结算
+const tabActive = ref('2') //type: '2', //支付类型：2 客户付款 3 合同设计费结算， 4 全案申请结算
 /** 设计师发起支付记录 列表 */
 defineOptions({ name: 'PaymentRecord' })
 
@@ -296,6 +312,7 @@ const resetQuery = () => {
 /** 添加/修改操作 */
 const customerFormRef = ref()
 const designerFormRef = ref()
+const wholeProjectFormRef = ref()
 const batchSettlementRef = ref()
 const openForm = (type, data) => {
   if (tabActive.value === '2') {
@@ -304,6 +321,9 @@ const openForm = (type, data) => {
   } else if (tabActive.value === '3') {
     // 设计师合同结算
     designerFormRef.value.open(type, data)
+  } else if (tabActive.value === '4') {
+    // 全案申请结算
+    wholeProjectFormRef.value.open(type, data)
   }
 }
 

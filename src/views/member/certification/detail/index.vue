@@ -45,22 +45,22 @@
           <CardTitle title="账户明细" />
         </template>
         <el-tabs>
-<!--          <el-tab-pane label="订单管理">-->
-<!--            <UserOrderList :user-id="id" />-->
-<!--          </el-tab-pane>-->
-<!--          <el-tab-pane label="余额" lazy>-->
-<!--            <UserBalanceList :wallet-id="wallet.id" />-->
-<!--          </el-tab-pane>-->
-<!--          <el-tab-pane label="售后管理" lazy>-->
-<!--            <UserAfterSaleList :user-id="id" />-->
-<!--          </el-tab-pane>-->
-<!--          <el-tab-pane label="推广用户" lazy>-->
-<!--            <UserBrokerageList :bind-user-id="id" />-->
-<!--          </el-tab-pane>-->
-          <el-tab-pane label="团队" lazy/>
-          <el-tab-pane label="合同" lazy/>
-          <el-tab-pane label="预约" lazy/>
-          <el-tab-pane label="结算记录" lazy/>
+          <!--          <el-tab-pane label="订单管理">-->
+          <!--            <UserOrderList :user-id="id" />-->
+          <!--          </el-tab-pane>-->
+          <!--          <el-tab-pane label="余额" lazy>-->
+          <!--            <UserBalanceList :wallet-id="wallet.id" />-->
+          <!--          </el-tab-pane>-->
+          <!--          <el-tab-pane label="售后管理" lazy>-->
+          <!--            <UserAfterSaleList :user-id="id" />-->
+          <!--          </el-tab-pane>-->
+          <!--          <el-tab-pane label="推广用户" lazy>-->
+          <!--            <UserBrokerageList :bind-user-id="id" />-->
+          <!--          </el-tab-pane>-->
+          <el-tab-pane label="团队" lazy />
+          <el-tab-pane label="合同" lazy />
+          <el-tab-pane label="预约" lazy />
+          <el-tab-pane label="结算记录" lazy />
           <el-tab-pane label="作品集" lazy>
             <DesignList :bind-user-id="id" />
           </el-tab-pane>
@@ -111,8 +111,10 @@ const getUserData = async (id) => {
     let data = await CertificationApi.getCertification(id)
     designerInfo.value = {
       ...data,
-      certificates: data.certificates?.split(',') || [],
-      designerStyleType: data.designerStyleType?.split(',').map((item) => Number(item)) || []
+      certificates: data?.certificates ? data?.certificates.split(',') : [],
+      designerStyleType: data.designerStyleType
+        ? data.designerStyleType?.split(',').map((item) => Number(item))
+        : []
     }
   } finally {
     loading.value = false
@@ -133,14 +135,7 @@ const WALLET_INIT_DATA = {
 const wallet = ref(WALLET_INIT_DATA) // 钱包信息
 
 /** 查询用户钱包信息 */
-const getUserWallet = async () => {
-  if (!id) {
-    wallet.value = WALLET_INIT_DATA
-    return
-  }
-  const params = { userId: id }
-  wallet.value = (await WalletApi.getWallet(params)) || WALLET_INIT_DATA
-}
+const getUserWallet = async () => {}
 
 onMounted(() => {
   if (!id) {

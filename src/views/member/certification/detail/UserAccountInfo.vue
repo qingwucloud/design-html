@@ -19,7 +19,7 @@
       </template>
       <el-image
         disabled
-        class="w-60px h-70px mr-10px"
+        class="w-70px h-70px mr-10px"
         :src="designerInfo.cardImgFront"
         :preview-src-list="[designerInfo.cardImgFront]"
         show-progress
@@ -32,7 +32,7 @@
       </template>
       <el-image
         disabled
-        class="w-60px h-70px mr-10px"
+        class="w-70px h-70px mr-10px"
         :src="designerInfo.cardImgBack"
         :preview-src-list="[designerInfo.cardImgBack]"
         show-progress
@@ -55,15 +55,14 @@
       <template #label>
         <descriptions-item-label label=" 身份证有效期 " />
       </template>
-      {{ dayjs(Number(designerInfo.startTime)).format('YYYY-MM-DD') }} -
-      {{ designerInfo.endTime ? dayjs(Number(designerInfo.endTime)).format('YYYY-MM-DD') : '至今' }}
+      {{ designerInfo.cardStartdate }} -
+      {{ designerInfo.cardValidate || '至今' }}
     </el-descriptions-item>
   </el-descriptions>
 </template>
 <script lang="ts" setup>
 import { DescriptionsItemLabel } from '@/components/Descriptions'
 import * as UserApi from '@/api/member/user'
-import dayjs from 'dayjs'
 
 withDefaults(defineProps<{ user: UserApi.UserVO; designerInfo: any; column?: number }>(), {
   column: 2

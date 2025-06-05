@@ -4,8 +4,15 @@
       <slot name="header"></slot>
     </template>
     <el-row v-if="mode === 'member'">
-      <el-col :span="4">
-        <ElAvatar :size="140" :src="user.avatar || undefined" shape="square" />
+      <el-col :span="3">
+        <div class="w-full px-7">
+          <img
+            class="w-full h-full rounded-full object-cover"
+            :src="
+              user.avatar || 'https://80du-design.oss-cn-shenzhen.aliyuncs.com/static/avatar.png'
+            "
+          />
+        </div>
       </el-col>
       <el-col :span="20">
         <el-descriptions :column="2">
@@ -67,7 +74,7 @@
       </el-col>
     </el-row>
     <template v-if="mode === 'kefu'">
-      <ElAvatar :size="140" :src="user.avatar || undefined" shape="square" />
+      <ElAvatar :size="140" :src="user.avatar || undefined" shape="square" fit="cover" />
       <el-descriptions :column="1" class="kefu-descriptions">
         <el-descriptions-item>
           <template #label>

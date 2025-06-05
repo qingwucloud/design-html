@@ -31,7 +31,7 @@
       </template>
       {{ designerInfo.profile }}
     </el-descriptions-item>
-    <el-descriptions-item span="2">
+    <el-descriptions-item span="2" v-if="designerInfo.certificates?.length > 0">
       <template #label>
         <descriptions-item-label label=" 证书 " />
       </template>
@@ -40,7 +40,7 @@
           :key="item"
           disabled
           v-for="item in designerInfo.certificates"
-          class="w-60px h-70px mr-10px"
+          class="w-60px h-60px mr-10px"
           :src="item"
           :preview-src-list="designerInfo.certificates"
           show-progress

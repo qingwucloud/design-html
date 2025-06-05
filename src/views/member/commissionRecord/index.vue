@@ -123,22 +123,20 @@
         width="180"
         fixed
       />
-      <el-table-column label="合同名称" align="center" prop="contractName" />
+      <el-table-column label="合同名称" align="center" prop="contractName" width="170" />
       <el-table-column label="邀请人" align="center" prop="inviterName" />
       <el-table-column label="被邀请人" align="center" prop="inviteeName" />
-      <el-table-column label="佣金金额" align="center" prop="commissionAmount">
-        <template #default="{ row }">
-          {{row.commissionAmount }}元
-        </template>
-      </el-table-column>
       <el-table-column label="佣金比例" align="center" prop="commissionRate" width="100">
         <template #default="{ row }">
           {{ (Number(row.commissionRate || 0) * 100).toFixed(2) }}%
         </template>
       </el-table-column>
-      <!-- <el-table-column label="合同金额" align="center" prop="sourceAmount" width="120">
-        <template #default="{ row }"> ¥{{ Number(row.sourceAmount || 0).toFixed(2) }} </template>
-      </el-table-column> -->
+      <el-table-column label="合同金额" align="center" prop="sourceAmount" width="120">
+        <template #default="{ row }"> {{ row.sourceAmount }}元 </template>
+      </el-table-column>
+      <el-table-column label="佣金金额" align="center" prop="commissionAmount">
+        <template #default="{ row }"> {{ row.commissionAmount }}元 </template>
+      </el-table-column>
       <!-- <el-table-column label="佣金类型" align="center" prop="commissionType" width="100">
         <template #default="{ row }">
           <DictTag :type="DICT_TYPE.COMMISSION_TYPE" :value="row.commissionType" />

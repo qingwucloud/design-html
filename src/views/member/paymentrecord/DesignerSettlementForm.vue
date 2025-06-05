@@ -129,13 +129,13 @@
             />
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="formData.payTime">
-          <el-form-item label="创建时间">
-            <el-input v-model="formData.payTime" :disabled="true" />
+
+        <el-col :span="12">
+          <el-form-item label="审核时间" v-if="formData.checkTime">
+            <el-input v-model="formData.checkTime" :disabled="true" />
           </el-form-item>
         </el-col>
       </el-row>
-
       <!-- 已有支付凭证 -->
       <el-row :gutter="20" v-if="paymentVoucherList.length > 0">
         <el-col :span="24">

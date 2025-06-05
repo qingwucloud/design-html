@@ -369,6 +369,7 @@ const handleSelectionChange = (selection) => {
 }
 
 const handleRowChick = (row, e) => {
+  if (!tabActive.value == 3) return false
   if (e.label === '操作') return
 
   // 首先检查该行是否可选中

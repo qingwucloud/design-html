@@ -41,15 +41,15 @@ const timeRange = new Map()
   .set(TimeRangeTypeEnum.DAY30, {
     name: '30天',
     series: [
-      { name: '订单金额', type: 'bar', smooth: true, data: [] },
+      { name: '订单金额', type: 'bar', smooth: true, barWidth: 20, data: [] },
       { name: '订单数量', type: 'line', smooth: true, data: [] }
     ]
   })
   .set(TimeRangeTypeEnum.WEEK, {
     name: '周',
     series: [
-      { name: '上周金额', type: 'bar', smooth: true, data: [] },
-      { name: '本周金额', type: 'bar', smooth: true, data: [] },
+      { name: '上周金额', type: 'bar', smooth: true, barWidth: 15, data: [] },
+      { name: '本周金额', type: 'bar', smooth: true, barWidth: 15, data: [] },
       { name: '上周数量', type: 'line', smooth: true, data: [] },
       { name: '本周数量', type: 'line', smooth: true, data: [] }
     ]
@@ -57,8 +57,8 @@ const timeRange = new Map()
   .set(TimeRangeTypeEnum.MONTH, {
     name: '月',
     series: [
-      { name: '上月金额', type: 'bar', smooth: true, data: [] },
-      { name: '本月金额', type: 'bar', smooth: true, data: [] },
+      { name: '上月金额', type: 'bar', smooth: true, barWidth: 15, data: [] },
+      { name: '本月金额', type: 'bar', smooth: true, barWidth: 15, data: [] },
       { name: '上月数量', type: 'line', smooth: true, data: [] },
       { name: '本月数量', type: 'line', smooth: true, data: [] }
     ]
@@ -66,8 +66,8 @@ const timeRange = new Map()
   .set(TimeRangeTypeEnum.YEAR, {
     name: '年',
     series: [
-      { name: '去年金额', type: 'bar', smooth: true, data: [] },
-      { name: '今年金额', type: 'bar', smooth: true, data: [] },
+      { name: '去年金额', type: 'bar', smooth: true, barWidth: 15, data: [] },
+      { name: '今年金额', type: 'bar', smooth: true, barWidth: 15, data: [] },
       { name: '去年数量', type: 'line', smooth: true, data: [] },
       { name: '今年数量', type: 'line', smooth: true, data: [] }
     ]
@@ -75,7 +75,7 @@ const timeRange = new Map()
 /** 图表配置 */
 const eChartOptions = reactive<EChartsOption>({
   grid: {
-    left: 20,
+    left: 30,
     right: 20,
     bottom: 20,
     top: 80,
@@ -108,7 +108,7 @@ const eChartOptions = reactive<EChartsOption>({
   xAxis: {
     type: 'category',
     inverse: true,
-    boundaryGap: false,
+    boundaryGap: true,
     axisTick: {
       show: false
     },

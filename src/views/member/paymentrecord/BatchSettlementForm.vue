@@ -29,7 +29,7 @@
           <el-table-column label="合同编号" prop="contractNo" width="120" />
           <el-table-column label="合同名称" prop="contractName" width="150" />
           <el-table-column label="节点名称" prop="nodeName" width="100" />
-          <el-table-column label="付款金额" prop="amount" width="100">
+          <el-table-column label="结算金额" prop="amount" width="100">
             <template #default="{ row }"> ¥{{ Number(row.amount || 0).toFixed(2) }} </template>
           </el-table-column>
           <el-table-column label="客户" prop="customerName" width="80" />

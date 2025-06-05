@@ -61,14 +61,14 @@
 
       <el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item label="付款金额">
+          <el-form-item label="结算金额">
             <el-input v-model="formData.amount" :disabled="true">
               <template #append>元</template>
             </el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="付款比例">
+          <el-form-item label="结算比例">
             <el-input v-model="formData.ratio" :disabled="true">
               <template #append>%</template>
             </el-input>
@@ -311,8 +311,6 @@ const previewImage = (index: number) => {
     initialIndex: index
   })
 }
-
-
 </script>
 
 <style lang="scss" scoped>

@@ -3,6 +3,7 @@
     <el-tabs v-model="tabActive" @tab-change="changeTab">
       <el-tab-pane label="客户付款审核" name="2" />
       <el-tab-pane label="设计师合同结算" name="3" />
+      <el-tab-pane label="全案申请结算" name="4" />
     </el-tabs>
   </ContentWrap>
   <ContentWrap>
@@ -151,10 +152,14 @@
       <el-table-column label="合同总金额" align="center" prop="totalAmount">
         <template #default="{ row }"> {{ row.totalAmount }}元 </template>
       </el-table-column>
-      <el-table-column label="付款比例" align="center" prop="ratio">
+      <el-table-column :label="tabActive == 2 ? '付款比例' : '结算比例'"  v-if="tabActive != 4" align="center" prop="ratio">
         <template #default="{ row }"> {{ row.ratio }}% </template>
       </el-table-column>
-      <el-table-column label="付款金额" align="center" prop="amount">
+      <el-table-column
+        :label="tabActive == 2 ? '付款金额' : '结算金额'"
+        align="center"
+        prop="amount"
+      >
         <template #default="{ row }"> {{ row.amount }}元 </template>
       </el-table-column>
 

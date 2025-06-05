@@ -132,6 +132,7 @@
       :show-overflow-tooltip="true"
       @selection-change="handleSelectionChange"
       @row-click="handleRowChick"
+      @select-all="handleSelectAll"
     >
       <!-- 多选列 -->
       <el-table-column
@@ -365,11 +366,6 @@ const rowSelectable = (row) => {
 // 处理多选变化
 const handleSelectionChange = (selection) => {
   selectedRows.value = selection
-
-  // 当取消选择所有行时，重新加载表格以恢复可选状态
-  if (selection.length === 0) {
-    getList()
-  }
 }
 
 const handleRowChick = (row, e) => {
@@ -397,6 +393,51 @@ const handleRowChick = (row, e) => {
   }
 }
 
+/** 处理全选事件 */
+const handleSelectAll = (selection) => {
+  // 如果没有选中任何记录，直接返回
+  if (selection.length === 0) {
+    selectedRows.value = []
+    return
+  }
+
+  // 寻找第一个符合条件的记录（未结算的记录）
+  const firstValidRow = list.value.find((row) => row.paymentStatus === 0)
+  if (!firstValidRow) {
+    // 如果没有符合条件的记录，清空选择
+    selectedRows.value = []
+    tableRef.value.clearSelection()
+    ElMessage.warning('没有可以选择的记录')
+    return
+  }
+
+  // 获取第一个符合条件的记录的合同编号
+  const targetContractNo = firstValidRow.contractNo
+
+  // 取消所有行的选择状态
+  tableRef.value.clearSelection()
+
+  // 选择所有符合条件的行（相同合同编号且未结算）
+  const validRows = list.value.filter((row) => {
+    return row.paymentStatus === 0 && row.contractNo === targetContractNo
+  })
+
+  // 将符合条件的行设置为选中状态
+  validRows.forEach((row) => {
+    tableRef.value.toggleRowSelection(row, true)
+  })
+
+  // 更新选中的行数据
+  selectedRows.value = validRows
+
+  // 如果没有符合条件的记录，显示提示信息
+  if (validRows.length === 0) {
+    ElMessage.warning('没有符合条件的记录可以选择')
+  } else {
+    ElMessage.success(`已选择合同编号为 ${targetContractNo} 的 ${validRows.length} 条记录`)
+  }
+}
+
 const changeTab = (val) => {
   tabActive.value = val
   // 切换tab时清空选中的行
@@ -410,8 +451,4 @@ onMounted(() => {
 })
 </script>
 
-<style lang="scss" scoped>
-:deep(.el-table__header-wrapper .el-checkbox) {
-  display: none;
-}
-</style>
+<style lang="scss" scoped></style>

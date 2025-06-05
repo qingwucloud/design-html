@@ -253,7 +253,7 @@
 import { dateFormatter } from '@/utils/formatTime'
 import { PortfolioApi, PortfolioVO } from '@/api/member/portfolio'
 import PortfolioForm from './PortfolioForm.vue'
-import { getIntDictOptions, DICT_TYPE } from '@/utils/dict'
+import CheckAndDetail from './CheckAndDetail.vue'
 import { ElMessageBox } from 'element-plus'
 
 /** 设计师作品集 列表 */

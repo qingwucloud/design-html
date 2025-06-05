@@ -36,7 +36,6 @@ const props = defineProps({
       'bulletedList',
       'numberedList',
       'uploadImage',
-      'todo',
       'fullScreen' // 添加全屏功能
     ]
   },

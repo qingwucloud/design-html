@@ -35,7 +35,7 @@
           class="!w-240px"
         />
       </el-form-item>
-      <el-form-item label="设计师手机号" prop="designerName">
+      <!-- <el-form-item label="设计师手机号" prop="designerName">
         <el-input
           v-model="queryParams.designerMobile"
           placeholder="请输入设计师手机号"
@@ -43,7 +43,7 @@
           @keyup.enter="handleQuery"
           class="!w-240px"
         />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="客户姓名" prop="customerName">
         <el-input
           v-model="queryParams.customerName"
@@ -53,7 +53,7 @@
           class="!w-240px"
         />
       </el-form-item>
-      <el-form-item label="客户手机号" prop="customerMobile">
+      <!-- <el-form-item label="客户手机号" prop="customerMobile">
         <el-input
           v-model="queryParams.customerMobile"
           placeholder="请输入客户手机号"
@@ -61,7 +61,7 @@
           @keyup.enter="handleQuery"
           class="!w-240px"
         />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="合同状态" prop="memberContractStatus">
         <el-select
           v-model="queryParams.memberContractStatus"

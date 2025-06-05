@@ -61,7 +61,13 @@
   <ContentWrap>
     <el-table v-loading="loading" :data="list" :stripe="true" :show-overflow-tooltip="false">
       <el-table-column label="编号" align="center" prop="id" />
-      <el-table-column label="合同名称" align="center" prop="contractName" />
+      <el-table-column label="合同名称" align="center" prop="contractName">
+        <template #default="scope">
+          <span class="cursor-pointer">
+            {{ scope.row.contractName || '虚拟评论' }}
+          </span>
+        </template>
+      </el-table-column>
       <el-table-column label="用户账号" align="center" prop="userNickname" />
       <!-- <el-table-column label="商品评分" align="center" prop="descriptionScores" width="90" /> -->
       <el-table-column label="服务评分" align="center" prop="benefitScores" />

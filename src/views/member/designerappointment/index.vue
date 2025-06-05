@@ -8,9 +8,9 @@
       :inline="true"
       label-width="110px"
     >
-      <el-form-item label="客户手机号" prop="userId">
+      <el-form-item label="客户手机号" prop="userMobile">
         <el-input
-          v-model="queryParams.userId"
+          v-model="queryParams.userMobile"
           placeholder="请输入客户手机号"
           clearable
           type="number"
@@ -18,18 +18,18 @@
           class="!w-240px"
         />
       </el-form-item>
-      <el-form-item label="设计师名称" prop="designerId">
+      <el-form-item label="设计师名称" prop="designerName">
         <el-input
-          v-model="queryParams.designerId"
+          v-model="queryParams.designerName"
           placeholder="请输入设计师名称"
           clearable
           @keyup.enter="handleQuery"
           class="!w-240px"
         />
       </el-form-item>
-      <el-form-item label="指派设计师名称" prop="assignedDesignerId">
+      <el-form-item label="指派设计师名称" prop="assignedDesignerName">
         <el-input
-          v-model="queryParams.assignedDesignerId"
+          v-model="queryParams.assignedDesignerName"
           placeholder="请输入指派设计师名称"
           clearable
           @keyup.enter="handleQuery"
@@ -84,18 +84,18 @@
   <ContentWrap>
     <el-table v-loading="loading" :data="list" :stripe="true" :show-overflow-tooltip="true">
       <el-table-column label="编号" align="center" prop="id" />
-      <el-table-column label="客户名" align="center" prop="userName" />
-      <el-table-column label="客户手机号" align="center" prop="userMobile" />
-      <el-table-column label="预约设计师" align="center" prop="designerName" />
+      <el-table-column label="客户名" align="center" prop="userName" width="120" />
+      <el-table-column label="客户手机号" align="center" prop="userMobile" width="120" />
+      <el-table-column label="预约设计师" align="center" prop="designerName" width="120" />
       <el-table-column label="预约设计师电话" align="center" prop="designerMobile" width="150" />
-      <el-table-column label="指派设计师" align="center" prop="assignedDesignerName" />
+      <el-table-column label="指派设计师" align="center" prop="assignedDesignerName" width="120" />
       <el-table-column
         label="指派设计师电话"
         align="center"
         prop="assignedDesignerMobile"
         width="150"
       />
-      <el-table-column label="预约状态" align="center" prop="designerAppointmentStatus">
+      <el-table-column label="预约状态" align="center" prop="designerAppointmentStatus" width="120">
         <template #default="{ row }">
           <DictTag
             :type="DICT_TYPE.DESIGNER_APPOINTMENT_STATUS"
@@ -159,10 +159,12 @@ const list = ref<DesignerAppointmentVO[]>([]) // 列表的数据
 const total = ref(0) // 列表的总页数
 const queryParams = reactive({
   pageNo: 1,
+  userMobile: undefined,
+  designerName: undefined,
   pageSize: 10,
   userId: undefined,
   designerId: undefined,
-  assignedDesignerId: undefined,
+  assignedDesignerName: undefined,
   designerAppointmentStatus: undefined,
   portfolioId: undefined,
   memberRemark: undefined,

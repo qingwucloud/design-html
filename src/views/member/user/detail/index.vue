@@ -46,9 +46,12 @@
           <el-tab-pane label="订单管理">
             <UserOrderList :user-id="id" />
           </el-tab-pane>
-          <el-tab-pane label="余额" lazy>
-            <UserBalanceList :wallet-id="wallet.id" />
-          </el-tab-pane>
+<!--          <el-tab-pane label="余额" lazy>-->
+<!--            <UserBalanceList :wallet-id="wallet.id" />-->
+<!--          </el-tab-pane>-->
+          <el-tab-pane label="预约设计师" lazy/>
+          <el-tab-pane label="合同" lazy/>
+          <el-tab-pane label="合同付款" lazy/>
           <el-tab-pane label="售后管理" lazy>
             <UserAfterSaleList :user-id="id" />
           </el-tab-pane>
@@ -125,12 +128,12 @@ const wallet = ref<WalletApi.WalletVO>(WALLET_INIT_DATA) // 钱包信息
 
 /** 查询用户钱包信息 */
 const getUserWallet = async () => {
-  if (!id) {
-    wallet.value = WALLET_INIT_DATA
-    return
-  }
-  const params = { userId: id }
-  wallet.value = (await WalletApi.getWallet(params)) || WALLET_INIT_DATA
+  // if (!id) {
+  //   wallet.value = WALLET_INIT_DATA
+  //   return
+  // }
+  // const params = { userId: id }
+  // wallet.value = (await WalletApi.getWallet(params)) || WALLET_INIT_DATA
 }
 
 onMounted(() => {

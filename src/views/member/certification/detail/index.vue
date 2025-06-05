@@ -45,18 +45,22 @@
           <CardTitle title="账户明细" />
         </template>
         <el-tabs>
-          <el-tab-pane label="订单管理">
-            <UserOrderList :user-id="id" />
-          </el-tab-pane>
-          <el-tab-pane label="余额" lazy>
-            <UserBalanceList :wallet-id="wallet.id" />
-          </el-tab-pane>
-          <el-tab-pane label="售后管理" lazy>
-            <UserAfterSaleList :user-id="id" />
-          </el-tab-pane>
-          <el-tab-pane label="推广用户" lazy>
-            <UserBrokerageList :bind-user-id="id" />
-          </el-tab-pane>
+<!--          <el-tab-pane label="订单管理">-->
+<!--            <UserOrderList :user-id="id" />-->
+<!--          </el-tab-pane>-->
+<!--          <el-tab-pane label="余额" lazy>-->
+<!--            <UserBalanceList :wallet-id="wallet.id" />-->
+<!--          </el-tab-pane>-->
+<!--          <el-tab-pane label="售后管理" lazy>-->
+<!--            <UserAfterSaleList :user-id="id" />-->
+<!--          </el-tab-pane>-->
+<!--          <el-tab-pane label="推广用户" lazy>-->
+<!--            <UserBrokerageList :bind-user-id="id" />-->
+<!--          </el-tab-pane>-->
+          <el-tab-pane label="团队" lazy/>
+          <el-tab-pane label="合同" lazy/>
+          <el-tab-pane label="预约" lazy/>
+          <el-tab-pane label="结算记录" lazy/>
           <el-tab-pane label="作品集" lazy>
             <DesignList :bind-user-id="id" />
           </el-tab-pane>

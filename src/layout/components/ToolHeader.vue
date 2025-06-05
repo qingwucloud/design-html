@@ -73,9 +73,6 @@ export default defineComponent({
           {size.value ? (
             <SizeDropdown class="custom-hover" color="var(--top-header-text-color)"></SizeDropdown>
           ) : undefined}
-          {message.value ? (
-            <Message class="custom-hover" color="var(--top-header-text-color)"></Message>
-          ) : undefined}
           <UserInfo></UserInfo>
         </div>
       </div>

@@ -1,6 +1,4 @@
 <template>
-
-
   <!-- 搜索 -->
   <ContentWrap>
     <el-form ref="queryFormRef" :inline="true" :model="queryParams" label-width="68px">
@@ -120,7 +118,7 @@
           </el-button>
         </template>
       </el-table-column>
-      <el-table-column label="商品信息" min-width="600" prop="spuName">
+      <el-table-column label="商品信息" min-width="300" prop="spuName">
         <template #default="{ row }">
           <div class="flex items-center">
             <el-image

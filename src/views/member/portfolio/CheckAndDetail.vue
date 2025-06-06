@@ -1,5 +1,12 @@
 <template>
-  <Dialog :title="dialogTitle" v-model="dialogVisible" width="1080px" top="2vh">
+  <Dialog
+    :title="dialogTitle"
+    v-model="dialogVisible"
+    width="1080px"
+    scroll
+    max-height="700px"
+    top="2vh"
+  >
     <el-form ref="formRef" :model="formData" label-width="130px" v-loading="formLoading">
       <el-row>
         <el-col :span="12">
@@ -160,7 +167,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="驳回原因" prop="rejectReason" v-if="formType==='detail'">
+          <el-form-item label="驳回原因" prop="rejectReason" v-if="formType === 'detail'">
             <el-input
               disabled
               v-model="formData.rejectReason"
@@ -187,7 +194,7 @@
       </el-row>
 
       <el-form-item label="内容" prop="content">
-        <Editor readonly v-model="formData.content" height="250px" />
+        <div v-html="formData.content"></div>
       </el-form-item>
     </el-form>
     <el-form
@@ -239,7 +246,7 @@
 import { PortfolioApi } from '@/api/member/portfolio'
 import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
 import { CertificationApi } from '@/api/member/certification'
-
+import { processImgTags } from '@/utils/formRules'
 defineOptions({ name: 'PortfolioForm' })
 
 const message = useMessage() // 消息弹窗
@@ -294,6 +301,7 @@ const open = async (type: string, id?: number) => {
   let data = await PortfolioApi.getPortfolio(id as number)
   formData.value = {
     ...data,
+    content: processImgTags(data.content),
     portfolioTagType: data.portfolioTagType
       ? data.portfolioTagType.split(',').map((item) => Number(item))
       : [],

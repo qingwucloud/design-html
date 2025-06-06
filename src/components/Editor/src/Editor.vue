@@ -106,9 +106,9 @@ const editorConfig = computed((): IEditorConfig => {
         ['uploadImage']: {
           server: getUploadUrl(),
           // 单个文件的最大体积限制，默认为 2M
-          maxFileSize: 5 * 1024 * 1024,
+          maxFileSize: 10 * 1024 * 1024,
           // 最多可上传几个文件，默认为 100
-          maxNumberOfFiles: 10,
+          maxNumberOfFiles: 50,
           // 选择文件时的类型限制，默认为 ['image/*'] 。如不想限制，则设置为 []
           allowedFileTypes: ['image/*'],
 

@@ -38,3 +38,26 @@ export function validateCountWords(_rule: any, value: any, callback: any, len: a
     return callback()
   }
 }
+
+/**
+ * 处理HTML内容中的图片标签，添加样式限制最大宽度
+ * @param content HTML内容
+ * @returns 处理后的HTML内容
+ */
+export const processImgTags = (content: string): string => {
+  return content.replace(/<img\s+([^>]*)src="([^"]+)"([^>]*)>/g, (match, before, src, after) => {
+    // 检查是否已有style属性
+    if (match.includes('style=')) {
+      // 如果已有style属性，确保包含最大宽度限制
+      return match.replace(/style="([^"]*)"/g, (styleMatch, styleContent) => {
+        if (!styleContent.includes('max-width')) {
+          return `style="${styleContent}max-width:100%;display:block;"`
+        }
+        return styleMatch
+      })
+    } else {
+      // 如果没有style属性，添加新的style属性
+      return `<img ${before}src="${src}"${after} style="max-width:100%;display:block;">`
+    }
+  })
+}

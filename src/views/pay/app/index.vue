@@ -76,35 +76,35 @@
           />
         </template>
       </el-table-column>
-      <el-table-column align="center" label="支付宝配置">
-        <el-table-column
-          v-for="channel in alipayChannels"
-          :key="channel.code"
-          :label="channel.name.replace('支付宝', '')"
-          align="center"
-        >
-          <template #default="scope">
-            <el-button
-              v-if="isChannelExists(scope.row.channelCodes, channel.code)"
-              circle
-              size="small"
-              type="success"
-              @click="openChannelForm(scope.row, channel.code)"
-            >
-              <Icon icon="ep:check" />
-            </el-button>
-            <el-button
-              v-else
-              circle
-              size="small"
-              type="danger"
-              @click="openChannelForm(scope.row, channel.code)"
-            >
-              <Icon icon="ep:close" />
-            </el-button>
-          </template>
-        </el-table-column>
-      </el-table-column>
+<!--      <el-table-column align="center" label="支付宝配置">-->
+<!--        <el-table-column-->
+<!--          v-for="channel in alipayChannels"-->
+<!--          :key="channel.code"-->
+<!--          :label="channel.name.replace('支付宝', '')"-->
+<!--          align="center"-->
+<!--        >-->
+<!--          <template #default="scope">-->
+<!--            <el-button-->
+<!--              v-if="isChannelExists(scope.row.channelCodes, channel.code)"-->
+<!--              circle-->
+<!--              size="small"-->
+<!--              type="success"-->
+<!--              @click="openChannelForm(scope.row, channel.code)"-->
+<!--            >-->
+<!--              <Icon icon="ep:check" />-->
+<!--            </el-button>-->
+<!--            <el-button-->
+<!--              v-else-->
+<!--              circle-->
+<!--              size="small"-->
+<!--              type="danger"-->
+<!--              @click="openChannelForm(scope.row, channel.code)"-->
+<!--            >-->
+<!--              <Icon icon="ep:close" />-->
+<!--            </el-button>-->
+<!--          </template>-->
+<!--        </el-table-column>-->
+<!--      </el-table-column>-->
       <el-table-column align="center" label="微信配置">
         <el-table-column
           v-for="channel in wxChannels"
@@ -114,7 +114,7 @@
         >
           <template #default="scope">
             <el-button
-              v-if="isChannelExists(scope.row.channelCodes, channel.code)"
+                v-if="isChannelExists(scope.row.channelCodes, channel.code)"
               circle
               size="small"
               type="success"
@@ -134,30 +134,30 @@
           </template>
         </el-table-column>
       </el-table-column>
-      <el-table-column align="center" label="钱包支付配置">
-        <el-table-column :label="PayChannelEnum.WALLET.name" align="center">
-          <template #default="scope">
-            <el-button
-              v-if="isChannelExists(scope.row.channelCodes, PayChannelEnum.WALLET.code)"
-              circle
-              size="small"
-              type="success"
-              @click="openChannelForm(scope.row, PayChannelEnum.WALLET.code)"
-            >
-              <Icon icon="ep:check" />
-            </el-button>
-            <el-button
-              v-else
-              circle
-              size="small"
-              type="danger"
-              @click="openChannelForm(scope.row, PayChannelEnum.WALLET.code)"
-            >
-              <Icon icon="ep:close" />
-            </el-button>
-          </template>
-        </el-table-column>
-      </el-table-column>
+<!--      <el-table-column align="center" label="钱包支付配置">-->
+<!--        <el-table-column :label="PayChannelEnum.WALLET.name" align="center">-->
+<!--          <template #default="scope">-->
+<!--            <el-button-->
+<!--              v-if="isChannelExists(scope.row.channelCodes, PayChannelEnum.WALLET.code)"-->
+<!--              circle-->
+<!--              size="small"-->
+<!--              type="success"-->
+<!--              @click="openChannelForm(scope.row, PayChannelEnum.WALLET.code)"-->
+<!--            >-->
+<!--              <Icon icon="ep:check" />-->
+<!--            </el-button>-->
+<!--            <el-button-->
+<!--              v-else-->
+<!--              circle-->
+<!--              size="small"-->
+<!--              type="danger"-->
+<!--              @click="openChannelForm(scope.row, PayChannelEnum.WALLET.code)"-->
+<!--            >-->
+<!--              <Icon icon="ep:close" />-->
+<!--            </el-button>-->
+<!--          </template>-->
+<!--        </el-table-column>-->
+<!--      </el-table-column>-->
       <el-table-column align="center" label="模拟支付配置">
         <el-table-column :label="PayChannelEnum.MOCK.name" align="center">
           <template #default="scope">
@@ -259,11 +259,11 @@ const alipayChannels = [
 
 const wxChannels = [
   PayChannelEnum.WX_LITE,
-  PayChannelEnum.WX_PUB,
-  PayChannelEnum.WX_APP,
-  PayChannelEnum.WX_NATIVE,
-  PayChannelEnum.WX_WAP,
-  PayChannelEnum.WX_BAR
+  // PayChannelEnum.WX_PUB,
+  // PayChannelEnum.WX_APP,
+  // PayChannelEnum.WX_NATIVE,
+  // PayChannelEnum.WX_WAP,
+  // PayChannelEnum.WX_BAR
 ]
 
 /** 查询列表 */

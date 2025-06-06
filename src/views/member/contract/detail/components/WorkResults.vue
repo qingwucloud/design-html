@@ -135,11 +135,9 @@
             </span>
           </div>
           <!-- 其他链接 -->
-          <div v-if="item.otherLinks" class="other-links">
-            <span class="other-links-label">其他链接：</span>
+          <div  class="other-links" v-if="item.otherLinks">
             <el-button type="primary" link @click="openOtherLink(item.otherLinks)">
-              <el-icon><Document /></el-icon>
-              查看详情
+              点击预览3D效果图
             </el-button>
           </div>
         </div>

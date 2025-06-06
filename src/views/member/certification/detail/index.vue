@@ -43,10 +43,18 @@
           <CardTitle title="账户明细" />
         </template>
         <el-tabs>
-          <el-tab-pane label="团队" lazy />
-          <el-tab-pane label="合同" lazy />
-          <el-tab-pane label="预约" lazy />
-          <el-tab-pane label="结算记录" lazy />
+          <el-tab-pane label="团队" lazy>
+            <TeamList :bind-user-id="id" />
+          </el-tab-pane>
+          <el-tab-pane label="合同" lazy>
+            <ContractList :bind-user-id="id" />
+          </el-tab-pane>
+          <el-tab-pane label="预约" lazy>
+            <AppointmentList :bind-user-id="id" />
+          </el-tab-pane>
+          <el-tab-pane label="结算记录" lazy>
+            <SettlementList :bind-user-id="id" />
+          </el-tab-pane>
           <el-tab-pane label="作品集" lazy>
             <DesignList :bind-user-id="id" />
           </el-tab-pane>
@@ -73,6 +81,10 @@ import { CertificationApi } from '@/api/member/certification'
 import DesignerAccountInfo from '@/views/member/certification/detail/DesignerAccountInfo.vue'
 import UserCommentList from '../comment/index.vue'
 import DesignList from './DesignList.vue'
+import TeamList from './TeamList.vue'
+import ContractList from './ContractList.vue'
+import AppointmentList from './AppointmentList.vue'
+import SettlementList from './SettlementList.vue'
 defineOptions({ name: 'MemberDetail' })
 
 const loading = ref(true) // 加载中

@@ -157,7 +157,7 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 
 const tableRef = ref() // 表格的引用
 /** 设计师发起支付记录 列表 */
-defineOptions({ name: 'PaymentRecord' })
+defineOptions({ name: 'UserInfoPaymentRecord' })
 
 const loading = ref(true) // 列表的加载中
 const list = ref([]) // 列表的数据

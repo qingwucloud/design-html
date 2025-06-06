@@ -153,7 +153,7 @@ import DesignerAppointmentForm from '../../designerappointment/DesignerAppointme
 import { getIntDictOptions, DICT_TYPE } from '@/utils/dict'
 
 /** 客户预约设计师 列表 */
-defineOptions({ name: 'DesignerAppointment' })
+defineOptions({ name: 'UserInfoAppointment' })
 const loading = ref(true) // 列表的加载中
 const list = ref<DesignerAppointmentVO[]>([]) // 列表的数据
 const total = ref(0) // 列表的总页数

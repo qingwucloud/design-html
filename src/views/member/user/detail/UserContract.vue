@@ -226,7 +226,7 @@ import ContractSortDialog from '../../contract/components/ContractSortDialog.vue
 import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
 
 /** 用户合同 列表 */
-defineOptions({ name: 'Contract' })
+defineOptions({ name: 'UserInfoContract' })
 const { push } = useRouter()
 const loading = ref(true) // 列表的加载中
 const list = ref<ContractVO[]>([]) // 列表的数据

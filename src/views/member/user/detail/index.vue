@@ -24,10 +24,10 @@
             <UserOrderList :user-id="id" />
           </el-tab-pane>
           <el-tab-pane label="预约设计师" lazy>
-            <DesignerAppointment :user-id="id" />
+            <UserAppointment :user-id="id" />
           </el-tab-pane>
           <el-tab-pane label="合同" lazy>
-            <Contract :user-id="id" />
+            <UserContract :user-id="id" />
           </el-tab-pane>
           <el-tab-pane label="合同付款" lazy>
             <PaymentRecord :user-id="id" />
@@ -54,8 +54,8 @@ import UserBasicInfo from './UserBasicInfo.vue'
 import UserBrokerageList from './UserBrokerageList.vue'
 import UserOrderList from './UserOrderList.vue'
 import UserAfterSaleList from './UserAftersaleList.vue'
-import DesignerAppointment from './DesignerAppointment.vue'
-import Contract from './Contract.vue'
+import UserAppointment from './UserAppointment.vue'
+import UserContract from './UserContract.vue'
 import PaymentRecord from './PaymentRecord.vue'
 import { CardTitle } from '@/components/Card/index'
 import { ElMessage } from 'element-plus'

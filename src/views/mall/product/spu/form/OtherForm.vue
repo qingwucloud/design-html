@@ -9,14 +9,14 @@
         class="w-80!"
       />
     </el-form-item>
-    <el-form-item label="赠送积分" prop="giveIntegral">
+    <!-- <el-form-item label="赠送积分" prop="giveIntegral">
       <el-input-number
         v-model="formData.giveIntegral"
         :min="0"
         placeholder="请输入赠送积分"
         class="w-80!"
       />
-    </el-form-item>
+    </el-form-item> -->
     <el-form-item label="虚拟销量" prop="virtualSalesCount">
       <el-input-number
         v-model="formData.virtualSalesCount"

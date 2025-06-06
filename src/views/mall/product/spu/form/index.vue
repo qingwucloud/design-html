@@ -17,14 +17,14 @@
           :propFormData="formData"
         />
       </el-tab-pane>
-      <el-tab-pane label="物流设置" name="delivery">
+      <!-- <el-tab-pane label="物流设置" name="delivery">
         <DeliveryForm
           ref="deliveryRef"
           v-model:activeName="activeName"
           :is-detail="isDetail"
           :propFormData="formData"
         />
-      </el-tab-pane>
+      </el-tab-pane> -->
       <el-tab-pane label="商品详情" name="description">
         <DescriptionForm
           ref="descriptionRef"
@@ -177,6 +177,8 @@ const submitForm = async () => {
     deepCopyFormData.sliderPicUrls = newSliderPicUrls
     // 校验都通过后提交表单
     const data = deepCopyFormData as ProductSpuApi.Spu
+    // 处理配送方式
+    data.deliveryTypes = [2]
     const id = params.id as unknown as number
     if (!id) {
       await ProductSpuApi.createSpu(data)

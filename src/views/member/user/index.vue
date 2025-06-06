@@ -136,48 +136,6 @@
           <div class="flex items-center justify-center">
             <el-button link type="primary" @click="openDetail(scope.row.id)">详情</el-button>
             <el-button link type="warning" v-hasPermi="['member:user:update']" @click="handleCommand('handleUpdate',scope.row)">编辑</el-button>
-<!--            <el-dropdown-->
-<!--              v-hasPermi="[-->
-<!--                'member:user:update',-->
-<!--                'member:user:update-level',-->
-<!--                'member:user:update-point',-->
-<!--                'pay:wallet:update-balance'-->
-<!--              ]"-->
-<!--              @command="(command) => handleCommand(command, scope.row)"-->
-<!--            >-->
-<!--              <el-button link type="primary">-->
-<!--                <Icon icon="ep:d-arrow-right" />-->
-<!--                更多-->
-<!--              </el-button>-->
-<!--              <template #dropdown>-->
-<!--                <el-dropdown-menu>-->
-<!--                  <el-dropdown-item-->
-<!--                    v-if="checkPermi(['member:user:update'])"-->
-<!--                    command="handleUpdate"-->
-<!--                  >-->
-<!--                    编辑-->
-<!--                  </el-dropdown-item>-->
-<!--                  <el-dropdown-item-->
-<!--                    v-if="checkPermi(['member:user:update-level'])"-->
-<!--                    command="handleUpdateLevel"-->
-<!--                  >-->
-<!--                    修改等级-->
-<!--                  </el-dropdown-item>-->
-<!--                  <el-dropdown-item-->
-<!--                    v-if="checkPermi(['member:user:update-point'])"-->
-<!--                    command="handleUpdatePoint"-->
-<!--                  >-->
-<!--                    修改积分-->
-<!--                  </el-dropdown-item>-->
-<!--                  <el-dropdown-item-->
-<!--                    v-if="checkPermi(['pay:wallet:update-balance'])"-->
-<!--                    command="handleUpdateBlance"-->
-<!--                  >-->
-<!--                    修改余额-->
-<!--                  </el-dropdown-item>-->
-<!--                </el-dropdown-menu>-->
-<!--              </template>-->
-<!--            </el-dropdown>-->
           </div>
         </template>
       </el-table-column>
@@ -193,31 +151,14 @@
 
   <!-- 表单弹窗：添加/修改 -->
   <UserForm ref="formRef" @success="getList" />
-  <!-- 修改用户等级弹窗 -->
-  <UserLevelUpdateForm ref="updateLevelFormRef" @success="getList" />
-  <!-- 修改用户积分弹窗 -->
-  <UserPointUpdateForm ref="updatePointFormRef" @success="getList" />
-  <!-- 修改用户余额弹窗 -->
-  <UserBalanceUpdateForm ref="UpdateBalanceFormRef" @success="getList" />
-  <!-- 发送优惠券弹窗 -->
-  <CouponSendForm ref="couponSendFormRef" />
 </template>
 <script lang="ts" setup>
 import { dateFormatter } from '@/utils/formatTime'
 import * as UserApi from '@/api/member/user'
 import { DICT_TYPE } from '@/utils/dict'
 import UserForm from './UserForm.vue'
-import MemberTagSelect from '@/views/member/tag/components/MemberTagSelect.vue'
-import MemberGroupSelect from '@/views/member/group/components/MemberGroupSelect.vue'
-import UserLevelUpdateForm from './components/UserLevelUpdateForm.vue'
-import UserPointUpdateForm from './components/UserPointUpdateForm.vue'
-import UserBalanceUpdateForm from './components/UserBalanceUpdateForm.vue'
-import { CouponSendForm } from '@/views/mall/promotion/coupon/components'
-import { checkPermi } from '@/utils/permission'
 
 defineOptions({ name: 'MemberUser' })
-
-const message = useMessage() // 消息弹窗
 
 const loading = ref(true) // 列表的加载中
 const total = ref(0) // 列表的总页数
@@ -234,9 +175,6 @@ const queryParams = reactive({
   groupId: null
 })
 const queryFormRef = ref() // 搜索的表单
-const updateLevelFormRef = ref() // 修改会员等级表单
-const updatePointFormRef = ref() // 修改会员积分表单
-const UpdateBalanceFormRef = ref() // 修改用户余额表单
 const selectedIds = ref<number[]>([]) // 表格的选中 ID 数组
 
 /** 查询列表 */
@@ -280,30 +218,12 @@ const handleSelectionChange = (rows: UserApi.UserVO[]) => {
   selectedIds.value = rows.map((row) => row.id)
 }
 
-/** 发送优惠券 */
-const couponSendFormRef = ref()
-const openCoupon = () => {
-  if (selectedIds.value.length === 0) {
-    message.warning('请选择要发送优惠券的用户')
-    return
-  }
-  couponSendFormRef.value.open(selectedIds.value)
-}
 
 /** 操作分发 */
 const handleCommand = (command: string, row: UserApi.UserVO) => {
   switch (command) {
     case 'handleUpdate':
       openForm('update', row.id)
-      break
-    case 'handleUpdateLevel':
-      updateLevelFormRef.value.open(row.id)
-      break
-    case 'handleUpdatePoint':
-      updatePointFormRef.value.open(row.id)
-      break
-    case 'handleUpdateBlance':
-      UpdateBalanceFormRef.value.open(row.id)
       break
     default:
       break

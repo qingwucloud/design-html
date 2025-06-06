@@ -38,25 +38,11 @@
           </DesignerAccountInfo>
         </el-card>
       </el-col>
-      <!-- 下边：账户明细 -->
-      <!-- TODO 芋艿：【订单管理】【售后管理】【收藏记录】-->
       <el-card header="账户明细" shadow="never" style="width: 100%; margin-top: 20px">
         <template #header>
           <CardTitle title="账户明细" />
         </template>
         <el-tabs>
-          <!--          <el-tab-pane label="订单管理">-->
-          <!--            <UserOrderList :user-id="id" />-->
-          <!--          </el-tab-pane>-->
-          <!--          <el-tab-pane label="余额" lazy>-->
-          <!--            <UserBalanceList :wallet-id="wallet.id" />-->
-          <!--          </el-tab-pane>-->
-          <!--          <el-tab-pane label="售后管理" lazy>-->
-          <!--            <UserAfterSaleList :user-id="id" />-->
-          <!--          </el-tab-pane>-->
-          <!--          <el-tab-pane label="推广用户" lazy>-->
-          <!--            <UserBrokerageList :bind-user-id="id" />-->
-          <!--          </el-tab-pane>-->
           <el-tab-pane label="团队" lazy />
           <el-tab-pane label="合同" lazy />
           <el-tab-pane label="预约" lazy />
@@ -76,16 +62,11 @@
   <UserForm ref="formRef" @success="getUserData(id)" />
 </template>
 <script setup>
-import * as WalletApi from '@/api/pay/wallet/balance'
 import * as UserApi from '@/api/member/user'
 import { useTagsViewStore } from '@/store/modules/tagsView'
 import UserForm from '@/views/member/user/UserForm.vue'
 import UserAccountInfo from './UserAccountInfo.vue'
 import UserBasicInfo from './UserBasicInfo.vue'
-import UserBrokerageList from './UserBrokerageList.vue'
-import UserOrderList from './UserOrderList.vue'
-import UserAfterSaleList from './UserAftersaleList.vue'
-import UserBalanceList from './UserBalanceList.vue'
 import { CardTitle } from '@/components/Card/index'
 import { ElMessage } from 'element-plus'
 import { CertificationApi } from '@/api/member/certification'
@@ -99,9 +80,7 @@ const user = ref({})
 
 /** 添加/修改操作 */
 const formRef = ref()
-const openForm = (type) => {
-  formRef.value.open(type, id)
-}
+
 const designerInfo = ref({})
 /** 获得用户 */
 const getUserData = async (id) => {
@@ -126,16 +105,6 @@ const { currentRoute } = useRouter() // 路由
 const { delView } = useTagsViewStore() // 视图操作
 const route = useRoute()
 const id = route.params.id
-/* 用户钱包相关信息 */
-const WALLET_INIT_DATA = {
-  balance: 0,
-  totalExpense: 0,
-  totalRecharge: 0
-} // 钱包初始化数据
-const wallet = ref(WALLET_INIT_DATA) // 钱包信息
-
-/** 查询用户钱包信息 */
-const getUserWallet = async () => {}
 
 onMounted(() => {
   if (!id) {
@@ -144,7 +113,6 @@ onMounted(() => {
     return
   }
   getUserData(id)
-  getUserWallet()
 })
 </script>
 <style lang="css" scoped>

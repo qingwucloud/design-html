@@ -23,9 +23,15 @@
           <el-tab-pane label="订单管理">
             <UserOrderList :user-id="id" />
           </el-tab-pane>
-          <el-tab-pane label="预约设计师" lazy/>
-          <el-tab-pane label="合同" lazy/>
-          <el-tab-pane label="合同付款" lazy/>
+          <el-tab-pane label="预约设计师" lazy>
+            <DesignerAppointment :user-id="id" />
+          </el-tab-pane>
+          <el-tab-pane label="合同" lazy>
+            <Contract :user-id="id" />
+          </el-tab-pane>
+          <el-tab-pane label="合同付款" lazy>
+            <PaymentRecord :user-id="id" />
+          </el-tab-pane>
           <el-tab-pane label="售后管理" lazy>
             <UserAfterSaleList :user-id="id" />
           </el-tab-pane>
@@ -48,6 +54,9 @@ import UserBasicInfo from './UserBasicInfo.vue'
 import UserBrokerageList from './UserBrokerageList.vue'
 import UserOrderList from './UserOrderList.vue'
 import UserAfterSaleList from './UserAftersaleList.vue'
+import DesignerAppointment from './DesignerAppointment.vue'
+import Contract from './Contract.vue'
+import PaymentRecord from './PaymentRecord.vue'
 import { CardTitle } from '@/components/Card/index'
 import { ElMessage } from 'element-plus'
 
@@ -76,7 +85,7 @@ const getUserData = async (id: any) => {
 const { currentRoute } = useRouter() // 路由
 const { delView } = useTagsViewStore() // 视图操作
 const route = useRoute()
-const id = route.params.id
+const id = Number(route.params.id)
 
 onMounted(() => {
   if (!id) {

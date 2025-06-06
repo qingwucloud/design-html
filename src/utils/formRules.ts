@@ -13,13 +13,28 @@ export const required = {
  * @param len 限制字数
  */
 export function validateCountWords(_rule: any, value: any, callback: any, len: any) {
-  const text = (value || '').replace(/<[^>]*>?/gm, '');
-  const count = text.length;
-  if (!text)   callback(new Error(`不能为空`))
+  if (!value) {
+    return callback(new Error(`不能为空`))
+  }
+
+  // 检查富文本是否只包含图片
+  const hasImgTag = /<img[^>]*>/i.test(value)
+  const textWithoutTags = (value || '').replace(/<[^>]*>?/gm, '').trim()
+
+  // 如果只有图片标签但没有文本内容
+  if (hasImgTag && !textWithoutTags) {
+    return callback() // 包含图片就通过验证
+  }
+
+  // 正常验证文本字数
+  const count = textWithoutTags.length
+  if (!textWithoutTags) {
+    return callback(new Error(`不能为空`))
+  }
+
   if (count > len) {
-    callback(new Error(`字数不得超过了${len}`))
+    return callback(new Error(`字数不得超过${len}`))
   } else {
     return callback()
   }
 }
-

@@ -1,7 +1,5 @@
 <!-- 商品中心 - 商品列表  -->
 <template>
-
-
   <!-- 搜索工作栏 -->
   <ContentWrap>
     <el-form
@@ -60,7 +58,7 @@
           <Icon class="mr-5px" icon="ep:plus" />
           新增
         </el-button>
-        <el-button
+        <!-- <el-button
           v-hasPermi="['product:spu:export']"
           :loading="exportLoading"
           plain
@@ -69,7 +67,7 @@
         >
           <Icon class="mr-5px" icon="ep:download" />
           导出
-        </el-button>
+        </el-button> -->
       </el-form-item>
     </el-form>
   </ContentWrap>

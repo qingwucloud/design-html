@@ -1,7 +1,4 @@
 <template>
-
-
-
   <ContentWrap>
     <el-form
       ref="formRef"
@@ -32,7 +29,7 @@
               />
             </el-select>
           </el-form-item>
-          <el-form-item label="退货理由" prop="afterSaleReturnReasons">
+          <!-- <el-form-item label="退货理由" prop="afterSaleReturnReasons">
             <el-select
               v-model="formData.afterSaleReturnReasons"
               allow-create
@@ -47,10 +44,10 @@
                 :value="reason"
               />
             </el-select>
-          </el-form-item>
+          </el-form-item> -->
         </el-tab-pane>
         <!-- 配送 -->
-        <el-tab-pane label="配送">
+        <!-- <el-tab-pane label="配送">
           <el-form-item label="启用包邮" prop="deliveryExpressFreeEnabled">
             <el-switch v-model="formData.deliveryExpressFreeEnabled" style="user-select: none" />
             <el-text class="w-full" size="small" type="info"> 商城是否启用全场包邮</el-text>
@@ -70,9 +67,9 @@
           <el-form-item label="启用门店自提" prop="deliveryPickUpEnabled">
             <el-switch v-model="formData.deliveryPickUpEnabled" style="user-select: none" />
           </el-form-item>
-        </el-tab-pane>
+        </el-tab-pane> -->
         <!-- 分销 -->
-        <el-tab-pane label="分销">
+        <!-- <el-tab-pane label="分销">
           <el-form-item label="分佣启用" prop="brokerageEnabled">
             <el-switch v-model="formData.brokerageEnabled" style="user-select: none" />
             <el-text class="w-full" size="small" type="info"> 商城是否开启分销模式</el-text>
@@ -189,7 +186,7 @@
             </el-checkbox-group>
             <el-text class="w-full" size="small" type="info"> 商城开通提现的付款方式</el-text>
           </el-form-item>
-        </el-tab-pane>
+        </el-tab-pane> -->
       </el-tabs>
       <!-- 保存 -->
       <el-form-item>

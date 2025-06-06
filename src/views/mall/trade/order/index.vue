@@ -8,6 +8,15 @@
       class="-mb-15px"
       label-width="68px"
     >
+      <el-form-item label="订单号" prop="no">
+        <el-input
+          v-model="queryParams.no"
+          class="!w-280px"
+          clearable
+          placeholder="请输入订单号"
+          @keyup.enter="handleQuery"
+        />
+      </el-form-item>
       <el-form-item label="订单状态" prop="status">
         <el-select v-model="queryParams.status" class="!w-280px" clearable placeholder="全部">
           <el-option
@@ -33,17 +42,6 @@
           />
         </el-select>
       </el-form-item> -->
-      <el-form-item label="创建时间" prop="createTime">
-        <el-date-picker
-          v-model="queryParams.createTime"
-          :default-time="[new Date('1 00:00:00'), new Date('1 23:59:59')]"
-          class="!w-280px"
-          end-placeholder="自定义时间"
-          start-placeholder="自定义时间"
-          type="daterange"
-          value-format="YYYY-MM-DD HH:mm:ss"
-        />
-      </el-form-item>
       <!-- <el-form-item label="订单来源" prop="terminal">
         <el-select v-model="queryParams.terminal" class="!w-280px" clearable placeholder="全部">
           <el-option
@@ -121,7 +119,37 @@
           @keyup.enter="handleQuery"
         />
       </el-form-item> -->
-      <el-form-item label="聚合搜索">
+
+      <el-form-item label="用户昵称" prop="userNickname">
+        <el-input
+          v-model="queryParams.userNickname"
+          class="!w-280px"
+          clearable
+          placeholder="请输入用户昵称"
+          @keyup.enter="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="用户电话" prop="userMobile">
+        <el-input
+          v-model="queryParams.userMobile"
+          class="!w-280px"
+          clearable
+          placeholder="请输入用户电话"
+          @keyup.enter="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="创建时间" prop="createTime">
+        <el-date-picker
+          v-model="queryParams.createTime"
+          :default-time="[new Date('1 00:00:00'), new Date('1 23:59:59')]"
+          class="!w-280px"
+          end-placeholder="自定义时间"
+          start-placeholder="自定义时间"
+          type="daterange"
+          value-format="YYYY-MM-DD HH:mm:ss"
+        />
+      </el-form-item>
+      <!-- <el-form-item label="聚合搜索">
         <el-input
           v-show="true"
           v-model="queryParams[queryType.queryParam]"
@@ -147,7 +175,7 @@
             </el-select>
           </template>
         </el-input>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item>
         <el-button @click="handleQuery">
           <Icon class="mr-5px" icon="ep:search" />
@@ -263,14 +291,16 @@ const queryParams = ref({
   deliveryType: undefined, // 配送方式
   logisticsId: undefined, // 快递公司
   pickUpStoreId: undefined, // 自提门店
-  pickUpVerifyCode: undefined // 自提核销码
+  pickUpVerifyCode: undefined, // 自提核销码
+  userNickname: undefined, // 用户昵称
+  userMobile: undefined // 用户电话
 })
 const queryType = reactive({ queryParam: '' }) // 订单搜索类型 queryParam
 
 // 订单聚合搜索 select 类型配置（动态搜索）
 const dynamicSearchList = ref([
   { value: 'no', label: '订单号' },
-  { value: 'userId', label: '用户UID' },
+  // { value: 'userId', label: '用户UID' },
   { value: 'userNickname', label: '用户昵称' },
   { value: 'userMobile', label: '用户电话' }
 ])

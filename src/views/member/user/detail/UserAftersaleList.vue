@@ -127,9 +127,6 @@
               @click="imagePreview(row.picUrl)"
             />
             <span class="mr-10px">{{ row.spuName }}</span>
-            <el-tag v-for="property in row.properties" :key="property.propertyId" class="mr-10px">
-              {{ property.propertyName }}: {{ property.valueName }}
-            </el-tag>
           </div>
         </template>
       </el-table-column>

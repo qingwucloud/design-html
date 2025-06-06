@@ -50,15 +50,6 @@
           value-format="YYYY-MM-DD HH:mm:ss"
         />
       </el-form-item>
-<!--      <el-form-item label="用户标签" prop="tagIds">-->
-<!--        <MemberTagSelect v-model="queryParams.tagIds" class="w-240!"/>-->
-<!--      </el-form-item>-->
-<!--      <el-form-item label="用户等级" prop="levelId">-->
-<!--        <MemberLevelSelect v-model="queryParams.levelId" />-->
-<!--      </el-form-item>-->
-<!--      <el-form-item label="用户分组" prop="groupId">-->
-<!--        <MemberGroupSelect v-model="queryParams.groupId" class="w-240!" />-->
-<!--      </el-form-item>-->
       <el-form-item>
         <el-button @click="handleQuery">
           <Icon class="mr-5px" icon="ep:search" />
@@ -68,7 +59,6 @@
           <Icon class="mr-5px" icon="ep:refresh" />
           重置
         </el-button>
-<!--        <el-button v-hasPermi="['promotion:coupon:send']" @click="openCoupon">发送优惠券</el-button>-->
       </el-form-item>
     </el-form>
   </ContentWrap>
@@ -91,21 +81,6 @@
       </el-table-column>
       <el-table-column align="center" label="手机号" prop="mobile"  />
       <el-table-column align="center" label="昵称" prop="nickname" />
-<!--      <el-table-column align="center" label="等级" prop="levelName" width="100px" />-->
-<!--      <el-table-column align="center" label="分组" prop="groupName" width="100px" />-->
-<!--      <el-table-column-->
-<!--        :show-overflow-tooltip="false"-->
-<!--        align="center"-->
-<!--        label="用户标签"-->
-<!--        prop="tagNames"-->
-<!--      >-->
-<!--        <template #default="scope">-->
-<!--          <el-tag v-for="(tagName, index) in scope.row.tagNames" :key="index" class="mr-5px">-->
-<!--            {{ tagName }}-->
-<!--          </el-tag>-->
-<!--        </template>-->
-<!--      </el-table-column>-->
-<!--      <el-table-column align="center" label="积分" prop="point"  />-->
       <el-table-column align="center" label="状态" prop="status" >
         <template #default="scope">
           <dict-tag :type="DICT_TYPE.COMMON_STATUS" :value="scope.row.status" />

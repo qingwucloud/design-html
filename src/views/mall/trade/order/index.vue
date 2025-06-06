@@ -281,6 +281,7 @@ const list = ref<TradeOrderApi.OrderVO[]>([]) // 列表的数据
 const queryFormRef = ref<FormInstance>() // 搜索的表单
 // 表单搜索
 const queryParams = ref({
+  no:undefined, // 订单号
   pageNo: 1, // 页数
   pageSize: 10, // 每页显示数量
   status: undefined, // 订单状态

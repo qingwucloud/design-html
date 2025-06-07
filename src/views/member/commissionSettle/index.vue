@@ -193,7 +193,7 @@
     />
   </ContentWrap>
   <!-- 表单弹窗：添加/修改 -->
-  <PaymentForm ref="formRef" @success="getList" />
+  <SettlementForm ref="formRef" @success="getList" />
 
   <!-- 批量结算弹窗 -->
   <BatchSettlementForm ref="batchSettlementRef" @success="handleBatchSettlementSuccess" />
@@ -201,11 +201,11 @@
 
 <script setup>
 import { dateFormatter } from '@/utils/formatTime'
-import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
+import { DICT_TYPE } from '@/utils/dict'
 import { PaymentRecordApi } from '@/api/member/paymentrecord'
-import PaymentForm from './PaymentForm.vue'
+import SettlementForm from './SettlementForm.vue'
 import BatchSettlementForm from './BatchSettlementForm.vue'
-import { ElMessage, ElMessageBox } from 'element-plus'
+import { ElMessage } from 'element-plus'
 
 /** 佣金记录 列表 */
 defineOptions({ name: 'CommissionRecord' })

@@ -149,7 +149,7 @@
 <script setup lang="ts">
 import { dateFormatter } from '@/utils/formatTime'
 import { DesignerAppointmentApi, DesignerAppointmentVO } from '@/api/member/designerappointment'
-import DesignerAppointmentForm from '../../designerappointment/DesignerAppointmentForm.vue'
+import DesignerAppointmentForm from '@/views/member/designerAppointment/DesignerAppointmentForm.vue'
 import { getIntDictOptions, DICT_TYPE } from '@/utils/dict'
 
 /** 客户预约设计师 列表 */

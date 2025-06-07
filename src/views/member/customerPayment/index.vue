@@ -124,15 +124,6 @@
           >
             详情
           </el-button>
-          <el-button
-            link
-            type="success"
-            v-if="row.paymentStatus == 1"
-            @click="openForm('audit', row)"
-            v-hasPermi="['member:payment-record:checkUserOrder']"
-          >
-            审核
-          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -144,7 +135,8 @@
       @pagination="getList"
     />
   </ContentWrap>
-  <!-- 表单弹窗：添加/修改 -->
+
+  <!-- 表单弹窗：详情/审核 -->
   <CustomerPaymentForm ref="customerFormRef" @success="getList" />
 </template>
 
@@ -152,31 +144,23 @@
 import { dateFormatter } from '@/utils/formatTime'
 import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
 import { PaymentRecordApi } from '@/api/member/paymentrecord'
-import CustomerPaymentForm from '@/views/member/designerSettle/CustomerPaymentForm.vue'
-import { ElMessage, ElMessageBox } from 'element-plus'
+import CustomerPaymentForm from './CustomerPaymentForm.vue'
+
+/** 客户付款审核 */
+defineOptions({ name: 'PaymentAudit' })
 
 const tableRef = ref() // 表格的引用
-/** 设计师发起支付记录 列表 */
-defineOptions({ name: 'UserInfoPaymentRecord' })
-
 const loading = ref(true) // 列表的加载中
 const list = ref([]) // 列表的数据
 const total = ref(0) // 列表的总页数
 const queryParams = reactive({
-  offlineOrderId: undefined,
   pageNo: 1,
   pageSize: 10,
   designerName: undefined,
-  designerMobile: undefined,
   customerName: undefined,
   contractNo: undefined,
   contractName: undefined,
-  customerMobile: undefined,
-  createTime: [],
-  checkTime: [],
   paymentStatus: undefined,
-  contractId: undefined,
-  orderId: undefined,
   payTime: []
 })
 const queryFormRef = ref() // 搜索的表单
@@ -184,11 +168,11 @@ const queryFormRef = ref() // 搜索的表单
 /** 查询列表 */
 const getList = async () => {
   loading.value = true
-
   try {
+    // 调用API获取客户付款审核列表，类型固定为2
     const data = await PaymentRecordApi.getPaymentRecordPage({
       ...queryParams,
-      type: 2
+      type: '2' // 客户付款审核
     })
     list.value = data.list
     total.value = data.total
@@ -209,12 +193,12 @@ const resetQuery = () => {
   handleQuery()
 }
 
-/** 添加/修改操作 */
+/** 打开详情/审核表单 */
 const customerFormRef = ref()
 const openForm = (type, data) => {
-  // 客户付款审核
   customerFormRef.value.open(type, data)
 }
+
 /** 初始化 **/
 onMounted(() => {
   getList()

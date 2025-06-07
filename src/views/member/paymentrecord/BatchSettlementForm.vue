@@ -1,5 +1,5 @@
 <template>
-  <Dialog :title="dialogTitle" v-model="dialogVisible" width="1080px">
+  <Dialog :title="dialogTitle" v-model="dialogVisible" width="1080px" custom-class="pay-d">
     <el-form
       ref="formRef"
       :model="formData"
@@ -218,7 +218,7 @@ const handleSubmit = async () => {
 }
 </style>
 <style>
-.el-dialog {
+.pay-d{
   position: absolute;
   top: 50%;
   left: 50%;
@@ -228,9 +228,10 @@ const handleSubmit = async () => {
   margin: 0 !important;
   transform: translate(-50%, -50%);
   flex-direction: column;
+
+  .el-dialog__body {
+    overflow: auto;
+  }
 }
 
-.el-dialog__body {
-  overflow: auto;
-}
 </style>

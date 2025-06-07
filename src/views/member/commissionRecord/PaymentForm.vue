@@ -1,5 +1,5 @@
 <template>
-  <Dialog :title="dialogTitle" v-model="dialogVisible" width="1000px">
+  <Dialog :title="dialogTitle" v-model="dialogVisible" width="1000px"   custom-class="pay-d">
     <!-- 统一的表单（详情和结算） -->
     <el-form ref="formRef" :model="formData" label-width="120px" v-loading="formLoading">
       <!-- 佣金记录详情 -->
@@ -332,7 +332,7 @@ const previewImage = (index: number) => {
 </style>
 
 <style>
-.el-dialog {
+.pay-d{
   position: absolute;
   top: 50%;
   left: 50%;
@@ -342,9 +342,10 @@ const previewImage = (index: number) => {
   margin: 0 !important;
   transform: translate(-50%, -50%);
   flex-direction: column;
+
+  .el-dialog__body {
+    overflow: auto;
+  }
 }
 
-.el-dialog__body {
-  overflow: auto;
-}
 </style>

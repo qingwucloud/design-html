@@ -1,28 +1,82 @@
 <template>
-  <el-descriptions :class="{ 'kefu-descriptions': column === 1 }" :column="column">
+  <el-descriptions :column="column">
     <el-descriptions-item>
       <template #label>
-        <descriptions-item-label icon="svg-icon:member_level" label=" 等级 " />
+        <descriptions-item-label label=" 身份证姓名" />
       </template>
-      {{ user.levelName || '无' }}
+      {{ designerInfo.cardName }}
+    </el-descriptions-item>
+    <el-descriptions-item span="2">
+      <template #label>
+        <descriptions-item-label label=" 身份证号码 " />
+      </template>
+      {{ designerInfo.cardNo }}
+    </el-descriptions-item>
+
+    <el-descriptions-item>
+      <template #label>
+        <descriptions-item-label label=" 身份证国徽面 " />
+      </template>
+      <el-image
+        disabled
+        class="w-70px h-70px mr-10px"
+        :src="designerInfo.cardImgFront"
+        :preview-src-list="[designerInfo.cardImgFront]"
+        show-progress
+        fit="cover"
+      />
     </el-descriptions-item>
     <el-descriptions-item>
       <template #label>
-        <descriptions-item-label icon="svg-icon:member_balance" label=" 当前余额 " />
+        <descriptions-item-label label=" 身份证人像面 " />
       </template>
-      {{ fenToYuan(wallet.balance || 0) }}
+      <el-image
+        disabled
+        class="w-70px h-70px mr-10px"
+        :src="designerInfo.cardImgBack"
+        :preview-src-list="[designerInfo.cardImgBack]"
+        show-progress
+        fit="cover"
+      />
+    </el-descriptions-item>
+    <el-descriptions-item span="3">
+      <template #label>
+        <descriptions-item-label label=" 身份证地址 " />
+      </template>
+      {{ designerInfo.cardAddr }}
+    </el-descriptions-item>
+    <el-descriptions-item span="3">
+      <template #label>
+        <descriptions-item-label label=" 身份证签发机关 " />
+      </template>
+      {{ designerInfo.cardOrgan }}
+    </el-descriptions-item>
+    <el-descriptions-item span="3">
+      <template #label>
+        <descriptions-item-label label=" 身份证有效期 " />
+      </template>
+      {{ designerInfo.cardStartdate }} -
+      {{ designerInfo.cardValidate || '至今' }}
     </el-descriptions-item>
   </el-descriptions>
 </template>
 <script lang="ts" setup>
 import { DescriptionsItemLabel } from '@/components/Descriptions'
 import * as UserApi from '@/api/member/user'
-import * as WalletApi from '@/api/pay/wallet/balance'
-import { fenToYuan } from '@/utils'
 
-withDefaults(defineProps<{ user: UserApi.UserVO; wallet: WalletApi.WalletVO; column?: number }>(), {
-  column: 2
-}) // 用户信息
+withDefaults(defineProps<{ user: UserApi.UserVO; designerInfo: any; column?: number }>(), {
+  column: 2,
+  designerInfo:{
+    cardName: '',
+    cardNo: '',
+    cardImgFront: '',
+    cardImgBack: '',
+    cardAddr: '',
+    cardOrgan: '',
+    cardStartdate: '',
+    cardValidate: ''
+  }
+})
 </script>
 <style lang="scss" scoped>
 .cell-item {
@@ -33,22 +87,7 @@ withDefaults(defineProps<{ user: UserApi.UserVO; wallet: WalletApi.WalletVO; col
   content: ':';
 }
 
-.kefu-descriptions {
-  ::v-deep(.el-descriptions__cell) {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    .el-descriptions__label {
-      display: block;
-      width: 120px;
-      text-align: left;
-    }
-
-    .el-descriptions__content {
-      flex: 1;
-      text-align: end;
-    }
-  }
+:deep(.el-descriptions__label) {
+  vertical-align: top;
 }
 </style>

@@ -3,16 +3,28 @@
     <el-row :gutter="10">
       <!-- 左上角：基本信息 -->
       <el-col :span="24" class="detail-info-item">
-        <UserBasicInfo :user="user">
-          <template #header>
-            <div class="card-header">
-              <CardTitle title="基本信息" />
-              <el-button size="small" text type="primary" @click="openForm('update')">
-                编辑
-              </el-button>
-            </div>
-          </template>
-        </UserBasicInfo>
+        <el-row :gutter="10">
+          <el-col :span="14">
+            <UserBasicInfo :user="user">
+              <template #header>
+                <div class="card-header">
+                  <CardTitle title="基本信息" />
+                  <el-button size="small" text type="primary" @click="openForm('update')">
+                    编辑
+                  </el-button>
+                </div>
+              </template>
+            </UserBasicInfo>
+          </el-col>
+          <el-col :span="10">
+            <el-card class="h-full" shadow="never">
+              <template #header>
+                <CardTitle title="身份证信息" />
+              </template>
+              <UserAccountInfo :user="user"  />
+            </el-card>
+          </el-col>
+        </el-row>
       </el-col>
       <!-- 下边：账户明细 -->
       <el-card header="账户明细" shadow="never" style="width: 100%; margin-top: 20px">
@@ -59,7 +71,7 @@ import UserContract from './UserContract.vue'
 import PaymentRecord from './PaymentRecord.vue'
 import { CardTitle } from '@/components/Card/index'
 import { ElMessage } from 'element-plus'
-
+import UserAccountInfo from './UserAccountInfo.vue'
 defineOptions({ name: 'MemberDetail' })
 
 const loading = ref(true) // 加载中

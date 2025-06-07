@@ -147,7 +147,7 @@ import { PaymentRecordApi } from '@/api/member/paymentrecord'
 import CustomerPaymentForm from './CustomerPaymentForm.vue'
 
 /** 客户付款审核 */
-defineOptions({ name: 'PaymentAudit' })
+defineOptions({ name: 'CustomerPayment' })
 
 const tableRef = ref() // 表格的引用
 const loading = ref(true) // 列表的加载中

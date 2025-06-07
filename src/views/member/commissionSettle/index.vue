@@ -208,7 +208,7 @@ import BatchSettlementForm from './BatchSettlementForm.vue'
 import { ElMessage } from 'element-plus'
 
 /** 佣金记录 列表 */
-defineOptions({ name: 'CommissionRecord' })
+defineOptions({ name: 'CommissionSettle' })
 
 const loading = ref(true) // 列表的加载中
 const list = ref([]) // 列表的数据

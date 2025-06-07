@@ -213,7 +213,7 @@ import WholeProjectSettlementForm from './WholeProjectSettlementForm.vue'
 const tableRef = ref() // 表格的引用
 const tabActive = ref('3') //type: '2', //支付类型 3 合同设计费结算， 4 全案申请结算
 /** 设计师发起支付记录 列表 */
-defineOptions({ name: 'PaymentRecord' })
+defineOptions({ name: 'DesignerSettle' })
 
 const loading = ref(true) // 列表的加载中
 const list = ref([]) // 列表的数据

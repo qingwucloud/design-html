@@ -61,6 +61,9 @@
           <el-tab-pane label="评论" lazy>
             <UserCommentList :bind-user-id="id" />
           </el-tab-pane>
+          <el-tab-pane label="余额明细" lazy>
+            <UserBrokerageList :bind-user-id="id" />
+          </el-tab-pane>
         </el-tabs>
       </el-card>
     </el-row>
@@ -85,6 +88,7 @@ import TeamList from './TeamList.vue'
 import ContractList from './ContractList.vue'
 import AppointmentList from './AppointmentList.vue'
 import SettlementList from './SettlementList.vue'
+import UserBrokerageList from "@/views/member/user/detail/UserBrokerageList.vue";
 defineOptions({ name: 'MemberDetail' })
 
 const loading = ref(true) // 加载中

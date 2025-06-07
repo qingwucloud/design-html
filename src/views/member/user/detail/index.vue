@@ -47,7 +47,10 @@
           <el-tab-pane label="售后管理" lazy>
             <UserAfterSaleList :user-id="id" />
           </el-tab-pane>
-          <el-tab-pane label="推广用户" lazy>
+          <el-tab-pane label="团队" lazy>
+            <UserBrokerageList :bind-user-id="id" />
+          </el-tab-pane>
+          <el-tab-pane label="余额明细" lazy>
             <UserBrokerageList :bind-user-id="id" />
           </el-tab-pane>
         </el-tabs>

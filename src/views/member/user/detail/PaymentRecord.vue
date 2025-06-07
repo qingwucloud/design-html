@@ -152,8 +152,7 @@
 import { dateFormatter } from '@/utils/formatTime'
 import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
 import { PaymentRecordApi } from '@/api/member/paymentrecord'
-import CustomerPaymentForm from '@/views/member/designerSettle/CustomerPaymentForm.vue'
-import { ElMessage, ElMessageBox } from 'element-plus'
+import CustomerPaymentForm from '@/views/member/customerPayment/CustomerPaymentForm.vue'
 
 const tableRef = ref() // 表格的引用
 /** 设计师发起支付记录 列表 */

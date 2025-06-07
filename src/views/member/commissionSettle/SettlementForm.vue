@@ -191,7 +191,7 @@ import { formatDate } from '@/utils/formatTime'
 import { UploadImg } from '@/components/UploadFile'
 import { copyBankInfo } from '@/utils/clipboard'
 /** 佣金记录 表单 */
-defineOptions({ name: 'CommissionRecordForm' })
+defineOptions({ name: 'CommissionSettlementForm' })
 
 const message = useMessage() // 消息弹窗
 

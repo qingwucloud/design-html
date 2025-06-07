@@ -93,7 +93,7 @@ import { UploadImg } from '@/components/UploadFile'
 import { copyBankInfo } from '@/utils/clipboard'
 
 /** 批量结算表单 */
-defineOptions({ name: 'BatchSettlementForm' })
+defineOptions({ name: 'CommissionBatchSettlementForm' })
 
 const message = useMessage() // 消息弹窗
 

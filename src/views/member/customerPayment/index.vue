@@ -124,6 +124,15 @@
           >
             详情
           </el-button>
+          <el-button
+            link
+            type="success"
+            v-if="row.paymentStatus == 1"
+            @click="openForm('audit', row)"
+            v-hasPermi="['member:payment-record:checkUserOrder']"
+          >
+            审核
+          </el-button>
         </template>
       </el-table-column>
     </el-table>

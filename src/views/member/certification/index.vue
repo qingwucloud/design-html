@@ -222,7 +222,7 @@ import CertificationForm from './CertificationForm.vue'
 import { getIntDictOptions, DICT_TYPE } from '@/utils/dict'
 
 /** 设计师认证 列表 */
-defineOptions({ name: 'Certification' })
+defineOptions({ name: 'MemberCertification' })
 
 const message = useMessage() // 消息弹窗
 

@@ -257,7 +257,7 @@ import CheckAndDetail from './CheckAndDetail.vue'
 import { ElMessageBox } from 'element-plus'
 
 /** 设计师作品集 列表 */
-defineOptions({ name: 'Portfolio' })
+defineOptions({ name: 'MemberPortfolio' })
 
 const message = useMessage() // 消息弹窗
 const { t } = useI18n() // 国际化

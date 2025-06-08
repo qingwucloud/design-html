@@ -1,5 +1,5 @@
 <template>
-  <Dialog :title="dialogTitle" v-model="dialogVisible" width="1000px"  custom-class="pay-d">
+  <Dialog :title="dialogTitle" v-model="dialogVisible" width="1000px" >
     <!-- 客户付款审核表单 -->
     <el-form ref="formRef" :model="formData" label-width="120px" v-loading="formLoading">
       <!-- 合同信息 -->
@@ -263,22 +263,4 @@ const previewImage = (index: number) => {
   font-weight: 600;
   color: var(--el-text-color-primary);
 }
-</style>
-<style>
-.pay-d{
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  display: flex;
-  max-width: calc(100% - 30px);
-  max-height: calc(100% - 30px);
-  margin: 0 !important;
-  transform: translate(-50%, -50%);
-  flex-direction: column;
-
-  .el-dialog__body {
-    overflow: auto;
-  }
-}
-
 </style>

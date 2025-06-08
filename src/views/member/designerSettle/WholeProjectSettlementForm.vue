@@ -1,5 +1,5 @@
 <template>
-  <Dialog :title="dialogTitle" v-model="dialogVisible" width="1000px" custom-class="pay-d">
+  <Dialog :title="dialogTitle" v-model="dialogVisible" width="1000px" is-center="">
     <!-- 全案申请结算表单 -->
     <el-form ref="formRef" :model="formData" label-width="120px" v-loading="formLoading">
       <!-- 记录详情 -->
@@ -347,22 +347,4 @@ const previewImage = (index: number) => {
 .upload-tip {
   margin-top: 8px;
 }
-</style>
-<style>
-.pay-d{
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  display: flex;
-  max-width: calc(100% - 30px);
-  max-height: calc(100% - 30px);
-  margin: 0 !important;
-  transform: translate(-50%, -50%);
-  flex-direction: column;
-
-  .el-dialog__body {
-    overflow: auto;
-  }
-}
-
 </style>

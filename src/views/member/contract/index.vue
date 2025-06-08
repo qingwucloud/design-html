@@ -152,11 +152,11 @@
           <span>{{ row.totalAmount }} 元</span>
         </template>
       </el-table-column>
-      <!-- <el-table-column label="已支付金额" align="center" prop="paidAmount" width="100">
+      <el-table-column label="已支付金额" align="center" prop="paidAmount" width="100">
         <template #default="{ row }">
           <span>{{ row.paidAmount }} 元</span>
         </template>
-      </el-table-column> -->
+      </el-table-column>
       <el-table-column
         label="审核时间"
         width="180px"

@@ -1,10 +1,10 @@
 <template>
-  <ContentWrap>
-    <el-tabs v-model="tabActive" @tab-change="changeTab">
-      <el-tab-pane label="合同结算" name="3" />
-      <el-tab-pane label="全案申请结算" name="4" />
-    </el-tabs>
-  </ContentWrap>
+<!--  <ContentWrap>-->
+<!--    <el-tabs v-model="tabActive" @tab-change="changeTab">-->
+<!--      <el-tab-pane label="合同结算" name="3" />-->
+<!--      <el-tab-pane label="全案申请结算" name="4" />-->
+<!--    </el-tabs>-->
+<!--  </ContentWrap>-->
   <ContentWrap>
     <!-- 搜索工作栏 -->
     <el-form
@@ -211,7 +211,7 @@ import DesignerSettlementForm from './DesignerSettlementForm.vue'
 import WholeProjectSettlementForm from './WholeProjectSettlementForm.vue'
 
 const tableRef = ref() // 表格的引用
-const tabActive = ref('3') //type: '2', //支付类型 3 合同设计费结算， 4 全案申请结算
+const tabActive = ref('4') //type: '2', //支付类型 3 合同设计费结算， 4 全案申请结算
 /** 设计师发起支付记录 列表 */
 defineOptions({ name: 'DesignerSettle' })
 

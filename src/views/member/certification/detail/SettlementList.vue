@@ -46,6 +46,9 @@
       <el-form-item>
         <el-button @click="handleQuery"><Icon icon="ep:search" class="mr-5px" /> 搜索</el-button>
         <el-button @click="resetQuery"><Icon icon="ep:refresh" class="mr-5px" /> 重置</el-button>
+        <el-button type="primary" plain @click="openBalanceDialog">
+          <Icon icon="ep:edit" class="mr-5px" /> 余额调整
+        </el-button>
       </el-form-item>
     </el-form>
   </ContentWrap>
@@ -99,16 +102,57 @@
       @pagination="getList"
     />
   </ContentWrap>
+
+  <!-- 余额调整弹窗 -->
+  <el-dialog
+    v-model="dialogVisible"
+    title="余额调整"
+    width="500px"
+    destroy-on-close
+    :close-on-click-modal="false"
+  >
+    <el-form ref="formRef" :model="form" :rules="rules" label-width="100px">
+      <el-form-item label="调整金额" prop="amount">
+        <el-input-number
+          v-model="form.amount"
+          :precision="0"
+          :step="1"
+          class="w-full!"
+          placeholder="请输入调整金额（正数增加，负数减少）"
+        />
+      </el-form-item>
+      <el-form-item label="调整原因" prop="reason">
+        <el-input
+          v-model="form.reason"
+          type="textarea"
+          :rows="3"
+          placeholder="请输入调整原因"
+          maxlength="200"
+          show-word-limit
+        />
+      </el-form-item>
+    </el-form>
+    <template #footer>
+      <el-button @click="dialogVisible = false">取 消</el-button>
+      <el-button type="primary" @click="submitForm" :loading="submitLoading">确 定</el-button>
+    </template>
+  </el-dialog>
 </template>
 
 <script setup lang="ts">
 import { dateFormatter } from '@/utils/formatTime'
 import { WalletRecordApi } from '@/api/member/wallet'
 import { DICT_TYPE } from '@/utils/dict'
+import { ElMessage } from 'element-plus'
+import { useMitt } from '@/hooks/web/useMitt'
+
+// 获取事件总线
+const { emitter } = useMitt()
 
 /** 用户结算记录列表 */
 defineOptions({ name: 'SettlementList' })
 
+const emit = defineEmits(['update'])
 const route = useRoute()
 const loading = ref(true) // 列表的加载中
 const list = ref<any[]>([]) // 列表的数据
@@ -121,6 +165,19 @@ const queryParams = reactive({
   settlementStatus: undefined
 })
 const queryFormRef = ref() // 搜索的表单
+
+// 余额调整相关数据
+const dialogVisible = ref(false)
+const submitLoading = ref(false)
+const formRef = ref()
+const form = reactive({
+  amount: undefined as number | undefined,
+  reason: ''
+})
+const rules = {
+  amount: [{ required: true, message: '请输入调整金额', trigger: 'blur' }],
+  reason: [{ required: true, message: '请输入调整原因', trigger: 'blur' }]
+}
 
 /** 查询列表 */
 const getList = async () => {
@@ -147,6 +204,44 @@ const handleQuery = () => {
 const resetQuery = () => {
   queryFormRef.value.resetFields()
   handleQuery()
+}
+
+/** 打开余额调整弹窗 */
+const openBalanceDialog = () => {
+  dialogVisible.value = true
+  form.amount = undefined
+  form.reason = ''
+}
+
+/** 提交表单 */
+const submitForm = async () => {
+  if (!formRef.value) return
+  await formRef.value.validate(async (valid: boolean) => {
+    if (!valid) return
+
+    submitLoading.value = true
+    try {
+      await WalletRecordApi.adjustBalance({
+        userId: Number(route.params.id),
+        amount: form.amount,
+        reason: form.reason
+      })
+
+      ElMessage.success('余额调整成功')
+      dialogVisible.value = false
+      // 通知父级组件更新
+      emit('update')
+      // 触发事件通知UserWallet组件更新数据
+      emitter.emit('updateAccountWallet')
+      // 重新获取列表
+      getList()
+    } catch (error) {
+      console.error('余额调整失败:', error)
+      ElMessage.error('余额调整失败，请稍后重试')
+    } finally {
+      submitLoading.value = false
+    }
+  })
 }
 
 /** 初始化 **/

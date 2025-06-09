@@ -25,5 +25,10 @@ export const WalletRecordApi = {
   // 获得用户佣金余额
   getUserCommissionBalance: async (params: any) => {
     return await request.get({ url: `/member/commission/get`, params })
+  },
+
+  // 余额调整
+  adjustBalance: async (params: any) => {
+    return await request.post({ url: `/member/commission/adjust-balance`, data: params })
   }
 }

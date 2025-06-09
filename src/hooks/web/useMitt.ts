@@ -7,7 +7,7 @@ interface Option {
 
 const emitter = mitt()
 
-export const useEmitt = (option?: Option) => {
+export const useMitt = (option?: Option) => {
   if (option) {
     emitter.on(option.name, option.callback)
 

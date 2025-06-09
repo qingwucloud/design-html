@@ -42,6 +42,8 @@
 import { DescriptionsItemLabel } from '@/components/Descriptions'
 import { WalletRecordApi } from '@/api/member/wallet'
 import { formatTime } from '@/utils'
+import { useMitt } from '@/hooks/web/useMitt'
+
 const route = useRoute()
 const formData = ref({
   totalCommission: 0,
@@ -50,15 +52,35 @@ const formData = ref({
   withdrawnAmount: 0,
   lastSettlementTime: null
 })
-onMounted(async () => {
+
+// 使用 useMitt 监听事件
+useMitt({
+  name: 'updateAccountWallet',
+  callback: () => updateAccountWallet()
+})
+
+onMounted(() => {
+  // 初始化加载数据
+  updateAccountWallet()
+})
+
+// 更新账户钱包数据
+const updateAccountWallet = async () => {
   const data = await WalletRecordApi.getUserCommissionBalance({ userId: route.params.id })
-  formData.value = {
-    totalCommission: data.totalCommission,
-    availableBalance: data.availableBalance,
-    frozenBalance: data.frozenBalance,
-    withdrawnAmount: data.withdrawnAmount,
-    lastSettlementTime: data.lastSettlementTime
+  if (data) {
+    formData.value = {
+      totalCommission: data.totalCommission,
+      availableBalance: data.availableBalance,
+      frozenBalance: data.frozenBalance,
+      withdrawnAmount: data.withdrawnAmount,
+      lastSettlementTime: data.lastSettlementTime
+    }
   }
+}
+
+// 导出方法供外部调用
+defineExpose({
+  updateAccountWallet
 })
 </script>
 <style lang="scss" scoped>

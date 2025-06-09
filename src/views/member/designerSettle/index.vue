@@ -183,7 +183,7 @@
             type="success"
             v-if="row.paymentStatus == 0 && tabActive == 4"
             @click="openForm('settlement', row)"
-            v-hasPermi="['member:payment-record:settlement']"
+            v-hasPermi="['member:payment-record:checkFullSettlement']"
           >
             结算
           </el-button>

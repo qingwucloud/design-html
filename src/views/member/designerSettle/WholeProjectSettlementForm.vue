@@ -219,7 +219,7 @@ const formRef = ref() // 表单 Ref
 // 结算表单相关
 const settlementFormRef = ref() // 结算表单 Ref
 const settlementFormData = ref({
-  ids: [] as number[], // 付款记录ID数组
+  id: undefined, // 付款记录ID数组
   paymentVoucher: '', // 付款凭证
   type: 4 // 类型固定为4（全案申请结算）
 })
@@ -248,7 +248,7 @@ const open = async (type: string, data: any) => {
     dialogTitle.value = '全案申请结算'
     // 重置结算表单数据
     settlementFormData.value = {
-      ids: [data.id], // 设置当前记录ID
+      id: data.id, // 设置当前记录ID
       paymentVoucher: '',
       type: 4
     }
@@ -272,18 +272,18 @@ const handleSettlement = async () => {
     await settlementFormRef.value?.validate()
 
     // 确认操作
-    await message.confirm('确定进行全案申请结算吗？')
+    await message.confirm('确定进行全案申请结算吗？确认后钱款将打入设计师钱包账户！！！')
     formLoading.value = true
 
     // 准备提交参数
     const submitData = {
-      ids: settlementFormData.value.ids,
+      id: settlementFormData.value.id,
       paymentVoucher: settlementFormData.value.paymentVoucher,
       type: settlementFormData.value.type
     }
 
     // 调用结算接口
-    await PaymentRecordApi.settlementPayment(submitData)
+    await PaymentRecordApi.checkFullSettlement(submitData)
     message.success('结算成功')
 
     dialogVisible.value = false

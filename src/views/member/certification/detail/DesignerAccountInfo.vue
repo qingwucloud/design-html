@@ -55,9 +55,10 @@
       <el-button type="primary" text @click="dialogResumesVisible = true">查看履历</el-button>
     </el-descriptions-item>
   </el-descriptions>
-  <Dialog title="履历" v-model="dialogResumesVisible" width="1080px">
+  <Dialog title="履历" v-model="dialogResumesVisible" width="1080px" is-center>
     <el-form disabled ref="formRef" :model="designerInfo.resumes" label-width="120px">
-      <div v-for="resume in designerInfo.resumes" :key="resume.id" class="mb-20px">
+      <div v-for="(resume, index) in designerInfo.resumes" :key="resume.id" class="mb-20px">
+        <div class="font-700">履历{{ index + 1 }}</div>
         <el-form-item label="公司名称" prop="companyName">
           <el-input v-model="resume.companyName" />
         </el-form-item>

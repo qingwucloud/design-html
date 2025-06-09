@@ -58,7 +58,7 @@
           <el-tab-pane label="团队" lazy>
             <UserBrokerageList :bind-user-id="id" />
           </el-tab-pane>
-          <el-tab-pane label="收入记录" lazy>
+          <el-tab-pane label="余额明细" lazy>
             <SettlementList :bind-user-id="id" />
           </el-tab-pane>
         </el-tabs>

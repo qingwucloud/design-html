@@ -1,75 +1,73 @@
 <template>
   <div v-loading="loading">
-    <el-row :gutter="10">
-      <!-- 左上角：基本信息 -->
-      <el-col :span="14" class="detail-info-item">
-        <el-row :gutter="10">
-          <el-col>
-            <UserBasicInfo :user="user">
-              <template #header>
-                <div class="card-header">
-                  <CardTitle title="基本信息" />
-                </div>
-              </template>
-            </UserBasicInfo>
-          </el-col>
-          <el-col class="mt-16px">
-            <el-card class="h-full" shadow="never">
-              <template #header>
-                <CardTitle title="身份证信息" />
-              </template>
-              <UserAccountInfo :user="user" :designerInfo="designerInfo" />
-            </el-card>
-          </el-col>
-        </el-row>
+    <!-- 用户信息卡片组 -->
+    <el-row :gutter="20" class="info-row">
+      <!-- 第一行卡片 -->
+      <el-col :span="12" class="mb-20">
+        <!-- 基本信息 -->
+        <UserBasicInfo :user="user" class="h-full">
+          <template #header>
+            <div class="card-header">
+              <CardTitle title="基本信息" />
+            </div>
+          </template>
+        </UserBasicInfo>
       </el-col>
-      <!-- 右上角：账户信息 -->
-      <el-col :span="10" class="detail-info-item">
-        <el-row :gutter="10">
-          <el-col>
-            <el-card shadow="never">
-              <template #header>
-                <CardTitle title="设计师信息" />
-              </template>
-              <DesignerAccountInfo :user="user" :designer-info="designerInfo" />
-            </el-card>
-          </el-col>
-          <el-col class="mt-20px">
-            <el-card shadow="never">
-              <template #header>
-                <CardTitle title="账户余额" />
-              </template>
-              <UserWallet />
-            </el-card>
-          </el-col>
-        </el-row>
+      <el-col :span="12" class="mb-20">
+        <!-- 设计师信息 -->
+        <el-card shadow="never" class="h-full">
+          <template #header>
+            <CardTitle title="设计师信息" />
+          </template>
+          <DesignerAccountInfo :user="user" :designer-info="designerInfo" />
+        </el-card>
       </el-col>
-      <el-card header="账户明细" shadow="never" style="width: 100%; margin-top: 20px">
-        <template #header>
-          <CardTitle title="账户明细" />
-        </template>
-        <el-tabs>
-          <el-tab-pane label="团队" lazy>
-            <TeamList :bind-user-id="id" />
-          </el-tab-pane>
-          <el-tab-pane label="合同" lazy>
-            <ContractList :bind-user-id="id" />
-          </el-tab-pane>
-          <el-tab-pane label="预约" lazy>
-            <AppointmentList :bind-user-id="id" />
-          </el-tab-pane>
-          <el-tab-pane label="收入记录" lazy>
-            <SettlementList :bind-user-id="id" />
-          </el-tab-pane>
-          <el-tab-pane label="作品集" lazy>
-            <DesignList :bind-user-id="id" />
-          </el-tab-pane>
-          <el-tab-pane label="评论" lazy>
-            <UserCommentList :bind-user-id="id" />
-          </el-tab-pane>
-        </el-tabs>
-      </el-card>
+
+      <!-- 第二行卡片 -->
+      <el-col :span="12">
+        <!-- 身份证信息 -->
+        <el-card shadow="never" class="h-full">
+          <template #header>
+            <CardTitle title="身份证信息" />
+          </template>
+          <UserAccountInfo :user="user" :designerInfo="designerInfo" />
+        </el-card>
+      </el-col>
+      <el-col :span="12">
+        <!-- 账户余额 -->
+        <el-card shadow="never" class="h-full">
+          <template #header>
+            <CardTitle title="账户余额" />
+          </template>
+          <UserWallet />
+        </el-card>
+      </el-col>
     </el-row>
+    <el-card header="账户明细" shadow="never" style="width: 100%; margin-top: 20px">
+      <template #header>
+        <CardTitle title="账户明细" />
+      </template>
+      <el-tabs>
+        <el-tab-pane label="团队" lazy>
+          <TeamList :bind-user-id="id" />
+        </el-tab-pane>
+        <el-tab-pane label="合同" lazy>
+          <ContractList :bind-user-id="id" />
+        </el-tab-pane>
+        <el-tab-pane label="预约" lazy>
+          <AppointmentList :bind-user-id="id" />
+        </el-tab-pane>
+        <el-tab-pane label="余额明细" lazy>
+          <SettlementList :bind-user-id="id" />
+        </el-tab-pane>
+        <el-tab-pane label="作品集" lazy>
+          <DesignList :bind-user-id="id" />
+        </el-tab-pane>
+        <el-tab-pane label="评论" lazy>
+          <UserCommentList :bind-user-id="id" />
+        </el-tab-pane>
+      </el-tabs>
+    </el-card>
   </div>
 
   <!-- 表单弹窗：添加/修改 -->
@@ -136,13 +134,17 @@ onMounted(() => {
 })
 </script>
 <style lang="css" scoped>
-.detail-info-item:first-child {
-  padding-left: 0 !important;
+/* 卡片布局相关样式 */
+.info-row {
+  margin-bottom: 20px;
 }
 
-/* first-child 不生效有没有大佬给看下q.q */
-.detail-info-item:nth-child(2) {
-  padding-right: 0 !important;
+.mb-20 {
+  margin-bottom: 20px;
+}
+
+.h-full {
+  height: 100%;
 }
 
 .card-header {

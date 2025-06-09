@@ -177,9 +177,10 @@
       <el-button @click="dialogVisible = false">取 消</el-button>
     </template>
   </Dialog>
-  <Dialog title="履历" v-model="dialogResumesVisible" width="1080px">
+  <Dialog title="履历" v-model="dialogResumesVisible" width="1080px" is-center>
     <el-form disabled ref="formRef" :model="formData.resumes" label-width="120px">
-      <div v-for="resume in formData.resumes" :key="resume.id" class="mb-20px">
+      <div v-for="(resume, index) in formData.resumes" :key="resume.id" class="mb-20px">
+        <div class="font-700">履历{{ index + 1 }}</div>
         <el-form-item label="公司名称" prop="companyName">
           <el-input v-model="resume.companyName" />
         </el-form-item>

@@ -52,9 +52,9 @@
           <el-form-item label="面积" prop="area">
             <el-input-number
               class="w-full!"
-              :max="500"
+              :max="999"
               :min="10"
-              :precision="1"
+              :precision="0"
               v-model="formData.area"
               placeholder="请输入面积(㎡)"
             >
@@ -80,14 +80,15 @@
         </el-col>
         <el-col :span="12">
           <el-form-item label="总造价金额" prop="totalMoney">
-            <el-input
+            <el-input-number
               v-model="formData.totalMoney"
-              type="number"
-              maxlength="10"
+              :max="999999"
+              :precision="0"
+              class="w-full!"
               placeholder="请输入总造价金额"
             >
               <template #append>元</template>
-            </el-input>
+            </el-input-number>
           </el-form-item>
         </el-col>
       </el-row>

@@ -58,8 +58,8 @@
           <el-tab-pane label="团队" lazy>
             <UserBrokerageList :bind-user-id="id" />
           </el-tab-pane>
-          <el-tab-pane label="余额明细" lazy>
-            <UserBrokerageList :bind-user-id="id" />
+          <el-tab-pane label="收入记录" lazy>
+            <SettlementList :bind-user-id="id" />
           </el-tab-pane>
         </el-tabs>
       </el-card>
@@ -84,6 +84,7 @@ import { CardTitle } from '@/components/Card/index'
 import { ElMessage } from 'element-plus'
 import UserAccountInfo from './UserAccountInfo.vue'
 import UserWallet from '@/views/member/certification/detail/UserWallet.vue'
+import SettlementList from '@/views/member/certification/detail/SettlementList.vue'
 defineOptions({ name: 'MemberDetail' })
 
 const loading = ref(true) // 加载中

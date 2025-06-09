@@ -58,7 +58,7 @@
           <el-tab-pane label="预约" lazy>
             <AppointmentList :bind-user-id="id" />
           </el-tab-pane>
-          <el-tab-pane label="结算记录" lazy>
+          <el-tab-pane label="收入记录" lazy>
             <SettlementList :bind-user-id="id" />
           </el-tab-pane>
           <el-tab-pane label="作品集" lazy>
@@ -66,9 +66,6 @@
           </el-tab-pane>
           <el-tab-pane label="评论" lazy>
             <UserCommentList :bind-user-id="id" />
-          </el-tab-pane>
-          <el-tab-pane label="余额明细" lazy>
-            <UserBrokerageList :bind-user-id="id" />
           </el-tab-pane>
         </el-tabs>
       </el-card>

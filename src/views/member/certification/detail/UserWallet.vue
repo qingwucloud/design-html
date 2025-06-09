@@ -2,13 +2,6 @@
   <el-descriptions :column="1">
     <el-descriptions-item>
       <template #label>
-        <descriptions-item-label label="累计佣金总额" />
-      </template>
-      {{ formData.totalCommission }} 元
-    </el-descriptions-item>
-
-    <el-descriptions-item>
-      <template #label>
         <descriptions-item-label label="可用余额" />
       </template>
       {{ formData.availableBalance }} 元
@@ -27,7 +20,12 @@
       </template>
       {{ formData.withdrawnAmount }} 元
     </el-descriptions-item>
-
+    <el-descriptions-item>
+      <template #label>
+        <descriptions-item-label label="累计收入总额" />
+      </template>
+      {{ formData.totalCommission }} 元
+    </el-descriptions-item>
     <el-descriptions-item>
       <template #label>
         <descriptions-item-label label="最后结算时间" />

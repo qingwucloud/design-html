@@ -6,11 +6,29 @@
       :model="queryParams"
       ref="queryFormRef"
       :inline="true"
-      label-width="120px"
+      label-width="100px"
     >
+      <el-form-item label="用户名" prop="userName">
+        <el-input
+          v-model="queryParams.userName"
+          placeholder="请输入用户名"
+          clearable
+          @keyup.enter="handleQuery"
+          class="!w-240px"
+        />
+      </el-form-item>
+      <el-form-item label="用户手机号" prop="userMobile">
+        <el-input
+          v-model="queryParams.userMobile"
+          placeholder="客户手机号"
+          clearable
+          @keyup.enter="handleQuery"
+          class="!w-240px"
+        />
+      </el-form-item>
       <el-form-item label="审核状态" prop="settlementStatus">
         <el-select
-          v-model="queryParams.settlementStatus"
+          v-model="queryParams.paymentStatus"
           placeholder="请选择审核状态"
           clearable
           class="!w-240px"
@@ -55,11 +73,16 @@
       <!-- 多选列 -->
       <el-table-column label="编号" align="center" prop="id" fixed width="70" />
       <el-table-column label="订单编号" align="center" prop="orderNo" width="180" />
+      <el-table-column label="用户名" align="userName" prop="userName" width="80" />
+      <el-table-column label="用户手机号" align="userMobile" prop="userMobile" width="120" />
       <el-table-column label="提现金额" align="center" prop="amount" width="120">
         <template #default="{ row }"> {{ row.amount }}元 </template>
       </el-table-column>
-      <el-table-column label="收款账户名称" align="center" prop="bankName" />
-      <el-table-column label="收款账号" align="center" prop="bankNumber" />
+      <el-table-column label="收款账户" align="center" prop="bankName" >
+        <template #default="{ row }">
+          <span>{{ row.bankName }} ({{ row.bankNumber.slice(-4) }})</span>
+        </template>
+      </el-table-column>
       <el-table-column label="审核状态" align="center" prop="checkStatus" width="100">
         <template #default="{ row }">
           <el-tag v-if="row.checkStatus === 0" type="warning">待审核</el-tag>
@@ -117,7 +140,6 @@
 
 <script setup>
 import { dateFormatter } from '@/utils/formatTime'
-import { DICT_TYPE } from '@/utils/dict'
 import { WalletRecordApi } from '@/api/member/wallet'
 import SettlementForm from './SettlementForm.vue'
 
@@ -129,7 +151,9 @@ const total = ref(0) // 列表的总页数
 const queryParams = reactive({
   pageNo: 1,
   pageSize: 10,
-  settlementStatus: undefined,
+  userMobile: undefined,
+  userName: undefined,
+  paymentStatus: undefined,
   createTime: [],
   payTime: []
 })

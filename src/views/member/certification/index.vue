@@ -233,7 +233,6 @@
 
 <script setup lang="ts">
 import { ElMessageBox } from 'element-plus'
-import { ArrowDown } from '@element-plus/icons-vue'
 import { dateFormatter } from '@/utils/formatTime'
 import { CertificationApi, CertificationVO } from '@/api/member/certification'
 import CertificationForm from './CertificationForm.vue'

@@ -5,18 +5,18 @@
       <!-- 提现申请详情 -->
       <el-divider content-position="left">提现申请</el-divider>
 
-      <!-- <el-row :gutter="20">
+       <el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item label="申请人">
+          <el-form-item label="用户名">
             <el-input v-model="formData.userName" :disabled="true" />
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="申请人手机">
+          <el-form-item label="用户手机号">
             <el-input v-model="formData.userMobile" :disabled="true" />
           </el-form-item>
         </el-col>
-      </el-row> -->
+      </el-row>
 
       <el-row :gutter="20">
         <el-col :span="12">

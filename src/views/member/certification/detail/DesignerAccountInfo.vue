@@ -8,6 +8,12 @@
     </el-descriptions-item>
     <el-descriptions-item>
       <template #label>
+        <descriptions-item-label label="评分" />
+      </template>
+      <el-rate :value="designerInfo.score" show-score disabled  score-template="{value} 分"/>
+    </el-descriptions-item>
+    <el-descriptions-item>
+      <template #label>
         <descriptions-item-label label=" 设计师等级 " />
       </template>
       <DictTag :type="DICT_TYPE.DESIGNER_GRADE_TYPE" :value="designerInfo.designerGradeType" />
@@ -106,7 +112,7 @@ import { ref } from 'vue'
 const dialogResumesVisible = ref(false)
 
 withDefaults(defineProps<{ designerInfo: any; column?: number }>(), {
-  column: 1
+  column: 2
 })
 </script>
 <style lang="scss" scoped>

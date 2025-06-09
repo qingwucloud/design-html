@@ -1,5 +1,5 @@
 <template>
-  <Dialog :title="dialogTitle" v-model="dialogVisible" width="1000px" >
+  <Dialog :title="dialogTitle" v-model="dialogVisible" width="1000px" is-center>
     <!-- 客户付款审核表单 -->
     <el-form ref="formRef" :model="formData" label-width="120px" v-loading="formLoading">
       <!-- 合同信息 -->

@@ -88,10 +88,10 @@
       <el-table-column label="编号" align="center" prop="id" width="70" />
       <el-table-column label="订单号" align="center" prop="orderNo" width="170" />
       <el-table-column label="合同编号" align="center" prop="contractNo" width="170" />
-      <el-table-column label="合同名称" align="center" prop="contractName" />
+      <el-table-column label="合同名称" align="center" prop="contractName" width="170" />
       <el-table-column label="合同节点" align="center" prop="nodeName" />
-      <el-table-column label="客户" align="center" prop="customerName" />
-      <el-table-column label="设计师" align="center" prop="designerName" />
+      <el-table-column label="客户名称" align="center" prop="customerName" />
+      <el-table-column label="设计师名称" align="center" prop="designerName" />
       <el-table-column label="支付状态" align="center" prop="paymentStatus">
         <template #default="{ row }">
           <DictTag :type="DICT_TYPE.OFFLINE_ORDER_PAYMENT_STATUS" :value="row.paymentStatus" />

@@ -8,78 +8,21 @@
       :inline="true"
       label-width="120px"
     >
-      <el-form-item label="合同名称" prop="contractName">
-        <el-input
-          v-model="queryParams.contractName"
-          placeholder="请输入合同名称"
-          clearable
-          @keyup.enter="handleQuery"
-          class="!w-240px"
-        />
-      </el-form-item>
-      <el-form-item label="邀请人姓名" prop="inviterName">
-        <el-input
-          v-model="queryParams.inviterName"
-          placeholder="请输入邀请人姓名"
-          clearable
-          @keyup.enter="handleQuery"
-          class="!w-240px"
-        />
-      </el-form-item>
-      <!-- <el-form-item label="邀请人手机号" prop="inviterMobile">
-        <el-input
-          v-model="queryParams.inviterMobile"
-          placeholder="请输入邀请人手机号"
-          clearable
-          @keyup.enter="handleQuery"
-          class="!w-240px"
-        />
-      </el-form-item> -->
-      <el-form-item label="被邀请人姓名" prop="inviteeName">
-        <el-input
-          v-model="queryParams.inviteeName"
-          placeholder="请输入被邀请人姓名"
-          clearable
-          @keyup.enter="handleQuery"
-          class="!w-240px"
-        />
-      </el-form-item>
-      <!-- <el-form-item label="被邀请人手机号" prop="inviteeMobile">
-        <el-input
-          v-model="queryParams.inviteeMobile"
-          placeholder="请输入被邀请人手机号"
-          clearable
-          @keyup.enter="handleQuery"
-          class="!w-240px"
-        />
-      </el-form-item> -->
-      <!-- <el-form-item label="支付状态" prop="paymentStatus">
+      <el-form-item label="结算状态" prop="settlementStatus">
         <el-select
-          v-model="queryParams.paymentStatus"
-          placeholder="请选择状态"
+          v-model="queryParams.settlementStatus"
+          placeholder="请选择结算状态"
           clearable
           class="!w-240px"
         >
-          <el-option
-            v-for="dict in getIntDictOptions(DICT_TYPE.OFFLINE_ORDER_PAYMENT_STATUS)"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          />
+          <el-option label="待结算" :value="0" />
+          <el-option label="已结算" :value="1" />
+          <el-option label="已取消" :value="2" />
         </el-select>
-      </el-form-item> -->
-      <el-form-item label="结算批次号" prop="settlementBatchNo">
-        <el-input
-          v-model="queryParams.settlementBatchNo"
-          placeholder="请输入结算批次号"
-          clearable
-          @keyup.enter="handleQuery"
-          class="!w-240px"
-        />
       </el-form-item>
-      <el-form-item label="结算时间" prop="settlementTime">
+      <el-form-item label="申请时间" prop="createTime">
         <el-date-picker
-          v-model="queryParams.settlementTime"
+          v-model="queryParams.createTime"
           value-format="YYYY-MM-DD HH:mm:ss"
           type="daterange"
           start-placeholder="开始日期"
@@ -88,98 +31,74 @@
           class="!w-240px"
         />
       </el-form-item>
+      <!-- <el-form-item label="支付时间" prop="payTime">
+        <el-date-picker
+          v-model="queryParams.payTime"
+          value-format="YYYY-MM-DD HH:mm:ss"
+          type="daterange"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+          :default-time="[new Date('1 00:00:00'), new Date('1 23:59:59')]"
+          class="!w-240px"
+        />
+      </el-form-item> -->
       <el-form-item>
         <el-button @click="handleQuery"><Icon icon="ep:search" class="mr-5px" /> 搜索</el-button>
         <el-button @click="resetQuery"><Icon icon="ep:refresh" class="mr-5px" /> 重置</el-button>
-        <!-- 批量操作按钮 -->
-        <el-button
-          v-if="selectedRows.length > 0"
-          type="primary"
-          @click="handleBatchSettlement"
-          v-hasPermi="['member:commission-record:payment']"
-        >
-          批量结算 ({{ selectedRows.length }})
-        </el-button>
       </el-form-item>
     </el-form>
   </ContentWrap>
 
   <!-- 列表 -->
   <ContentWrap>
-    <el-table
-      v-loading="loading"
-      :data="list"
-      :stripe="true"
-      :show-overflow-tooltip="true"
-      @selection-change="handleSelectionChange"
-    >
+    <el-table v-loading="loading" :data="list" :stripe="true" :show-overflow-tooltip="true">
       <!-- 多选列 -->
-      <el-table-column type="selection" width="55" :selectable="rowSelectable" />
       <el-table-column label="编号" align="center" prop="id" fixed width="70" />
-      <el-table-column
-        label="结算批次号"
-        align="center"
-        prop="settlementBatchNo"
-        width="180"
-        fixed
-      />
-      <el-table-column label="合同名称" align="center" prop="contractName" width="170" />
-      <el-table-column label="邀请人" align="center" prop="inviterName" />
-      <el-table-column label="被邀请人" align="center" prop="inviteeName" />
-      <el-table-column label="佣金比例" align="center" prop="commissionRate" width="100">
+      <el-table-column label="订单编号" align="center" prop="orderNo" width="180" />
+      <el-table-column label="提现金额" align="center" prop="amount" width="120">
+        <template #default="{ row }"> {{ row.amount }}元 </template>
+      </el-table-column>
+      <el-table-column label="收款账户名称" align="center" prop="bankName" />
+      <el-table-column label="收款账号" align="center" prop="bankNumber" />
+      <el-table-column label="审核状态" align="center" prop="checkStatus" width="100">
         <template #default="{ row }">
-          {{ (Number(row.commissionRate || 0) * 100).toFixed(2) }}%
+          <el-tag v-if="row.checkStatus === 0" type="warning">待审核</el-tag>
+          <el-tag v-else-if="row.checkStatus === 1" type="success">审核通过</el-tag>
+          <el-tag v-else-if="row.checkStatus === 2" type="danger">审核拒绝</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="合同金额" align="center" prop="sourceAmount" width="120">
-        <template #default="{ row }"> {{ row.sourceAmount }}元 </template>
-      </el-table-column>
-      <el-table-column label="佣金金额" align="center" prop="commissionAmount">
-        <template #default="{ row }"> {{ row.commissionAmount }}元 </template>
-      </el-table-column>
-      <!-- <el-table-column label="佣金类型" align="center" prop="commissionType" width="100">
+      <!-- <el-table-column label="支付状态" align="center" prop="paymentStatusDesc" width="100">
         <template #default="{ row }">
-          <DictTag :type="DICT_TYPE.COMMISSION_TYPE" :value="row.commissionType" />
+          {{ row.paymentStatusDesc }}
         </template>
       </el-table-column> -->
-      <el-table-column label="支付状态" align="center" prop="paymentStatus">
-        <template #default="{ row }">
-          <DictTag :type="DICT_TYPE.OFFLINE_ORDER_PAYMENT_STATUS" :value="row.paymentStatus" />
-        </template>
-      </el-table-column>
-      <!-- <el-table-column label="结算状态" align="center" prop="settlementStatus" width="100" fixed>
-        <template #default="{ row }">
-          <el-tag v-if="row.settlementStatus === 0" type="warning">待结算</el-tag>
-          <el-tag v-else-if="row.settlementStatus === 1" type="success">已结算</el-tag>
-          <el-tag v-else-if="row.settlementStatus === 2" type="danger">已取消</el-tag>
-        </template>
-      </el-table-column> -->
-
       <el-table-column
-        label="结算时间"
+        label="审核时间"
         align="center"
-        prop="settlementTime"
+        prop="checkTime"
         :formatter="dateFormatter"
         width="180px"
       />
+      <el-table-column label="审核人" align="center" prop="checker" />
+      <!-- <el-table-column label="支付时间" align="center" prop="payTime" :formatter="dateFormatter" width="180px" /> -->
       <el-table-column
-        label="支付时间"
+        label="创建时间"
         align="center"
-        prop="payTime"
+        prop="createTime"
         :formatter="dateFormatter"
         width="180px"
       />
-      <el-table-column label="操作" align="center" fixed="right" width="150">
+      <el-table-column label="操作" align="center" fixed="right" width="120">
         <template #default="{ row }">
           <el-button link type="primary" @click="openForm('detail', row)"> 详情 </el-button>
           <el-button
             link
             type="success"
-            v-if="row.paymentStatus == 1"
+            v-if="row.checkStatus === 0"
             @click="openForm('settlement', row)"
-            v-hasPermi="['member:commission-record:payment']"
+            v-hasPermi="['member:commission:checkWithdrawal']"
           >
-            结算
+            审核
           </el-button>
         </template>
       </el-table-column>
@@ -194,20 +113,14 @@
   </ContentWrap>
   <!-- 表单弹窗：添加/修改 -->
   <SettlementForm ref="formRef" @success="getList" />
-
-  <!-- 批量结算弹窗 -->
-  <BatchSettlementForm ref="batchSettlementRef" @success="handleBatchSettlementSuccess" />
 </template>
 
 <script setup>
 import { dateFormatter } from '@/utils/formatTime'
 import { DICT_TYPE } from '@/utils/dict'
-import { PaymentRecordApi } from '@/api/member/paymentrecord'
+import { WalletRecordApi } from '@/api/member/wallet'
 import SettlementForm from './SettlementForm.vue'
-import BatchSettlementForm from './BatchSettlementForm.vue'
-import { ElMessage } from 'element-plus'
 
-/** 佣金记录 列表 */
 defineOptions({ name: 'CommissionSettle' })
 
 const loading = ref(true) // 列表的加载中
@@ -216,31 +129,23 @@ const total = ref(0) // 列表的总页数
 const queryParams = reactive({
   pageNo: 1,
   pageSize: 10,
-  contractName: undefined,
-  inviterName: undefined,
-  inviterMobile: undefined,
-  inviteeName: undefined,
-  inviteeMobile: undefined,
   settlementStatus: undefined,
-  paymentStatus: undefined,
-  settlementBatchNo: undefined,
-  settlementTime: [],
+  createTime: [],
   payTime: []
 })
 const queryFormRef = ref() // 搜索的表单
-// 多选相关
-const selectedRows = ref([]) // 选中的行数据
 
 /** 查询列表 */
 const getList = async () => {
   loading.value = true
 
   try {
-    const data = await PaymentRecordApi.getCommissionRecordPage({
+    const data = await WalletRecordApi.getWithdrawalRecordPage({
       ...queryParams
     })
-    list.value = data.list
-    total.value = data.total
+    console.log(data)
+    list.value = data?.list || []
+    total.value = data?.total || 0
   } finally {
     loading.value = false
   }
@@ -260,37 +165,10 @@ const resetQuery = () => {
 
 /** 添加/修改操作 */
 const formRef = ref()
-const batchSettlementRef = ref()
-const openForm = (type, data) => {
-  formRef.value.open(type, data)
-}
 
-/** 批量结算操作 */
-const handleBatchSettlement = async () => {
-  if (selectedRows.value.length === 0) {
-    ElMessage.warning('请选择要结算的记录')
-    return
-  }
-
-  // 打开批量结算弹窗
-  batchSettlementRef.value.open(selectedRows.value)
-}
-
-/** 批量结算成功回调 */
-const handleBatchSettlementSuccess = () => {
-  selectedRows.value = [] // 清空选中的行
-  getList() // 刷新列表
-}
-
-/** 行可选中性处理 */
-const rowSelectable = (row) => {
-  // 只有待结算状态的记录可以选中
-  return row.paymentStatus == 1
-}
-
-// 处理多选变化
-const handleSelectionChange = (selection) => {
-  selectedRows.value = selection
+/** 打开表单 */
+const openForm = (type, row) => {
+  formRef.value.open(type, row)
 }
 
 /** 初始化 **/

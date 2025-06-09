@@ -1,57 +1,45 @@
 <template>
-  <Dialog :title="dialogTitle" v-model="dialogVisible" width="1000px"  is-center>
+  <Dialog :title="dialogTitle" v-model="dialogVisible" width="1000px" is-center>
     <!-- 统一的表单（详情和结算） -->
     <el-form ref="formRef" :model="formData" label-width="120px" v-loading="formLoading">
-      <!-- 佣金记录详情 -->
-      <el-divider content-position="left">佣金记录详情</el-divider>
+      <!-- 提现申请详情 -->
+      <el-divider content-position="left">提现申请</el-divider>
+
+      <!-- <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form-item label="申请人">
+            <el-input v-model="formData.userName" :disabled="true" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="申请人手机">
+            <el-input v-model="formData.userMobile" :disabled="true" />
+          </el-form-item>
+        </el-col>
+      </el-row> -->
 
       <el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item label="合同名称">
-            <el-input v-model="formData.contractName" :disabled="true" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="合同金额">
-            <el-input v-model="formData.sourceAmount" :disabled="true">
-              <template #append>元</template>
-            </el-input>
-          </el-form-item>
-        </el-col>
-      </el-row>
-
-      <el-row :gutter="20">
-        <el-col :span="12">
-          <el-form-item label="邀请人">
-            <el-input v-model="formData.inviterName" :disabled="true" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="被邀请人">
-            <el-input v-model="formData.inviteeName" :disabled="true" />
-          </el-form-item>
-        </el-col>
-      </el-row>
-
-      <el-row :gutter="20">
-        <el-col :span="12">
-          <el-form-item label="佣金金额">
-            <el-input v-model="formData.commissionAmount" :disabled="true">
+          <el-form-item label="提现金额">
+            <el-input v-model="formData.amount" :disabled="true">
               <template #append>元</template>
             </el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="佣金比例">
-            <el-input
-              :value="(Number(formData.commissionRate || 0) * 100).toFixed(2)"
-              :disabled="true"
-            >
-              <template #append>%</template>
-            </el-input>
+          <el-form-item label="申请时间">
+            <el-input v-model="formData.createTime" :disabled="true" />
           </el-form-item>
         </el-col>
       </el-row>
+      <!-- 
+      <el-row :gutter="20">
+        <el-col :span="24">
+          <el-form-item label="提现说明">
+            <el-input v-model="formData.remark" type="textarea" :rows="2" :disabled="true" />
+          </el-form-item>
+        </el-col>
+      </el-row> -->
 
       <!-- 银行信息 -->
       <el-divider content-position="left">银行信息</el-divider>
@@ -94,33 +82,48 @@
         </el-col>
       </el-row>
 
-      <!-- 结算信息 -->
-      <el-divider content-position="left">结算信息</el-divider>
+      <!-- 审核状态 -->
+      <el-divider content-position="left">审核状态</el-divider>
 
       <el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item label="支付状态">
-            <DictTag
-              :type="DICT_TYPE.OFFLINE_ORDER_PAYMENT_STATUS"
-              :value="formData.paymentStatus"
-            />
+          <el-form-item label="审核状态">
+            <el-tag v-if="formData.checkStatus === 0" type="warning">待审核</el-tag>
+            <el-tag v-else-if="formData.checkStatus === 1" type="success">审核通过</el-tag>
+            <el-tag v-else-if="formData.checkStatus === 2" type="danger">审核拒绝</el-tag>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="formData.settlementBatchNo">
-          <el-form-item label="结算批次号">
-            <el-input v-model="formData.settlementBatchNo" :disabled="true" />
+        <el-col :span="12" v-if="formData.orderNo">
+          <el-form-item label="提现订单号">
+            <el-input v-model="formData.orderNo" :disabled="true" />
           </el-form-item>
         </el-col>
       </el-row>
 
-      <el-row :gutter="20" v-if="formData.settlementTime">
-        <el-col :span="12">
-          <el-form-item label="结算时间">
-            <el-input v-model="formData.settlementTime" :disabled="true" />
+      <el-row :gutter="20" v-if="formData.checkStatus === 1 || formData.checkStatus === 2">
+        <el-col :span="12" v-if="formData.checkTime">
+          <el-form-item label="审核时间">
+            <el-input v-model="formData.checkTime" :disabled="true" />
           </el-form-item>
         </el-col>
+        <el-col :span="12" v-if="formData.checker">
+          <el-form-item label="审核人">
+            <el-input v-model="formData.checker" :disabled="true" />
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+      <el-row :gutter="20" v-if="formData.checkStatus === 1 && formData.payTime">
         <el-col :span="12">
-          <el-form-item label="支付凭证" v-if="paymentVoucherList.length > 0">
+          <el-form-item label="付款时间">
+            <el-input v-model="formData.payTime" :disabled="true" />
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+      <el-row :gutter="20" v-if="formData.checkStatus === 1 && paymentVoucherList.length > 0">
+        <el-col :span="24">
+          <el-form-item label="支付凭证">
             <div class="voucher-images">
               <el-image
                 v-for="(url, index) in paymentVoucherList"
@@ -137,9 +140,17 @@
         </el-col>
       </el-row>
 
-      <!-- 结算操作 -->
+      <el-row :gutter="20" v-if="formData.checkStatus === 2 && formData.checkRemark">
+        <el-col :span="24">
+          <el-form-item label="驳回原因">
+            <el-input v-model="formData.checkRemark" type="textarea" :rows="3" :disabled="true" />
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+      <!-- 审核操作 -->
       <template v-if="formType === 'settlement'">
-        <el-divider content-position="left">结算操作</el-divider>
+        <el-divider content-position="left">审核操作</el-divider>
 
         <el-form
           ref="settlementFormRef"
@@ -148,6 +159,17 @@
           label-width="120px"
         >
           <el-row :gutter="20">
+            <el-col :span="24">
+              <el-form-item label="审核状态" prop="checkStatus">
+                <el-radio-group v-model="settlementFormData.checkStatus">
+                  <el-radio :label="1">审核通过</el-radio>
+                  <el-radio :label="2">驳回</el-radio>
+                </el-radio-group>
+              </el-form-item>
+            </el-col>
+          </el-row>
+
+          <el-row :gutter="20" v-if="settlementFormData.checkStatus === 1">
             <el-col :span="24">
               <el-form-item label="付款凭证" prop="paymentVoucher" required>
                 <UploadImg
@@ -164,6 +186,19 @@
               </el-form-item>
             </el-col>
           </el-row>
+
+          <el-row :gutter="20" v-if="settlementFormData.checkStatus === 2">
+            <el-col :span="24">
+              <el-form-item label="驳回原因" prop="checkRemark" required>
+                <el-input
+                  v-model="settlementFormData.checkRemark"
+                  type="textarea"
+                  :rows="4"
+                  placeholder="请输入驳回原因"
+                />
+              </el-form-item>
+            </el-col>
+          </el-row>
         </el-form>
       </template>
     </el-form>
@@ -175,7 +210,7 @@
         type="primary"
         :loading="formLoading"
       >
-        确认结算
+        {{ settlementFormData.checkStatus === 1 ? '确认审核通过' : '确认驳回' }}
       </el-button>
       <el-button @click="dialogVisible = false">
         {{ formType === 'detail' ? '关闭' : '取消' }}
@@ -184,14 +219,14 @@
   </Dialog>
 </template>
 <script setup lang="ts">
-import { PaymentRecordApi } from '@/api/member/paymentrecord'
-import { DICT_TYPE } from '@/utils/dict'
+import { WalletRecordApi } from '@/api/member/wallet'
 import { createImageViewer } from '@/components/ImageViewer'
 import { formatDate } from '@/utils/formatTime'
 import { UploadImg } from '@/components/UploadFile'
 import { copyBankInfo } from '@/utils/clipboard'
-/** 佣金记录 表单 */
-defineOptions({ name: 'CommissionSettlementForm' })
+import { nextTick, watch } from 'vue'
+/** 提现审核 表单 */
+defineOptions({ name: 'WithdrawalAuditForm' })
 
 const message = useMessage() // 消息弹窗
 
@@ -205,13 +240,23 @@ const formRef = ref() // 表单 Ref
 // 结算表单相关
 const settlementFormRef = ref() // 结算表单 Ref
 const settlementFormData = ref({
-  ids: [] as number[], // 佣金记录ID数组
+  id: 0, // 提现ID
   paymentVoucher: '', // 付款凭证
-  amount: 0 // 结算金额
+  checkStatus: 1, // 审核状态：1支付审核通过，2驳回
+  checkRemark: '' // 审核备注/驳回原因
 })
 
-const settlementFormRules = reactive({
-  paymentVoucher: [{ required: true, message: '请上传付款凭证', trigger: 'change' }]
+// 动态验证规则
+const settlementFormRules = computed(() => {
+  const baseRules = {}
+  if (settlementFormData.value.checkStatus === 1) {
+    // 审核通过需要上传付款凭证
+    baseRules['paymentVoucher'] = [{ required: true, message: '请上传付款凭证', trigger: 'change' }]
+  } else if (settlementFormData.value.checkStatus === 2) {
+    // 驳回需要填写驳回原因
+    baseRules['checkRemark'] = [{ required: true, message: '请填写驳回原因', trigger: 'blur' }]
+  }
+  return baseRules
 })
 
 // 支付凭证图片列表
@@ -223,31 +268,51 @@ const paymentVoucherList = computed(() => {
   return formData.value.paymentVoucher.split(',').filter((url) => url.trim())
 })
 
+// 监听审核状态变化，重置关联字段
+watch(
+  () => settlementFormData.value.checkStatus,
+  (newVal) => {
+    if (newVal === 1) {
+      // 切换到审核通过，清空驳回原因
+      settlementFormData.value.checkRemark = ''
+    } else if (newVal === 2) {
+      // 切换到驳回，清空付款凭证
+      settlementFormData.value.paymentVoucher = ''
+    }
+    // 重置表单验证
+    nextTick(() => {
+      settlementFormRef.value?.clearValidate()
+    })
+  }
+)
+
 /** 打开弹窗 */
 const open = async (type: string, data: any) => {
   dialogVisible.value = true
   formType.value = type
 
   if (type === 'detail') {
-    dialogTitle.value = '佣金记录详情'
+    dialogTitle.value = '提现记录详情'
   } else if (type === 'settlement') {
-    dialogTitle.value = '佣金记录结算'
+    dialogTitle.value = '提现记录审核'
     // 重置结算表单数据
     settlementFormData.value = {
-      ids: [data.id], // 设置当前记录ID
+      id: data.id, // 设置当前记录ID
       paymentVoucher: '',
-      amount: data.commissionAmount || 0
+      checkStatus: 1, // 默认审核通过
+      checkRemark: '' // 默认无备注
     }
   }
-
-  console.log(data.payTime)
 
   // 设置表单数据，格式化时间字段
   formData.value = {
     ...data,
+    createTime: data.createTime ? formatDate(data.createTime, 'YYYY-MM-DD HH:mm:ss') : '',
+    checkTime: data.checkTime ? formatDate(data.checkTime, 'YYYY-MM-DD HH:mm:ss') : '',
     settlementTime: data.settlementTime
       ? formatDate(data.settlementTime, 'YYYY-MM-DD HH:mm:ss')
-      : ''
+      : '',
+    payTime: data.payTime ? formatDate(data.payTime, 'YYYY-MM-DD HH:mm:ss') : ''
   }
 }
 
@@ -261,19 +326,28 @@ const handleSettlement = async () => {
     await settlementFormRef.value?.validate()
 
     // 确认操作
-    await message.confirm('确定进行佣金记录结算吗？')
+    const confirmMsg =
+      settlementFormData.value.checkStatus === 1
+        ? '确定审核通过该提现申请吗？'
+        : '确定驳回该提现申请吗？'
+    await message.confirm(confirmMsg)
     formLoading.value = true
 
-    // 调用结算接口
-    await PaymentRecordApi.commissionRecordPayment(settlementFormData.value)
-    message.success('结算成功')
+    // 调用审核接口
+    await WalletRecordApi.checkWithdrawal({
+      id: settlementFormData.value.id,
+      checkStatus: settlementFormData.value.checkStatus,
+      paymentVoucher: settlementFormData.value.paymentVoucher,
+      checkRemark: settlementFormData.value.checkRemark
+    })
+    message.success('审核成功')
 
     dialogVisible.value = false
     // 发送操作成功的事件
     emit('success')
   } catch (error) {
     // 用户取消或者接口错误
-    console.error('结算失败:', error)
+    console.error('审核失败:', error)
   } finally {
     formLoading.value = false
   }

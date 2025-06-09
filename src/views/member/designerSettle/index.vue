@@ -122,7 +122,6 @@
       :show-overflow-tooltip="true"
     >
       <el-table-column label="编号" align="center" prop="id" width="70" />
-      <el-table-column label="订单号" align="center" prop="orderNo" width="170" />
       <el-table-column label="合同编号" align="center" prop="contractNo" width="170" />
       <el-table-column label="合同名称" align="center" prop="contractName" />
       <el-table-column label="合同节点" align="center" prop="nodeName" />

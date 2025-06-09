@@ -8,16 +8,16 @@
       :inline="true"
       label-width="120px"
     >
-      <el-form-item label="结算状态" prop="settlementStatus">
+      <el-form-item label="审核状态" prop="settlementStatus">
         <el-select
           v-model="queryParams.settlementStatus"
-          placeholder="请选择结算状态"
+          placeholder="请选择审核状态"
           clearable
           class="!w-240px"
         >
-          <el-option label="待结算" :value="0" />
-          <el-option label="已结算" :value="1" />
-          <el-option label="已取消" :value="2" />
+          <el-option label="待审核" :value="0" />
+          <el-option label="审核通过" :value="1" />
+          <el-option label="审核拒绝" :value="2" />
         </el-select>
       </el-form-item>
       <el-form-item label="申请时间" prop="createTime">
@@ -67,11 +67,11 @@
           <el-tag v-else-if="row.checkStatus === 2" type="danger">审核拒绝</el-tag>
         </template>
       </el-table-column>
-      <!-- <el-table-column label="支付状态" align="center" prop="paymentStatusDesc" width="100">
+      <el-table-column label="支付状态" align="center" prop="paymentStatusDesc" width="100">
         <template #default="{ row }">
-          {{ row.paymentStatusDesc }}
+          <el-tag  type="primary">{{ row.paymentStatusDesc }}</el-tag>
         </template>
-      </el-table-column> -->
+      </el-table-column>
       <el-table-column
         label="审核时间"
         align="center"
@@ -82,7 +82,7 @@
       <el-table-column label="审核人" align="center" prop="checker" />
       <!-- <el-table-column label="支付时间" align="center" prop="payTime" :formatter="dateFormatter" width="180px" /> -->
       <el-table-column
-        label="创建时间"
+        label="申请时间"
         align="center"
         prop="createTime"
         :formatter="dateFormatter"

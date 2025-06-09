@@ -32,7 +32,7 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <!-- 
+      <!--
       <el-row :gutter="20">
         <el-col :span="24">
           <el-form-item label="提现说明">
@@ -94,7 +94,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="12" v-if="formData.orderNo">
-          <el-form-item label="提现订单号">
+          <el-form-item label="订单编号">
             <el-input v-model="formData.orderNo" :disabled="true" />
           </el-form-item>
         </el-col>

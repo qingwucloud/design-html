@@ -13,7 +13,7 @@
               </template>
             </UserBasicInfo>
           </el-col>
-          <el-col class="mt-20px">
+          <el-col class="mt-16px">
             <el-card class="h-full" shadow="never">
               <template #header>
                 <CardTitle title="身份证信息" />
@@ -25,18 +25,24 @@
       </el-col>
       <!-- 右上角：账户信息 -->
       <el-col :span="10" class="detail-info-item">
-        <el-card class="h-full mb-10" shadow="never">
-          <template #header>
-            <CardTitle title="设计师信息" />
-          </template>
-          <DesignerAccountInfo :designerInfo="designerInfo" class="detail-info-item">
-            <template #header>
-              <div class="card-header">
-                <CardTitle title="设计信息" />
-              </div>
-            </template>
-          </DesignerAccountInfo>
-        </el-card>
+        <el-row :gutter="10">
+          <el-col>
+            <el-card shadow="never">
+              <template #header>
+                <CardTitle title="设计师信息" />
+              </template>
+              <DesignerAccountInfo :user="user" :designer-info="designerInfo" />
+            </el-card>
+          </el-col>
+          <el-col class="mt-20px">
+            <el-card shadow="never">
+              <template #header>
+                <CardTitle title="账户余额" />
+              </template>
+              <UserWallet />
+            </el-card>
+          </el-col>
+        </el-row>
       </el-col>
       <el-card header="账户明细" shadow="never" style="width: 100%; margin-top: 20px">
         <template #header>
@@ -88,7 +94,8 @@ import TeamList from './TeamList.vue'
 import ContractList from './ContractList.vue'
 import AppointmentList from './AppointmentList.vue'
 import SettlementList from './SettlementList.vue'
-import UserBrokerageList from "@/views/member/user/detail/UserBrokerageList.vue";
+import UserBrokerageList from '@/views/member/user/detail/UserBrokerageList.vue'
+import UserWallet from '@/views/member/certification/detail/UserWallet.vue'
 defineOptions({ name: 'MemberDetail' })
 
 const loading = ref(true) // 加载中

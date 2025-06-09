@@ -4,7 +4,7 @@
       <!-- 左上角：基本信息 -->
       <el-col :span="24" class="detail-info-item">
         <el-row :gutter="10">
-          <el-col :span="14">
+          <el-col :span="10">
             <UserBasicInfo :user="user">
               <template #header>
                 <div class="card-header">
@@ -16,12 +16,20 @@
               </template>
             </UserBasicInfo>
           </el-col>
-          <el-col :span="10">
+          <el-col :span="9">
             <el-card class="h-full" shadow="never">
               <template #header>
                 <CardTitle title="身份证信息" />
               </template>
-              <UserAccountInfo :user="user"  />
+              <UserAccountInfo :user="user" />
+            </el-card>
+          </el-col>
+          <el-col :span="5">
+            <el-card class="h-full" shadow="never">
+              <template #header>
+                <CardTitle title="账户余额" />
+              </template>
+              <UserWallet :user="user" />
             </el-card>
           </el-col>
         </el-row>
@@ -75,6 +83,7 @@ import PaymentRecord from './PaymentRecord.vue'
 import { CardTitle } from '@/components/Card/index'
 import { ElMessage } from 'element-plus'
 import UserAccountInfo from './UserAccountInfo.vue'
+import UserWallet from '@/views/member/certification/detail/UserWallet.vue'
 defineOptions({ name: 'MemberDetail' })
 
 const loading = ref(true) // 加载中

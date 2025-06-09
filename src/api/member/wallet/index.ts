@@ -23,7 +23,7 @@ export const WalletRecordApi = {
   },
 
   // 获得用户佣金余额
-  getUserCommissionBalance: async (userId: any) => {
-    return await request.get({ url: `/member/commission/get`, data: { userId } })
+  getUserCommissionBalance: async (params: any) => {
+    return await request.get({ url: `/member/commission/get`, params })
   }
 }

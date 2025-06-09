@@ -131,7 +131,7 @@
     <el-table v-loading="loading" :data="list" :stripe="true" :show-overflow-tooltip="true">
       <el-table-column label="编号" align="center" prop="userId" />
       <el-table-column label="用户名" align="center" prop="name" />
-      <el-table-column label="手机号" align="center" prop="mobile" />
+      <el-table-column label="手机号" align="center" prop="mobile" width="120" />
       <el-table-column label="工作经验" align="center" prop="workExperience">
         <template #default="scope">
           <span>{{ scope.row.workExperience }} 年</span>

@@ -47,4 +47,16 @@ export const CertificationApi = {
   getAllDesignerUserPage: async () => {
     return await request.get({ url: `/member/certification/getDesignerAllList` })
   },
+
+  // 修改设计师评分
+  updateCertificationScore: async (data: any) => {
+    // 这里是假的接口，实际开发时需要替换为真实接口
+    return await new Promise((resolve) => {
+      setTimeout(() => {
+        resolve({ code: 0, data: true, msg: '操作成功' })
+      }, 500)
+    })
+    // 真实接口调用应该是：
+    // return await request.post({ url: `/member/certification/update-score`, data })
+  }
 }

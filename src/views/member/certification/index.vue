@@ -172,32 +172,46 @@
       <el-table-column label="审核人" align="center" prop="checker" />
       <el-table-column label="操作" align="center" min-width="120px">
         <template #default="scope">
-          <el-button
-            link
-            type="danger"
-            @click="openForm(scope.row.userId)"
-            v-if="scope.row.certStatus !== 1"
-            v-hasPermi="['member:certification:check']"
-          >
-            审核
-          </el-button>
-          <el-button
-            @click="openDetail(scope.row.userId)"
-            link
-            type="primary"
-            v-hasPermi="['member:certification:detail']"
-          >
-            详情
-          </el-button>
-          <el-button
-            v-hasPermi="['member:certification:recommend']"
-            link
-            type="success"
-            v-if="scope.row.certStatus === 1"
-            @click="sortOfActions(scope.row)"
-          >
-            精选排序
-          </el-button>
+          <div class="flex items-center justify-center">
+            <el-button
+              link
+              type="danger"
+              @click="openForm(scope.row.userId)"
+              v-if="scope.row.certStatus !== 1"
+              v-hasPermi="['member:certification:check']"
+            >
+              审核
+            </el-button>
+            <el-button
+              @click="openDetail(scope.row.userId)"
+              link
+              type="primary"
+              v-hasPermi="['member:certification:detail']"
+            >
+              详情
+            </el-button>
+
+            <!-- 已通过的认证才显示更多功能 -->
+            <el-dropdown v-if="scope.row.certStatus === 1">
+              <el-button link type="primary"> 更多 </el-button>
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item
+                    v-hasPermi="['member:certification:recommend']"
+                    @click="sortOfActions(scope.row)"
+                  >
+                    精选排序
+                  </el-dropdown-item>
+                  <el-dropdown-item
+                    v-hasPermi="['member:certification:recommend']"
+                    @click="openScoreForm(scope.row)"
+                  >
+                    修改评分
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
+          </div>
         </template>
       </el-table-column>
     </el-table>
@@ -212,13 +226,18 @@
 
   <!-- 表单弹窗：添加/修改 -->
   <CertificationForm ref="formRef" @success="getList" />
+
+  <!-- 评分表单弹窗 -->
+  <ScoreForm ref="scoreFormRef" @success="getList" />
 </template>
 
 <script setup lang="ts">
 import { ElMessageBox } from 'element-plus'
+import { ArrowDown } from '@element-plus/icons-vue'
 import { dateFormatter } from '@/utils/formatTime'
 import { CertificationApi, CertificationVO } from '@/api/member/certification'
 import CertificationForm from './CertificationForm.vue'
+import ScoreForm from './ScoreForm.vue'
 import { getIntDictOptions, DICT_TYPE } from '@/utils/dict'
 
 /** 设计师认证 列表 */
@@ -286,6 +305,12 @@ const openForm = (id?: number) => {
 const { push } = useRouter()
 const openDetail = (id: number) => {
   push({ name: 'MemberDesignerDetail', params: { id } })
+}
+
+/** 评分操作 */
+const scoreFormRef = ref()
+const openScoreForm = (row) => {
+  scoreFormRef.value.open(row)
 }
 /** 排序按钮操作 */
 const sortOfActions = async (row) => {

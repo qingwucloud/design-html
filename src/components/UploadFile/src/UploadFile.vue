@@ -25,10 +25,10 @@
         选取文件
       </el-button>
       <template v-if="isShowTip" #tip>
-        <div style="font-size: 8px">
+        <div class="text-12px line-height-loose">
           大小不超过 <b style="color: #f56c6c">{{ fileSize }}MB</b>
         </div>
-        <div style="font-size: 8px">
+        <div class="text-12px line-height-loose">
           格式为 <b style="color: #f56c6c">{{ fileType.join('/') }}</b> 的文件
         </div>
       </template>

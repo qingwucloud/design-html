@@ -18,20 +18,20 @@
       </template>
       <DictTag :type="DICT_TYPE.DESIGNER_STYLE_TYPE" :value="designerInfo.designerStyleType" />
     </el-descriptions-item>
-    <el-descriptions-item span="3">
+    <el-descriptions-item :span="3">
       <template #label>
         <descriptions-item-label label=" 联系地址 " />
       </template>
       {{ designerInfo.address }}
     </el-descriptions-item>
 
-    <el-descriptions-item span="3">
+    <el-descriptions-item :span="3">
       <template #label>
         <descriptions-item-label label=" 个人简介" />
       </template>
       {{ designerInfo.profile }}
     </el-descriptions-item>
-    <el-descriptions-item span="2" v-if="designerInfo.certificates?.length > 0">
+    <el-descriptions-item :span="2" v-if="designerInfo.certificates?.length > 0">
       <template #label>
         <descriptions-item-label label=" 证书 " />
       </template>
@@ -48,7 +48,7 @@
         />
       </div>
     </el-descriptions-item>
-    <el-descriptions-item span="3" v-if="designerInfo?.resumes?.length > 0">
+    <el-descriptions-item :span="3" v-if="designerInfo?.resumes?.length > 0">
       <template #label>
         <descriptions-item-label label=" 工作履历" />
       </template>

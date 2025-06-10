@@ -43,28 +43,29 @@
         </el-card>
       </el-col>
     </el-row>
-    <el-card header="账户明细" shadow="never" style="width: 100%; margin-top: 20px">
+    <el-card header="数据视图" shadow="never" style="width: 100%; margin-top: 20px">
       <template #header>
-        <CardTitle title="账户明细" />
+        <CardTitle title="数据视图" />
       </template>
       <el-tabs>
-        <el-tab-pane label="团队" lazy>
+        <el-tab-pane label="团队列表" lazy>
           <TeamList :bind-user-id="id" />
         </el-tab-pane>
-        <el-tab-pane label="合同" lazy>
+        <el-tab-pane label="合同列表" lazy>
           <ContractList :bind-user-id="id" />
         </el-tab-pane>
         <el-tab-pane label="预约" lazy>
           <AppointmentList :bind-user-id="id" />
         </el-tab-pane>
-        <el-tab-pane label="余额明细" lazy>
-          <SettlementList :bind-user-id="id" />
-        </el-tab-pane>
+
         <el-tab-pane label="作品集" lazy>
           <DesignList :bind-user-id="id" />
         </el-tab-pane>
         <el-tab-pane label="评论" lazy v-if="checkPermi(['customer:comment:query'])">
           <UserCommentList :bind-user-id="id" />
+        </el-tab-pane>
+        <el-tab-pane label="余额明细" lazy>
+          <SettlementList :bind-user-id="id" />
         </el-tab-pane>
       </el-tabs>
     </el-card>

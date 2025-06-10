@@ -34,10 +34,10 @@
           </el-col>
         </el-row>
       </el-col>
-      <!-- 下边：账户明细 -->
-      <el-card header="账户明细" shadow="never" class="w-full mt-20px">
+      <!-- 下边：数据视图 -->
+      <el-card header="数据视图" shadow="never" class="w-full mt-20px">
         <template #header>
-          <CardTitle title="账户明细" />
+          <CardTitle title="数据视图" />
         </template>
         <el-tabs>
           <el-tab-pane label="订单管理" v-if="checkPermi(['trade:order:query'])">
@@ -53,13 +53,13 @@
           >
             <UserAppointment :user-id="id" />
           </el-tab-pane>
-          <el-tab-pane label="合同" lazy v-if="checkPermi(['member:contract:query'])">
+          <el-tab-pane label="合同列表" lazy v-if="checkPermi(['member:contract:query'])">
             <UserContract :user-id="id" />
           </el-tab-pane>
           <el-tab-pane label="合同付款" lazy>
             <PaymentRecord :user-id="id" />
           </el-tab-pane>
-          <el-tab-pane label="团队" lazy>
+          <el-tab-pane label="团队列表" lazy>
             <UserBrokerageList :bind-user-id="id" />
           </el-tab-pane>
           <el-tab-pane label="余额明细" lazy>

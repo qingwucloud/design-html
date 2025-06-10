@@ -164,7 +164,7 @@ import { formatDate } from '@/utils/formatTime'
 import { copyBankInfo } from '@/utils/clipboard'
 
 /** 全案申请结算表单 */
-defineOptions({ name: 'WholeProjectSettlementForm' })
+defineOptions({ name: 'FullSettleForm' })
 
 const message = useMessage() // 消息弹窗
 
@@ -194,7 +194,7 @@ defineExpose({ open }) // 提供 open 方法，用于打开弹窗
 const emit = defineEmits(['success']) // 定义 success 事件，用于操作成功后的回调
 const handleSettlement = async () => {
   try {
-    await message.confirm('确定进行全案申请结算吗？确认后钱款将打入设计师钱包账户！！！')
+    await message.confirm('确定进行全案申请结算吗？确认后钱款将打入设计师余额！！！')
     formLoading.value = true
 
     // 准备提交参数

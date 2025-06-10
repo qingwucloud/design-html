@@ -155,14 +155,13 @@
             link
             type="primary"
             @click="openForm('detail', row)"
-            v-hasPermi="['member:payment-record:query']"
+            v-hasPermi="['member:payment-record:fullSettlementList']"
           >
             详情
           </el-button>
           <el-button
             link
             type="success"
-            v-if="row.settlementStatus == 0"
             @click="openForm('settlement', row)"
             v-hasPermi="['member:payment-record:checkFullSettlement']"
           >
@@ -180,18 +179,17 @@
     />
   </ContentWrap>
   <!-- 表单弹窗：添加/修改 -->
-  <WholeProjectSettlementForm ref="wholeProjectFormRef" @success="getList" />
+  <FullSettleForm ref="fullSettleFormRef" @success="getList" />
 </template>
 
 <script setup>
 import { dateFormatter } from '@/utils/formatTime'
-import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
 import { PaymentRecordApi } from '@/api/member/paymentrecord'
-import WholeProjectSettlementForm from './WholeProjectSettlementForm.vue'
+import FullSettleForm from './FullSettleForm.vue'
 
 const tableRef = ref() // 表格的引用
 /** 设计师发起支付记录 列表 */
-defineOptions({ name: 'DesignerSettle' })
+defineOptions({ name: 'FullSettle' })
 
 const loading = ref(true) // 列表的加载中
 const list = ref([]) // 列表的数据
@@ -239,9 +237,9 @@ const resetQuery = () => {
 }
 
 /** 添加/修改操作 */
-const wholeProjectFormRef = ref()
+const fullSettleFormRef = ref()
 const openForm = (type, data) => {
-  wholeProjectFormRef.value.open(type, data)
+  fullSettleFormRef.value.open(type, data)
 }
 
 /** 初始化 **/

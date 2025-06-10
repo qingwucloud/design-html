@@ -144,7 +144,7 @@
       <el-table-column
         label="申请时间"
         align="center"
-        prop="payTime"
+        prop="createTime"
         :formatter="dateFormatter"
         width="180px"
       />

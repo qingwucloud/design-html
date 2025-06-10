@@ -74,7 +74,7 @@ export const copyBankInfo = async (bankInfo: any) => {
   const message = useMessage() // 消息弹窗
   try {
     const info = [
-      `账户名称：${bankInfo.bankAccountName || ''}`,
+      `账户名称：${bankInfo.bankAccountName || bankInfo.userName || ''}`,
       `银行名称：${bankInfo.bankName || ''}`,
       `银行卡号：${bankInfo.bankNumber || ''}`,
       `银行渠道：${bankInfo.bankChanel || ''}`,

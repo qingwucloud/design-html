@@ -35,7 +35,7 @@
         </el-row>
       </el-col>
       <!-- 下边：账户明细 -->
-      <el-card header="账户明细" shadow="never" style="width: 100%; margin-top: 20px">
+      <el-card header="账户明细" shadow="never" class="w-full mt-20px">
         <template #header>
           <CardTitle title="账户明细" />
         </template>
@@ -43,17 +43,21 @@
           <el-tab-pane label="订单管理" v-if="checkPermi(['trade:order:query'])">
             <UserOrderList :user-id="id" />
           </el-tab-pane>
-          <el-tab-pane label="预约设计师" lazy>
+          <el-tab-pane label="售后管理" lazy v-if="checkPermi(['trade:after-sale:query'])">
+            <UserAfterSaleList :user-id="id" />
+          </el-tab-pane>
+          <el-tab-pane
+            label="预约设计师"
+            lazy
+            v-if="checkPermi(['member:designer-appointment:query'])"
+          >
             <UserAppointment :user-id="id" />
           </el-tab-pane>
-          <el-tab-pane label="合同" lazy>
+          <el-tab-pane label="合同" lazy v-if="checkPermi(['member:contract:query'])">
             <UserContract :user-id="id" />
           </el-tab-pane>
           <el-tab-pane label="合同付款" lazy>
             <PaymentRecord :user-id="id" />
-          </el-tab-pane>
-          <el-tab-pane label="售后管理" lazy v-if="checkPermi(['trade:after-sale:query'])">
-            <UserAfterSaleList :user-id="id" />
           </el-tab-pane>
           <el-tab-pane label="团队" lazy>
             <UserBrokerageList :bind-user-id="id" />

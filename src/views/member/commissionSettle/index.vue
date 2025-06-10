@@ -78,9 +78,9 @@
       <el-table-column label="提现金额" align="center" prop="amount" width="120">
         <template #default="{ row }"> {{ row.amount }}元 </template>
       </el-table-column>
-      <el-table-column label="收款账户" align="center" prop="bankName" >
+      <el-table-column label="收款账户" align="center" prop="bankName">
         <template #default="{ row }">
-          <span>{{ row.bankName }} ({{ row.bankNumber.slice(-4) }})</span>
+          <span v-if="row.bankNumber">{{ row.bankName }} ({{ row.bankNumber.slice(-4) }})</span>
         </template>
       </el-table-column>
       <el-table-column label="审核状态" align="center" prop="checkStatus" width="100">
@@ -92,7 +92,7 @@
       </el-table-column>
       <el-table-column label="支付状态" align="center" prop="paymentStatusDesc" width="100">
         <template #default="{ row }">
-          <el-tag  type="primary">{{ row.paymentStatusDesc }}</el-tag>
+          <el-tag type="primary">{{ row.paymentStatusDesc }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column

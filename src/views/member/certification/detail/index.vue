@@ -63,7 +63,7 @@
         <el-tab-pane label="作品集" lazy>
           <DesignList :bind-user-id="id" />
         </el-tab-pane>
-        <el-tab-pane label="评论" lazy>
+        <el-tab-pane label="评论" lazy v-if="checkPermi(['customer:comment:query'])">
           <UserCommentList :bind-user-id="id" />
         </el-tab-pane>
       </el-tabs>
@@ -91,6 +91,7 @@ import AppointmentList from './AppointmentList.vue'
 import SettlementList from './SettlementList.vue'
 import UserBrokerageList from '@/views/member/user/detail/UserBrokerageList.vue'
 import UserWallet from '@/views/member/certification/detail/UserWallet.vue'
+import { checkPermi } from '@/utils/permission'
 defineOptions({ name: 'MemberDetail' })
 
 const loading = ref(true) // 加载中

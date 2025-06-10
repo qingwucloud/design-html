@@ -40,7 +40,7 @@
           <CardTitle title="账户明细" />
         </template>
         <el-tabs>
-          <el-tab-pane label="订单管理">
+          <el-tab-pane label="订单管理" v-if="checkPermi(['trade:order:query'])">
             <UserOrderList :user-id="id" />
           </el-tab-pane>
           <el-tab-pane label="预约设计师" lazy>
@@ -52,7 +52,7 @@
           <el-tab-pane label="合同付款" lazy>
             <PaymentRecord :user-id="id" />
           </el-tab-pane>
-          <el-tab-pane label="售后管理" lazy>
+          <el-tab-pane label="售后管理" lazy v-if="checkPermi(['trade:after-sale:query'])">
             <UserAfterSaleList :user-id="id" />
           </el-tab-pane>
           <el-tab-pane label="团队" lazy>
@@ -85,6 +85,7 @@ import { ElMessage } from 'element-plus'
 import UserAccountInfo from './UserAccountInfo.vue'
 import UserWallet from '@/views/member/certification/detail/UserWallet.vue'
 import SettlementList from '@/views/member/certification/detail/SettlementList.vue'
+import { checkPermi } from '@/utils/permission'
 defineOptions({ name: 'MemberDetail' })
 
 const loading = ref(true) // 加载中

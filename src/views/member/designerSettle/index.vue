@@ -1,10 +1,4 @@
 <template>
-<!--  <ContentWrap>-->
-<!--    <el-tabs v-model="tabActive" @tab-change="changeTab">-->
-<!--      <el-tab-pane label="合同结算" name="3" />-->
-<!--      <el-tab-pane label="全案申请结算" name="4" />-->
-<!--    </el-tabs>-->
-<!--  </ContentWrap>-->
   <ContentWrap>
     <!-- 搜索工作栏 -->
     <el-form
@@ -68,22 +62,18 @@
           class="!w-240px"
         />
       </el-form-item> -->
-      <el-form-item label="支付状态" prop="paymentStatus">
+      <el-form-item label="结算状态" prop="settlementStatus">
         <el-select
-          v-model="queryParams.paymentStatus"
-          placeholder="请选择状态"
+          v-model="queryParams.settlementStatus"
+          placeholder="请选择结算状态"
           clearable
           class="!w-240px"
         >
-          <el-option
-            v-for="dict in getIntDictOptions(DICT_TYPE.OFFLINE_ORDER_PAYMENT_STATUS)"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          />
+          <el-option label="待结算" :value="0" />
+          <el-option label="已结算" :value="1" />
         </el-select>
       </el-form-item>
-      <!-- <el-form-item label="审核时间" prop="checkTime">
+      <el-form-item label="审核时间" prop="checkTime">
         <el-date-picker
           v-model="queryParams.checkTime"
           value-format="YYYY-MM-DD HH:mm:ss"
@@ -93,10 +83,10 @@
           :default-time="[new Date('1 00:00:00'), new Date('1 23:59:59')]"
           class="!w-240px"
         />
-      </el-form-item> -->
-      <el-form-item label="创建时间" prop="payTime">
+      </el-form-item>
+      <el-form-item label="申请时间" prop="createTime">
         <el-date-picker
-          v-model="queryParams.payTime"
+          v-model="queryParams.createTime"
           value-format="YYYY-MM-DD HH:mm:ss"
           type="daterange"
           start-placeholder="开始日期"
@@ -123,44 +113,36 @@
     >
       <el-table-column label="编号" align="center" prop="id" width="70" />
       <el-table-column label="合同编号" align="center" prop="contractNo" width="170" />
-      <el-table-column label="合同名称" align="center" prop="contractName" />
-      <el-table-column label="合同节点" align="center" prop="nodeName" />
+      <el-table-column label="合同名称" align="center" prop="contractName" width="170" />
+      <!-- <el-table-column label="合同节点" align="center" prop="nodeName" /> -->
       <el-table-column label="客户" align="center" prop="customerName" />
       <el-table-column label="设计师" align="center" prop="designerName" />
-      <el-table-column label="支付状态" align="center" prop="paymentStatus">
+      <el-table-column label="结算状态" align="center" prop="settlementStatus">
         <template #default="{ row }">
-          <DictTag :type="DICT_TYPE.OFFLINE_ORDER_PAYMENT_STATUS" :value="row.paymentStatus" />
+          <el-tag v-if="row.settlementStatus == 0" type="warning">待结算</el-tag>
+          <el-tag v-else-if="row.settlementStatus == 1" type="success">已结算</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="合同总金额" align="center" prop="totalAmount">
+      <el-table-column label="合同总金额" align="center" prop="totalAmount" width="120">
         <template #default="{ row }"> {{ row.totalAmount }}元 </template>
       </el-table-column>
-      <el-table-column
-        label="结算比例"
-        v-if="tabActive != 4"
-        align="center"
-        prop="ratio"
-      >
-        <template #default="{ row }"> {{ row.ratio }}% </template>
-      </el-table-column>
-      <el-table-column
-        label="结算金额"
-        align="center"
-        prop="amount"
-      >
+      <el-table-column label="结算金额" align="center" prop="amount">
         <template #default="{ row }"> {{ row.amount }}元 </template>
       </el-table-column>
+      <el-table-column label="付款比例" align="center" prop="ratio">
+        <template #default="{ row }"> {{ row.ratio }}% </template>
+      </el-table-column>
 
-      <!-- <el-table-column
+      <el-table-column
         label="审核时间"
         align="center"
         prop="checkTime"
         :formatter="dateFormatter"
         width="180px"
-      /> -->
-      <!-- <el-table-column label="审核人" align="center" prop="checker" /> -->
+      />
+      <el-table-column label="审核人" align="center" prop="checker" />
       <el-table-column
-        label="创建时间"
+        label="申请时间"
         align="center"
         prop="payTime"
         :formatter="dateFormatter"
@@ -180,7 +162,7 @@
           <el-button
             link
             type="success"
-            v-if="row.paymentStatus == 0 && tabActive == 4"
+            v-if="row.settlementStatus == 0"
             @click="openForm('settlement', row)"
             v-hasPermi="['member:payment-record:checkFullSettlement']"
           >
@@ -198,7 +180,6 @@
     />
   </ContentWrap>
   <!-- 表单弹窗：添加/修改 -->
-  <DesignerSettlementForm ref="designerFormRef" @success="getList" />
   <WholeProjectSettlementForm ref="wholeProjectFormRef" @success="getList" />
 </template>
 
@@ -206,11 +187,9 @@
 import { dateFormatter } from '@/utils/formatTime'
 import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
 import { PaymentRecordApi } from '@/api/member/paymentrecord'
-import DesignerSettlementForm from './DesignerSettlementForm.vue'
 import WholeProjectSettlementForm from './WholeProjectSettlementForm.vue'
 
 const tableRef = ref() // 表格的引用
-const tabActive = ref('4') //type: '2', //支付类型 3 合同设计费结算， 4 全案申请结算
 /** 设计师发起支付记录 列表 */
 defineOptions({ name: 'DesignerSettle' })
 
@@ -229,10 +208,8 @@ const queryParams = reactive({
   customerMobile: undefined,
   createTime: [],
   checkTime: [],
-  paymentStatus: undefined,
-  contractId: undefined,
-  orderId: undefined,
-  payTime: []
+  settlementStatus: undefined,
+  contractId: undefined
 })
 const queryFormRef = ref() // 搜索的表单
 
@@ -241,10 +218,7 @@ const getList = async () => {
   loading.value = true
 
   try {
-    const data = await PaymentRecordApi.getPaymentRecordPage({
-      ...queryParams,
-      type: tabActive.value
-    })
+    const data = await PaymentRecordApi.getFullSettlementListPage(queryParams)
     list.value = data.list
     total.value = data.total
   } finally {
@@ -265,21 +239,9 @@ const resetQuery = () => {
 }
 
 /** 添加/修改操作 */
-const designerFormRef = ref()
 const wholeProjectFormRef = ref()
 const openForm = (type, data) => {
-  if (tabActive.value === '3') {
-    // 设计师合同结算
-    designerFormRef.value.open(type, data)
-  } else if (tabActive.value === '4') {
-    // 全案申请结算
-    wholeProjectFormRef.value.open(type, data)
-  }
-}
-
-const changeTab = (val) => {
-  tabActive.value = val
-  getList()
+  wholeProjectFormRef.value.open(type, data)
 }
 
 /** 初始化 **/

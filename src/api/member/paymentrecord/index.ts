@@ -199,7 +199,6 @@ export const PaymentRecordApi = {
     return await request.put({ url: `/member/payment-record/checkFullSettlement`, params: data })
   },
 
-
   // 查询设计师发起支付记录分页
   getCommissionRecordPage: async (params: CommissionRecordReq) => {
     return await request.get<PageResultCommissionRecordRespVO>({
@@ -211,5 +210,10 @@ export const PaymentRecordApi = {
   // 支付设计师结算
   commissionRecordPayment: async (params: CommissionBatchPaymentSaveReq) => {
     return await request.post({ url: `/member/commission-record/payment`, data: params })
+  },
+
+  // 查询设计师发起支付记录分页
+  getFullSettlementListPage: async (params: any) => {
+    return await request.get({ url: `/member/payment-record/fullSettlementList`, params })
   }
 }

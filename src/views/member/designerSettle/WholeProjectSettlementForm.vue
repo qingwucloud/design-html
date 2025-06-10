@@ -3,7 +3,7 @@
     <!-- 全案申请结算表单 -->
     <el-form ref="formRef" :model="formData" label-width="120px" v-loading="formLoading">
       <!-- 记录详情 -->
-      <el-divider content-position="left">记录详情</el-divider>
+      <el-divider content-position="left">全案申请详情</el-divider>
 
       <el-row :gutter="20">
         <el-col :span="12">
@@ -27,7 +27,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="申请金额">
+          <el-form-item label="结算金额">
             <el-input v-model="formData.amount" :disabled="true">
               <template #append>元</template>
             </el-input>
@@ -37,13 +37,15 @@
 
       <el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item label="客户姓名">
-            <el-input v-model="formData.customerName" :disabled="true" />
+          <el-form-item label="付款比例">
+            <el-input v-model="formData.ratio" :disabled="true">
+              <template #append>%</template>
+            </el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="客户电话">
-            <el-input v-model="formData.customerMobile" :disabled="true" />
+          <el-form-item label="申请时间">
+            <el-input v-model="formData.createTime" :disabled="true" />
           </el-form-item>
         </el-col>
       </el-row>
@@ -57,6 +59,18 @@
         <el-col :span="12">
           <el-form-item label="设计师电话">
             <el-input v-model="formData.designerMobile" :disabled="true" />
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form-item label="客户姓名">
+            <el-input v-model="formData.customerName" :disabled="true" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="客户电话">
+            <el-input v-model="formData.customerMobile" :disabled="true" />
           </el-form-item>
         </el-col>
       </el-row>
@@ -107,11 +121,9 @@
 
       <el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item label="支付状态">
-            <DictTag
-              :type="DICT_TYPE.OFFLINE_ORDER_PAYMENT_STATUS"
-              :value="formData.paymentStatus"
-            />
+          <el-form-item label="结算状态">
+            <el-tag v-if="formData.settlementStatus == 0" type="warning">待结算</el-tag>
+            <el-tag v-else-if="formData.settlementStatus == 1" type="success">已结算</el-tag>
           </el-form-item>
         </el-col>
         <el-col :span="12" v-if="formData.checkTime">
@@ -128,56 +140,6 @@
           </el-form-item>
         </el-col>
       </el-row>
-
-      <!-- 已有支付凭证 -->
-      <el-row :gutter="20" v-if="paymentVoucherList.length > 0">
-        <el-col :span="24">
-          <el-form-item label="支付凭证">
-            <div class="voucher-images">
-              <el-image
-                v-for="(url, index) in paymentVoucherList"
-                :key="index"
-                :src="url"
-                :preview-src-list="paymentVoucherList"
-                :initial-index="index"
-                fit="cover"
-                class="voucher-image"
-                @click="previewImage(index)"
-              />
-            </div>
-          </el-form-item>
-        </el-col>
-      </el-row>
-
-      <!-- 结算操作 -->
-      <template v-if="formType === 'settlement'">
-        <el-divider content-position="left">结算操作</el-divider>
-
-        <el-form
-          ref="settlementFormRef"
-          :model="settlementFormData"
-          :rules="settlementFormRules"
-          label-width="120px"
-        >
-          <el-row :gutter="20">
-            <el-col :span="24">
-              <el-form-item label="付款凭证" prop="paymentVoucher" required>
-                <UploadImg
-                  v-model="settlementFormData.paymentVoucher"
-                  :fileSize="10"
-                  height="80px"
-                  width="80px"
-                />
-                <div class="upload-tip ml-10px">
-                  <el-text type="info" size="small">
-                    支持 PNG、JPG、JPEG 格式，单个文件不超过 10MB，最多上传 1 张图片
-                  </el-text>
-                </div>
-              </el-form-item>
-            </el-col>
-          </el-row>
-        </el-form>
-      </template>
     </el-form>
 
     <template #footer>
@@ -198,10 +160,7 @@
 
 <script setup lang="ts">
 import { PaymentRecordApi } from '@/api/member/paymentrecord'
-import { DICT_TYPE } from '@/utils/dict'
-import { createImageViewer } from '@/components/ImageViewer'
 import { formatDate } from '@/utils/formatTime'
-import { UploadImg } from '@/components/UploadFile'
 import { copyBankInfo } from '@/utils/clipboard'
 
 /** 全案申请结算表单 */
@@ -216,48 +175,15 @@ const formType = ref('') // 表单的类型：detail - 详情；settlement - 结
 const formData = ref<any>({})
 const formRef = ref() // 表单 Ref
 
-// 结算表单相关
-const settlementFormRef = ref() // 结算表单 Ref
-const settlementFormData = ref({
-  id: undefined, // 付款记录ID数组
-  paymentVoucher: '', // 付款凭证
-  type: 4 // 类型固定为4（全案申请结算）
-})
-
-const settlementFormRules = reactive({
-  paymentVoucher: [{ required: true, message: '请上传付款凭证', trigger: 'change' }]
-})
-
-// 支付凭证图片列表
-const paymentVoucherList = computed(() => {
-  if (!formData.value.paymentVoucher) {
-    return []
-  }
-  // 支付凭证是多张图片拼接的字符串，使用逗号分隔
-  return formData.value.paymentVoucher.split(',').filter((url) => url.trim())
-})
-
 /** 打开弹窗 */
 const open = async (type: string, data: any) => {
   dialogVisible.value = true
   formType.value = type
-
-  if (type === 'detail') {
-    dialogTitle.value = '详情'
-  } else if (type === 'settlement') {
-    dialogTitle.value = '全案申请结算'
-    // 重置结算表单数据
-    settlementFormData.value = {
-      id: data.id, // 设置当前记录ID
-      paymentVoucher: '',
-      type: 4
-    }
-  }
-
+  dialogTitle.value = type === 'detail' ? '详情' : '全案申请结算'
   // 设置表单数据，格式化时间字段
   formData.value = {
     ...data,
-    payTime: data.payTime ? formatDate(data.payTime, 'YYYY-MM-DD HH:mm:ss') : '',
+    createTime: data.createTime ? formatDate(data.createTime, 'YYYY-MM-DD HH:mm:ss') : '',
     checkTime: data.checkTime ? formatDate(data.checkTime, 'YYYY-MM-DD HH:mm:ss') : ''
   }
 }
@@ -268,18 +194,12 @@ defineExpose({ open }) // 提供 open 方法，用于打开弹窗
 const emit = defineEmits(['success']) // 定义 success 事件，用于操作成功后的回调
 const handleSettlement = async () => {
   try {
-    // 表单验证
-    await settlementFormRef.value?.validate()
-
-    // 确认操作
     await message.confirm('确定进行全案申请结算吗？确认后钱款将打入设计师钱包账户！！！')
     formLoading.value = true
 
     // 准备提交参数
     const submitData = {
-      id: settlementFormData.value.id,
-      paymentVoucher: settlementFormData.value.paymentVoucher,
-      type: settlementFormData.value.type
+      id: formData.value.id
     }
 
     // 调用结算接口
@@ -295,14 +215,6 @@ const handleSettlement = async () => {
   } finally {
     formLoading.value = false
   }
-}
-
-/** 预览图片 */
-const previewImage = (index: number) => {
-  createImageViewer({
-    urlList: paymentVoucherList.value,
-    initialIndex: index
-  })
 }
 </script>
 

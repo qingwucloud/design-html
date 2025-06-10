@@ -187,49 +187,67 @@
       <el-table-column
         label="操作"
         align="center"
-        min-width="240px"
+        min-width="120px"
         fixed="right"
         :show-overflow-tooltip="false"
       >
         <template #default="scope">
-          <el-button
-            link
-            type="success"
-            @click="openForm('update', scope.row.id)"
-            v-hasPermi="['member:portfolio:update']"
-            >编辑</el-button
-          >
-          <el-button
-            link
-            v-if="scope.row.status === 1"
-            type="primary"
-            @click="openCheckForm('detail', scope.row.id)"
-            v-hasPermi="['member:portfolio:detail']"
-            >详情</el-button
-          >
-          <el-button
-            link
-            type="success"
-            v-if="scope.row.status === 0"
-            @click="openCheckForm('check', scope.row.id)"
-            v-hasPermi="['member:portfolio:check']"
-            >审核</el-button
-          >
-          <el-button
-            link
-            type="danger"
-            @click="handleDelete(scope.row.id)"
-            v-hasPermi="['member:portfolio:delete']"
-            >删除</el-button
-          >
-          <el-button
-            link
-            type="danger"
-            v-if="scope.row.status === 1"
-            @click="handleSort(scope.row)"
-            v-hasPermi="['member:portfolio:recommend']"
-            >精选排序</el-button
-          >
+          <div class="flex items-center justify-center">
+            <!-- 待审核状态显示审核按钮 -->
+            <el-button
+              link
+              type="success"
+              v-if="scope.row.status === 0"
+              @click="openCheckForm('check', scope.row.id)"
+              v-hasPermi="['member:portfolio:check']"
+            >
+              审核
+            </el-button>
+
+            <!-- 已审核状态显示详情按钮 -->
+            <el-button
+              link
+              type="primary"
+              @click="openCheckForm('detail', scope.row.id)"
+              v-hasPermi="['member:portfolio:detail']"
+            >
+              详情
+            </el-button>
+
+            <!-- 更多操作下拉菜单 -->
+            <el-dropdown
+              v-hasPermi="[
+                'member:portfolio:update',
+                'member:portfolio:delete',
+                'member:portfolio:recommend'
+              ]"
+              @command="(command) => handleCommand(command, scope.row)"
+            >
+              <el-button link type="primary"> 更多 </el-button>
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item
+                    command="handleEdit"
+                    v-if="checkPermi(['member:portfolio:update'])"
+                  >
+                    编辑
+                  </el-dropdown-item>
+                  <el-dropdown-item
+                    command="handleSort"
+                    v-if="scope.row.status === 1 && checkPermi(['member:portfolio:recommend'])"
+                  >
+                    精选排序
+                  </el-dropdown-item>
+                  <el-dropdown-item
+                    command="handleDelete"
+                    v-if="checkPermi(['member:portfolio:delete'])"
+                  >
+                    删除
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
+          </div>
         </template>
       </el-table-column>
     </el-table>
@@ -255,6 +273,7 @@ import { PortfolioApi, PortfolioVO } from '@/api/member/portfolio'
 import PortfolioForm from './PortfolioForm.vue'
 import CheckAndDetail from './CheckAndDetail.vue'
 import { ElMessageBox } from 'element-plus'
+import { checkPermi } from '@/utils/permission'
 
 /** 设计师作品集 列表 */
 defineOptions({ name: 'MemberPortfolio' })
@@ -346,8 +365,31 @@ const handleDelete = async (id: any) => {
   } catch {}
 }
 
+/** 操作分发 */
+const handleCommand = (command: string, row: any) => {
+  switch (command) {
+    case 'handleEdit':
+      openForm('update', row.id)
+      break
+    case 'handleSort':
+      handleSort(row)
+      break
+    case 'handleDelete':
+      handleDelete(row.id)
+      break
+    default:
+      break
+  }
+}
+
 /** 初始化 **/
 onMounted(() => {
   getList()
 })
 </script>
+
+<style scoped lang="scss">
+:deep(.el-button + .el-button) {
+  margin-left: 0;
+}
+</style>

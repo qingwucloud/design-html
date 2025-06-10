@@ -38,6 +38,7 @@ const formData = ref({
   id: 0,
   currentScore: 0,
   score: 0,
+  startSort: 0
 })
 
 const formRef = ref() // 表单 Ref
@@ -50,7 +51,8 @@ const open = async (row: any) => {
     formData.value = {
       id: row.id,
       currentScore: row.score,
-      score: row.score,
+      score: row.score === 0 ? 5 : row.score,
+      startSort: row.startSort
     }
   } finally {
     formLoading.value = false
@@ -68,6 +70,7 @@ const submitForm = async () => {
     await CertificationApi.updateCertificationScore({
       id: formData.value.id,
       score: formData.value.score,
+      startSort: formData.value.startSort
     })
     message.success('评分修改成功')
     dialogVisible.value = false

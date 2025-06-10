@@ -46,3 +46,8 @@ export const updateUserLevel = async (data: any) => {
 export const updateUserPoint = async (data: any) => {
   return await request.put({ url: `/member/user/update-point`, data })
 }
+
+// 查询会员用户实名认证
+export const getRealInfo = async (id: number | string) => {
+  return await request.get({ url: `/member/user/getRealName?id=` + id })
+}

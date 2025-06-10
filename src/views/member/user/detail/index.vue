@@ -21,7 +21,7 @@
               <template #header>
                 <CardTitle title="身份证信息" />
               </template>
-              <UserAccountInfo :user="user" />
+              <UserAccountInfo />
             </el-card>
           </el-col>
           <el-col :span="5">

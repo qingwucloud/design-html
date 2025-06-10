@@ -203,7 +203,7 @@
                     精选排序
                   </el-dropdown-item>
                   <el-dropdown-item
-                    v-hasPermi="['member:certification:recommend']"
+                    v-hasPermi="['member:certification:updateScore']"
                     @click="openScoreForm(scope.row)"
                   >
                     修改评分

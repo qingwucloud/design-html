@@ -1,16 +1,16 @@
 <template>
-  <el-descriptions :column="column">
+  <el-descriptions :column="2">
     <el-descriptions-item>
       <template #label>
         <descriptions-item-label label=" 身份证姓名" />
       </template>
-      {{ designerInfo.cardName }}
+      {{ realInfo.cardName || '未认证' }}
     </el-descriptions-item>
-    <el-descriptions-item span="2">
+    <el-descriptions-item :span="2">
       <template #label>
         <descriptions-item-label label=" 身份证号码 " />
       </template>
-      {{ designerInfo.cardNo }}
+      {{ realInfo.cardNo || '-' }}
     </el-descriptions-item>
 
     <el-descriptions-item>
@@ -18,13 +18,15 @@
         <descriptions-item-label label=" 身份证国徽面 " />
       </template>
       <el-image
+        v-if="realInfo.cardImgFront"
         disabled
         class="w-70px h-70px mr-10px"
-        :src="designerInfo.cardImgFront"
-        :preview-src-list="[designerInfo.cardImgFront]"
+        :src="realInfo.cardImgFront"
+        :preview-src-list="[realInfo.cardImgFront]"
         show-progress
         fit="cover"
       />
+      <span v-else>-</span>
     </el-descriptions-item>
     <el-descriptions-item>
       <template #label>
@@ -32,31 +34,32 @@
       </template>
       <el-image
         disabled
+        v-if="realInfo.cardImgBack"
         class="w-70px h-70px mr-10px"
-        :src="designerInfo.cardImgBack"
-        :preview-src-list="[designerInfo.cardImgBack]"
+        :src="realInfo.cardImgBack"
+        :preview-src-list="[realInfo.cardImgBack]"
         show-progress
         fit="cover"
       />
+      <span v-else>-</span>
     </el-descriptions-item>
-    <el-descriptions-item span="3">
+    <el-descriptions-item :span="2">
       <template #label>
         <descriptions-item-label label=" 身份证地址 " />
       </template>
-      {{ designerInfo.cardAddr }}
+      {{ realInfo.cardAddr || '-' }}
     </el-descriptions-item>
-    <el-descriptions-item span="3">
+    <el-descriptions-item :span="2">
       <template #label>
         <descriptions-item-label label=" 身份证签发机关 " />
       </template>
-      {{ designerInfo.cardOrgan }}
+      {{ realInfo.cardOrgan || '-' }}
     </el-descriptions-item>
-    <el-descriptions-item span="3">
+    <el-descriptions-item :span="2">
       <template #label>
         <descriptions-item-label label=" 身份证有效期 " />
       </template>
-      {{ designerInfo.cardStartdate }} -
-      {{ designerInfo.cardValidate || '至今' }}
+      {{ realInfo.cardStartdate }} - {{ realInfo.cardValidate }}
     </el-descriptions-item>
   </el-descriptions>
 </template>
@@ -64,17 +67,24 @@
 import { DescriptionsItemLabel } from '@/components/Descriptions'
 import * as UserApi from '@/api/member/user'
 
-withDefaults(defineProps<{ user: UserApi.UserVO; designerInfo: any; column?: number }>(), {
-  column: 2,
-  designerInfo:{
-    cardName: '',
-    cardNo: '',
-    cardImgFront: '',
-    cardImgBack: '',
-    cardAddr: '',
-    cardOrgan: '',
-    cardStartdate: '',
-    cardValidate: ''
+const route = useRoute()
+const realInfo = ref({
+  isCertification: 0,
+  cardNo: '',
+  cardName: '',
+  cardImgFront: '',
+  cardImgBack: '',
+  cardAddr: '',
+  cardOrgan: '',
+  cardStartdate: '',
+  cardValidate: ''
+})
+
+onMounted(async () => {
+  let { data } = await UserApi.getRealInfo(route.params.id as string)
+  realInfo.value = {
+    ...realInfo.value,
+    ...data
   }
 })
 </script>

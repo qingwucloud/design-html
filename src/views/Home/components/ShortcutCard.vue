@@ -31,7 +31,7 @@ const router = useRouter() // 路由
 
 /** 菜单列表 */
 const menuList = [
-  { name: '用户管理', icon: 'ep:user-filled', bgColor: 'bg-red-400', routerName: 'MemberUser' },
+  { name: '会员管理', icon: 'ep:user-filled', bgColor: 'bg-red-400', routerName: 'MemberUser' },
   {
     name: '主材管理',
     icon: 'fluent-mdl2:product',

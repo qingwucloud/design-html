@@ -5,7 +5,7 @@
       <el-col :md="6" :sm="12" :xs="24" :loading="loading">
         <ComparisonCard
           tag="今日"
-          title="新增用户"
+          title="新增会员"
           :value="userComparison?.value?.registerUserCount || 0"
           :reference="userComparison?.reference?.registerUserCount || 0"
         />
@@ -105,21 +105,21 @@ const userName = computed(() => userStore.user?.nickname)
 
 const loading = ref(true) // 加载中
 const orderComparison = ref<DataComparisonRespVO<TradeOrderSummaryRespVO>>() // 交易对照数据
-const userComparison = ref<DataComparisonRespVO<MemberCountRespVO>>() // 用户对照数据
+const userComparison = ref<DataComparisonRespVO<MemberCountRespVO>>() // 会员对照数据
 
 /** 查询交易对照卡片数据 */
 const getOrderComparison = async () => {
   orderComparison.value = await TradeStatisticsApi.getOrderComparison()
 }
 
-/** 查询会员用户数量对照卡片数据 */
+/** 查询会员会员数量对照卡片数据 */
 const getUserCountComparison = async () => {
   userComparison.value = await MemberStatisticsApi.getUserCountComparison()
 }
 
 /** 初始化 **/
 onMounted(async () => {
-  if (checkPermi(['home:statistics:query'])){
+  if (checkPermi(['home:statistics:query'])) {
     loading.value = true
     await Promise.all([getOrderComparison(), getUserCountComparison()])
     loading.value = false

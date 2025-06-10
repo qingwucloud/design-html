@@ -1,7 +1,7 @@
 <template>
   <el-card shadow="never">
     <template #header>
-      <CardTitle title="用户统计" />
+      <CardTitle title="会员统计" />
     </template>
     <!-- 折线图 -->
     <Echart :height="300" :options="lineChartOptions" />
@@ -14,7 +14,7 @@ import * as MemberStatisticsApi from '@/api/mall/statistics/member'
 import { formatDate } from '@/utils/formatTime'
 import { CardTitle } from '@/components/Card'
 
-/** 会员用户统计卡片 */
+/** 会员会员统计卡片 */
 defineOptions({ name: 'MemberStatisticsCard' })
 
 const loading = ref(true) // 加载中

@@ -34,7 +34,7 @@ const router = useRouter() // 路由
 
 /** 数据 */
 const data = reactive({
-  orderWaitePickUp: { name: '所有用户', value: 0, routerName: 'TradeOrder' },
+  orderWaitePickUp: { name: '所有会员', value: 0, routerName: 'TradeOrder' },
   rechargePrice: {
     name: '待审核设计师',
     value: 0,

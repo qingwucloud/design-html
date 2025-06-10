@@ -43,9 +43,9 @@ const data = reactive({
   orderUndelivered: { name: '订单', value: 9, routerName: 'TradeOrder' },
   orderAfterSaleApply: { name: '退款中订单', value: 4, routerName: 'TradeAfterSale' },
   productAlertStock: { name: '库存预警', value: 0, routerName: 'ProductSpu' },
-  productForSale: { name: '上架主材', value: 0, routerName: 'ProductSpu' },
-  productInWarehouse: { name: '仓库主材', value: 0, routerName: 'ProductSpu' },
-  withdrawAuditing: { name: '待结算', value: 0, routerName: 'PaymentRecord' }
+  productForSale: { name: '上架商品', value: 0, routerName: 'ProductSpu' },
+  productInWarehouse: { name: '仓库商品', value: 0, routerName: 'ProductSpu' },
+  withdrawAuditing: { name: '待结算', value: 0, routerName: 'FullSettle' }
 })
 
 /** 查询订单数据 */

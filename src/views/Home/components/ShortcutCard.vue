@@ -33,7 +33,7 @@ const router = useRouter() // 路由
 const menuList = [
   { name: '会员管理', icon: 'ep:user-filled', bgColor: 'bg-red-400', routerName: 'MemberUser' },
   {
-    name: '主材管理',
+    name: '商品管理',
     icon: 'fluent-mdl2:product',
     bgColor: 'bg-orange-400',
     routerName: 'ProductSpu'

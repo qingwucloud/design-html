@@ -81,7 +81,7 @@ const realInfo = ref({
 })
 
 onMounted(async () => {
-  let { data } = await UserApi.getRealInfo(route.params.id as string)
+  let data = await UserApi.getRealInfo(route.params.id as string)
   realInfo.value = {
     ...realInfo.value,
     ...data

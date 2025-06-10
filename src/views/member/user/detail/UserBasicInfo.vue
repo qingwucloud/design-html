@@ -18,15 +18,15 @@
         <el-descriptions :column="2">
           <el-descriptions-item>
             <template #label>
-              <descriptions-item-label label="用户名" />
-            </template>
-            {{ user.name || '空' }}
-          </el-descriptions-item>
-          <el-descriptions-item>
-            <template #label>
               <descriptions-item-label label="昵称" />
             </template>
             {{ user.nickname }}
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template #label>
+              <descriptions-item-label label="用户名" />
+            </template>
+            {{ user.name || '空' }}
           </el-descriptions-item>
           <el-descriptions-item label="手机号">
             <template #label>

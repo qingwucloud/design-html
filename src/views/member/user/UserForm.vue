@@ -1,5 +1,5 @@
 <template>
-  <Dialog :title="dialogTitle" top="2vh" v-model="dialogVisible">
+  <Dialog :title="dialogTitle" top="2vh" v-model="dialogVisible" isCenter>
     <el-form
       ref="formRef"
       :model="formData"
@@ -27,8 +27,8 @@
       <el-form-item label="头像" prop="avatar">
         <UploadImg v-model="formData.avatar" :limit="1" :is-show-tip="false" />
       </el-form-item>
-      <el-form-item label="真实名字" prop="name">
-        <el-input v-model="formData.name" placeholder="请输入真实名字" />
+      <el-form-item label="用户名" prop="name">
+        <el-input v-model="formData.name" placeholder="请输入用户名" />
       </el-form-item>
       <el-form-item label="用户性别" prop="sex">
         <el-radio-group v-model="formData.sex">
@@ -58,15 +58,15 @@
           :render-after-expand="true"
         />
       </el-form-item>
-<!--      <el-form-item label="用户标签" prop="tagIds">-->
-<!--        <MemberTagSelect width="100%" v-model="formData.tagIds" show-add />-->
-<!--      </el-form-item>-->
-<!--      <el-form-item label="用户分组" prop="groupId">-->
-<!--        <MemberGroupSelect class="w-full!" v-model="formData.groupId" />-->
-<!--      </el-form-item>-->
-<!--      <el-form-item label="会员备注" prop="mark">-->
-<!--        <el-input type="textarea" v-model="formData.mark" placeholder="请输入会员备注" />-->
-<!--      </el-form-item>-->
+      <!--      <el-form-item label="用户标签" prop="tagIds">-->
+      <!--        <MemberTagSelect width="100%" v-model="formData.tagIds" show-add />-->
+      <!--      </el-form-item>-->
+      <!--      <el-form-item label="用户分组" prop="groupId">-->
+      <!--        <MemberGroupSelect class="w-full!" v-model="formData.groupId" />-->
+      <!--      </el-form-item>-->
+      <!--      <el-form-item label="会员备注" prop="mark">-->
+      <!--        <el-input type="textarea" v-model="formData.mark" placeholder="请输入会员备注" />-->
+      <!--      </el-form-item>-->
     </el-form>
     <template #footer>
       <el-button @click="submitForm" type="primary" :disabled="formLoading">确 定</el-button>

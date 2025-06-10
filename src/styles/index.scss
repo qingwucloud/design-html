@@ -36,8 +36,7 @@
   }
 }
 
-
-.center-dialog{
+.center-dialog {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -51,4 +50,9 @@
   .el-dialog__body {
     overflow: auto;
   }
+}
+
+.el-select__wrapper.is-disabled .el-select__caret,
+.el-select__wrapper.is-disabled .el-tag {
+  color: var(--el-disabled-text-color);
 }

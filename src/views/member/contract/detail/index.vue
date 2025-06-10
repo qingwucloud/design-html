@@ -48,16 +48,19 @@
               <el-descriptions-item label="客户手机号">
                 {{ contractData?.customerMobile || '' }}
               </el-descriptions-item>
-              <!-- <el-descriptions-item label="设计师名称">
+              <el-descriptions-item label="设计师名称">
                 {{ contractData?.designerName || '' }}
-              </el-descriptions-item> -->
+              </el-descriptions-item>
+              <el-descriptions-item label="设计师手机号">
+                {{ contractData?.designerMobile || '' }}
+              </el-descriptions-item>
 
               <!-- 项目信息 -->
-              <el-descriptions-item label="工程地址" :span="2">
-                {{ contractData?.projectAddress || '' }}
-              </el-descriptions-item>
               <el-descriptions-item label="小区名称">
                 {{ contractData?.communityName || '' }}
+              </el-descriptions-item>
+              <el-descriptions-item label="工程地址" :span="2">
+                {{ contractData?.projectAddress || '' }}
               </el-descriptions-item>
               <el-descriptions-item label="建筑面积">
                 {{ contractData?.builtArea || '' }}㎡
@@ -68,7 +71,7 @@
 
               <!-- 费用信息 -->
               <el-descriptions-item label="合同总金额">
-                <span class="amount-text">¥{{ contractData?.totalAmount || 0 }}</span>
+                <span class="amount-text paid">¥{{ contractData?.totalAmount || 0 }}</span>
               </el-descriptions-item>
               <el-descriptions-item label="已支付金额">
                 <span class="amount-text paid">¥{{ contractData?.paidAmount || 0 }}</span>

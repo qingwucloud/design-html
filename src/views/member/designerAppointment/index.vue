@@ -130,6 +130,15 @@
           >
             指派
           </el-button>
+          <el-button
+            link
+            v-hasPermi="['trade:order:query']"
+            v-if="row.tradeOrderId"
+            type="success"
+            @click="openDetail(row.tradeOrderId)"
+          >
+            订单
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -157,6 +166,7 @@ defineOptions({ name: 'DesignerAppointment' })
 const loading = ref(true) // 列表的加载中
 const list = ref<DesignerAppointmentVO[]>([]) // 列表的数据
 const total = ref(0) // 列表的总页数
+const { push } = useRouter() // 路由跳转
 const queryParams = reactive({
   pageNo: 1,
   userMobile: undefined,
@@ -185,7 +195,9 @@ const getList = async () => {
     loading.value = false
   }
 }
-
+const openDetail = (id: number) => {
+  push({ name: 'TradeOrderDetail', params: { id } })
+}
 /** 搜索按钮操作 */
 const handleQuery = () => {
   queryParams.pageNo = 1

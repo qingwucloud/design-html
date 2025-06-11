@@ -8,18 +8,22 @@
           {{ formData?.user?.nickname }}
         </el-button>
       </el-descriptions-item>
-<!--      <el-descriptions-item label="订单类型: ">-->
-<!--        <dict-tag :type="DICT_TYPE.TRADE_ORDER_TYPE" :value="formData.type!" />-->
-<!--      </el-descriptions-item>-->
-<!--      <el-descriptions-item label="订单来源: ">-->
-<!--        <dict-tag :type="DICT_TYPE.TERMINAL" :value="formData.terminal!" />-->
-<!--      </el-descriptions-item>-->
+      <!--      <el-descriptions-item label="订单类型: ">-->
+      <!--        <dict-tag :type="DICT_TYPE.TRADE_ORDER_TYPE" :value="formData.type!" />-->
+      <!--      </el-descriptions-item>-->
+      <!--      <el-descriptions-item label="订单来源: ">-->
+      <!--        <dict-tag :type="DICT_TYPE.TERMINAL" :value="formData.terminal!" />-->
+      <!--      </el-descriptions-item>-->
       <el-descriptions-item label="支付单号: ">{{ formData.payOrderId }}</el-descriptions-item>
       <el-descriptions-item label="付款方式: ">
         <dict-tag :type="DICT_TYPE.PAY_CHANNEL_CODE" :value="formData.payChannelCode!" />
       </el-descriptions-item>
-      <el-descriptions-item label="买家留言: " :span="2">{{ formData.userRemark }}</el-descriptions-item>
-      <el-descriptions-item label="商家备注: " :span="2">{{ formData.remark }}</el-descriptions-item>
+      <el-descriptions-item label="买家留言: " :span="2">{{
+        formData.userRemark
+      }}</el-descriptions-item>
+      <el-descriptions-item label="商家备注: " :span="2">{{
+        formData.remark
+      }}</el-descriptions-item>
       <!-- <el-descriptions-item v-if="formData.brokerageUser" label="推广用户: ">
         {{ formData.brokerageUser?.nickname }}
       </el-descriptions-item> -->
@@ -338,7 +342,7 @@ const clipboardSuccess = () => {
 const deliveryExpressList = ref([]) // 物流公司
 const expressTrackList = ref([]) // 物流详情
 const pickUpStore = ref({}) // 自提门店
-onMounted(async () => {
+onUpdated(async () => {
   await getDetail()
   // 如果配送方式为快递，则查询物流公司
   if (formData.value.deliveryType === DeliveryTypeEnum.EXPRESS.type) {
@@ -444,6 +448,4 @@ onMounted(async () => {
 //:deep(.el-descriptions__label){
 //  vertical-align: top;
 //}
-
-
 </style>

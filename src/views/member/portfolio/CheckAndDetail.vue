@@ -61,19 +61,11 @@
         </el-col>
         <el-col :span="12">
           <el-form-item label="面积" prop="area">
-            <el-input-number
-              disabled
-              class="w-full!"
-              :max="500"
-              :min="10"
-              :precision="1"
-              v-model="formData.area"
-              placeholder="请输入面积(㎡)"
-            >
+            <el-input disabled class="w-full!" :precision="1" v-model="formData.area" placeholder="请输入面积(㎡)">
               <template #suffix>
                 <span>㎡</span>
               </template>
-            </el-input-number>
+            </el-input>
           </el-form-item>
         </el-col>
       </el-row>

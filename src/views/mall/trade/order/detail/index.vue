@@ -3,14 +3,18 @@
     <!-- 订单信息 -->
     <el-descriptions title="订单信息">
       <el-descriptions-item label="订单号: ">{{ formData.no }}</el-descriptions-item>
-      <el-descriptions-item label="买家: ">{{ formData?.user?.nickname }}</el-descriptions-item>
-      <!-- <el-descriptions-item label="订单类型: ">
+      <el-descriptions-item label="买家: ">
+        <el-button link type="primary" @click="goToUserDetail">
+          {{ formData?.user?.nickname }}
+        </el-button>
+      </el-descriptions-item>
+      <el-descriptions-item label="订单类型: ">
         <dict-tag :type="DICT_TYPE.TRADE_ORDER_TYPE" :value="formData.type!" />
       </el-descriptions-item>
       <el-descriptions-item label="订单来源: ">
         <dict-tag :type="DICT_TYPE.TERMINAL" :value="formData.terminal!" />
-      </el-descriptions-item> -->
-      <!-- <el-descriptions-item label="买家留言: ">{{ formData.userRemark }}</el-descriptions-item> -->
+      </el-descriptions-item>
+      <el-descriptions-item label="买家留言: ">{{ formData.userRemark }}</el-descriptions-item>
       <el-descriptions-item label="商家备注: ">{{ formData.remark }}</el-descriptions-item>
       <el-descriptions-item label="支付单号: ">{{ formData.payOrderId }}</el-descriptions-item>
       <el-descriptions-item label="付款方式: ">
@@ -318,6 +322,11 @@ const { push, currentRoute } = useRouter() // 路由
 const close = () => {
   delView(unref(currentRoute))
   push({ name: 'TradeOrder' })
+}
+
+/** 跳转到买家用户详情 */
+const goToUserDetail = () => {
+  push({ name: 'MemberUserDetail', params: { id: formData.value.userId } })
 }
 
 /** 复制 */

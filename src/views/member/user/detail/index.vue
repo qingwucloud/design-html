@@ -40,30 +40,29 @@
           <CardTitle title="数据视图" />
         </template>
         <el-tabs>
+          <el-tab-pane label="团队列表" lazy v-if="checkPermi(['member:memberView:inviteList'])">
+            <TeamList  />
+          </el-tab-pane>
           <el-tab-pane label="订单管理" >
-            <UserOrderList :user-id="id" />
+            <UserOrderList :user-id="id" v-if="checkPermi(['trade:order:query'])"/>
           </el-tab-pane>
           <el-tab-pane label="售后管理" lazy >
-            <UserAfterSaleList :user-id="id" />
+            <UserAfterSaleList :user-id="id" v-if="checkPermi(['trade:after-sale:query'])"/>
           </el-tab-pane>
-          <el-tab-pane
-            label="预约设计师"
-            lazy
-
-          >
-            <UserAppointment :user-id="id" />
+          <el-tab-pane label="预约设计师" lazy v-if="checkPermi(['member:memberView:appointmentList'])">
+            <UserAppointment />
           </el-tab-pane>
-          <el-tab-pane label="合同列表" lazy >
-            <UserContract :user-id="id" />
+          <el-tab-pane label="合同列表" lazy v-if="checkPermi(['member:memberView:contractList'])">
+            <UserContract  />
           </el-tab-pane>
-          <el-tab-pane label="合同付款" lazy>
-            <PaymentRecord :user-id="id" />
+          <el-tab-pane label="合同付款" lazy v-if="checkPermi(['member:memberView:payment-record'])">
+            <PaymentRecord />
           </el-tab-pane>
-          <el-tab-pane label="团队列表" lazy>
-            <UserBrokerageList :bind-user-id="id" />
+          <el-tab-pane label="收入明细" lazy v-if="checkPermi(['member:memberView:incomeList'])">
+            <SettlementList  />
           </el-tab-pane>
-          <el-tab-pane label="余额明细" lazy>
-            <SettlementList :bind-user-id="id" />
+          <el-tab-pane label="提现记录" lazy v-if="checkPermi(['member:memberView:withdrawalList'])">
+            <PayoutList  />
           </el-tab-pane>
         </el-tabs>
       </el-card>
@@ -78,7 +77,8 @@ import * as UserApi from '@/api/member/user'
 import { useTagsViewStore } from '@/store/modules/tagsView'
 import UserForm from '@/views/member/user/UserForm.vue'
 import UserBasicInfo from './UserBasicInfo.vue'
-import UserBrokerageList from './UserBrokerageList.vue'
+import SettlementList from './SettlementList.vue'
+import PayoutList from './PayoutList.vue'
 import UserOrderList from './UserOrderList.vue'
 import UserAfterSaleList from './UserAftersaleList.vue'
 import UserAppointment from './UserAppointment.vue'
@@ -88,8 +88,8 @@ import { CardTitle } from '@/components/Card/index'
 import { ElMessage } from 'element-plus'
 import UserAccountInfo from './UserAccountInfo.vue'
 import UserWallet from '@/views/member/certification/detail/UserWallet.vue'
-import SettlementList from '@/views/member/certification/detail/SettlementList.vue'
-import { checkPermi } from '@/utils/permission'
+import TeamList from './TeamList.vue'
+import { checkPermi } from "@/utils/permission";
 defineOptions({ name: 'MemberDetail' })
 
 const loading = ref(true) // 加载中

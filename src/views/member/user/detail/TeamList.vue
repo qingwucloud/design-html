@@ -19,8 +19,8 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { getDesignerInviteList } from "@/api/member/view/designer";
 import { dateFormatter } from "@/utils/formatTime";
+import { getUserInviteList } from "@/api/member/view/user";
 defineOptions({ name: 'DesignerInfoTeamList' })
 const route = useRoute()
 
@@ -36,7 +36,7 @@ const queryParams = ref({
 const getTeamList = async () => {
   loading.value = true
   try {
-    const data = await getDesignerInviteList({
+    const data = await getUserInviteList({
       ...queryParams.value,
       userId: route.params.id
     })

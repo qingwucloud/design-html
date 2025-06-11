@@ -161,6 +161,7 @@
 import { dateFormatter } from '@/utils/formatTime'
 import { ContractApi, ContractVO } from '@/api/member/contract'
 import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
+import { getUserContractList } from "@/api/member/view/user";
 
 /** 用户合同 列表 */
 defineOptions({ name: 'UserInfoContract' })
@@ -184,12 +185,15 @@ const queryParams = reactive({
   memberContractStatus: undefined
 })
 const queryFormRef = ref() // 搜索的表单
-
+const route = useRoute()
 /** 查询列表 */
 const getList = async () => {
   loading.value = true
   try {
-    const data = await ContractApi.getContractPage(queryParams)
+    const data = await getUserContractList({
+      ...queryParams,
+      customerId:route.params.id
+    })
     list.value = data.list
     total.value = data.total
   } finally {

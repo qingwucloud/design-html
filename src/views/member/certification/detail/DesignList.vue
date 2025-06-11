@@ -84,7 +84,6 @@
         width="180px"
       />
       <el-table-column label="驳回原因" align="center" prop="rejectReason" />
-      <el-table-column label="精选排序号" align="center" prop="sortNum" width="100" />
       <el-table-column label="操作" align="center" fixed="right" :show-overflow-tooltip="false">
         <template #default="scope">
           <el-button
@@ -112,18 +111,13 @@
 
 <script setup lang="ts">
 import { dateFormatter } from '@/utils/formatTime'
-import { PortfolioApi, PortfolioVO } from '@/api/member/portfolio'
+import {  PortfolioVO } from '@/api/member/portfolio'
 import CheckAndDetail from '../../portfolio/CheckAndDetail.vue'
+import { getDesignerPortfolioList } from "@/api/member/view/designer";
 
 /** 设计师作品集 列表 */
 defineOptions({ name: 'DesignList' })
 
-const props = defineProps({
-  bindUserId: {
-    type: Number,
-    default: undefined
-  }
-})
 const loading = ref(true) // 列表的加载中
 const list = ref<PortfolioVO[]>([]) // 列表的数据
 const total = ref(0) // 列表的总页数
@@ -144,14 +138,14 @@ const queryParams = reactive({
 })
 const queryFormRef = ref() // 搜索的表单
 const checkRef = ref() // 详情/审核的表单
-
+const route = useRoute()
 /** 查询列表 */
 const getList = async () => {
   loading.value = true
   try {
-    const data = await PortfolioApi.getPortfolioPage({
+    const data = await getDesignerPortfolioList({
       ...queryParams,
-      userId: props.bindUserId || undefined
+      designerId:route.params.id
     })
     list.value = data.list
     total.value = data.total

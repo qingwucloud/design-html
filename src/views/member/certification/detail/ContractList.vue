@@ -26,24 +26,6 @@
           class="!w-240px"
         />
       </el-form-item>
-      <el-form-item label="设计师姓名" prop="designerName">
-        <el-input
-          v-model="queryParams.designerName"
-          placeholder="请输入设计师姓名"
-          clearable
-          @keyup.enter="handleQuery"
-          class="!w-240px"
-        />
-      </el-form-item>
-      <!-- <el-form-item label="设计师手机号" prop="designerName">
-        <el-input
-          v-model="queryParams.designerMobile"
-          placeholder="请输入设计师手机号"
-          clearable
-          @keyup.enter="handleQuery"
-          class="!w-240px"
-        />
-      </el-form-item> -->
       <el-form-item label="客户姓名" prop="customerName">
         <el-input
           v-model="queryParams.customerName"
@@ -53,15 +35,6 @@
           class="!w-240px"
         />
       </el-form-item>
-      <!-- <el-form-item label="客户手机号" prop="customerMobile">
-        <el-input
-          v-model="queryParams.customerMobile"
-          placeholder="请输入客户手机号"
-          clearable
-          @keyup.enter="handleQuery"
-          class="!w-240px"
-        />
-      </el-form-item> -->
       <el-form-item label="合同状态" prop="memberContractStatus">
         <el-select
           v-model="queryParams.memberContractStatus"
@@ -75,17 +48,6 @@
             :label="dict.label"
             :value="dict.value"
           />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="精选排序" prop="startSort">
-        <el-select
-          v-model="queryParams.startSort"
-          placeholder="请选择精选排序"
-          clearable
-          class="!w-240px"
-        >
-          <el-option label="否" :value="0" />
-          <el-option label="是" :value="1" />
         </el-select>
       </el-form-item>
       <el-form-item label="创建时间" prop="createTime">
@@ -130,9 +92,7 @@
       <el-table-column label="合同编号" align="center" prop="contractNo" width="170" fixed />
       <el-table-column label="合同名称" align="center" prop="contractName" width="170" fixed />
       <el-table-column label="客户姓名" align="center" prop="customerName" width="100" fixed />
-      <!-- <el-table-column label="客户电话" align="center" prop="customerMobile" width="120" fixed /> -->
-      <el-table-column label="设计师姓名" align="center" prop="designerName" width="100" fixed />
-      <!-- <el-table-column label="设计师电话" align="center" prop="designerMobile" width="120" fixed /> -->
+       <el-table-column label="客户电话" align="center" prop="customerMobile" width="120" fixed />
       <el-table-column
         label="合同状态"
         align="center"
@@ -146,17 +106,17 @@
       </el-table-column>
 
       <el-table-column label="小区名称" align="center" prop="communityName" width="150" />
-      <!-- <el-table-column label="工程地址" align="center" prop="projectAddress" width="150" /> -->
+       <el-table-column label="工程地址" align="center" prop="projectAddress" width="150" />
       <el-table-column label="合同总金额" align="center" prop="totalAmount" width="100">
         <template #default="{ row }">
           <span>{{ row.totalAmount }} 元</span>
         </template>
       </el-table-column>
-      <!-- <el-table-column label="已支付金额" align="center" prop="paidAmount" width="100">
+      <el-table-column label="已支付金额" align="center" prop="paidAmount" width="100">
         <template #default="{ row }">
           <span>{{ row.paidAmount }} 元</span>
         </template>
-      </el-table-column> -->
+      </el-table-column>
       <el-table-column
         label="审核时间"
         width="180px"
@@ -173,18 +133,8 @@
         :formatter="dateFormatter"
         width="180px"
       />
-      <el-table-column label="精选排序号" align="center" prop="startSort" width="100" />
-      <el-table-column label="操作" align="center" min-width="150px" fixed="right">
+      <el-table-column label="操作" align="center" min-width="100px" fixed="right">
         <template #default="scope">
-          <el-button
-            link
-            type="danger"
-            v-if="scope.row.memberContractStatus === 0"
-            @click="handleDetail('check', scope.row.id)"
-            v-hasPermi="['member:contract:check']"
-          >
-            审核
-          </el-button>
           <el-button
             link
             type="primary"
@@ -193,15 +143,6 @@
             v-hasPermi="['member:contract:detail']"
           >
             详情
-          </el-button>
-          <el-button
-            v-hasPermi="['member:contract:recommend']"
-            link
-            type="success"
-            v-if="[1, 3].includes(scope.row.memberContractStatus)"
-            @click="handleSort(scope.row)"
-          >
-            精选排序
           </el-button>
         </template>
       </el-table-column>
@@ -215,15 +156,14 @@
     />
   </ContentWrap>
 
-  <!-- 合同排序弹窗 -->
-  <ContractSortDialog ref="sortDialogRef" @success="getList" />
 </template>
 
 <script setup lang="ts">
 import { dateFormatter } from '@/utils/formatTime'
-import { ContractApi, ContractVO } from '@/api/member/contract'
+import {  ContractVO } from '@/api/member/contract'
 import ContractSortDialog from '../../contract/components/ContractSortDialog.vue'
 import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
+import { getDesignerContractList } from "@/api/member/view/designer";
 
 /** 用户合同 列表 */
 defineOptions({ name: 'DesignerInfoContract' })
@@ -231,12 +171,11 @@ const { push } = useRouter()
 const loading = ref(true) // 列表的加载中
 const list = ref<ContractVO[]>([]) // 列表的数据
 const total = ref(0) // 列表的总页数
+const route = useRoute()
 const queryParams = reactive({
   pageNo: 1,
   pageSize: 10,
   startSort: undefined,
-  designerName: undefined,
-  designerMobile: undefined,
   customerName: undefined,
   contractNo: undefined,
   contractName: undefined,
@@ -253,7 +192,10 @@ const sortDialogRef = ref() // 排序弹窗引用
 const getList = async () => {
   loading.value = true
   try {
-    const data = await ContractApi.getContractPage(queryParams)
+    const data = await getDesignerContractList({
+      ...queryParams,
+      designerId: route.params.id,
+    })
     list.value = data.list
     total.value = data.total
   } finally {

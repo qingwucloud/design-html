@@ -119,19 +119,6 @@
         :formatter="dateFormatter"
         width="180px"
       />
-      <el-table-column label="操作" align="center" min-width="120px" fixed="right">
-        <template #default="{ row }">
-          <el-button
-            v-if="[0, 1].includes(row.designerAppointmentStatus)"
-            link
-            type="primary"
-            @click="openForm(row)"
-            v-hasPermi="['member:designer-appointment:assigned']"
-          >
-            指派
-          </el-button>
-        </template>
-      </el-table-column>
     </el-table>
     <!-- 分页 -->
     <Pagination
@@ -142,15 +129,12 @@
     />
   </ContentWrap>
 
-  <!-- 表单弹窗：添加/修改 -->
-  <DesignerAppointmentForm ref="formRef" @success="getList" />
 </template>
 
 <script setup lang="ts">
 import { dateFormatter } from '@/utils/formatTime'
-import { DesignerAppointmentApi, DesignerAppointmentVO } from '@/api/member/designerappointment'
-import DesignerAppointmentForm from '@/views/member/designerAppointment/DesignerAppointmentForm.vue'
 import { getIntDictOptions, DICT_TYPE } from '@/utils/dict'
+import { getUserAppointmentList } from "@/api/member/view/user";
 
 /** 客户预约设计师 列表 */
 defineOptions({ name: 'UserInfoAppointment' })
@@ -162,7 +146,6 @@ const queryParams = reactive({
   userMobile: undefined,
   designerName: undefined,
   pageSize: 10,
-  userId: undefined,
   designerId: undefined,
   assignedDesignerName: undefined,
   designerAppointmentStatus: undefined,
@@ -173,12 +156,15 @@ const queryParams = reactive({
   checkTime: []
 })
 const queryFormRef = ref() // 搜索的表单
-
+const route = useRoute()
 /** 查询列表 */
 const getList = async () => {
   loading.value = true
   try {
-    const data = await DesignerAppointmentApi.getDesignerAppointmentPage(queryParams)
+    const data = await getUserAppointmentList({
+      ...queryParams,
+      customerId:route.params.id
+    })
     list.value = data.list
     total.value = data.total
   } finally {

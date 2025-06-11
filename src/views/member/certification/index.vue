@@ -248,7 +248,6 @@ import CertificationForm from './CertificationForm.vue'
 import ScoreForm from './ScoreForm.vue'
 import { getIntDictOptions, DICT_TYPE } from '@/utils/dict'
 import { checkPermi } from '@/utils/permission'
-import { PortfolioApi } from '@/api/member/portfolio'
 
 /** 设计师认证 列表 */
 defineOptions({ name: 'MemberCertification' })

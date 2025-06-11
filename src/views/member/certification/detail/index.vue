@@ -48,24 +48,26 @@
         <CardTitle title="数据视图" />
       </template>
       <el-tabs>
-        <el-tab-pane label="团队列表" lazy>
-          <TeamList :bind-user-id="id" />
+        <el-tab-pane label="团队列表" lazy  v-if="checkPermi(['member:designerView:inviteList'])">
+          <TeamList/>
         </el-tab-pane>
-        <el-tab-pane label="合同列表" lazy>
-          <ContractList :bind-user-id="id" />
+        <el-tab-pane label="合同列表" lazy v-if="checkPermi(['member:designerView:contractList'])">
+          <ContractList  />
         </el-tab-pane>
-        <el-tab-pane label="预约" lazy>
-          <AppointmentList :bind-user-id="id" />
+        <el-tab-pane label="预约" lazy v-if="checkPermi(['member:designerView:appointmentList'])">
+          <AppointmentList  />
         </el-tab-pane>
-
-        <el-tab-pane label="作品集" lazy>
-          <DesignList :bind-user-id="id" />
+        <el-tab-pane label="作品集" lazy v-if="checkPermi(['member:designerView:portfolioList'])">
+          <DesignList  />
         </el-tab-pane>
-        <el-tab-pane label="评论" lazy >
-          <UserCommentList :bind-user-id="id" />
+        <el-tab-pane label="评论" lazy v-if="checkPermi(['member:designerView:commentList'])" >
+          <UserCommentList  />
         </el-tab-pane>
-        <el-tab-pane label="余额明细" lazy>
-          <SettlementList :bind-user-id="id" />
+        <el-tab-pane label="收入明细" lazy v-if="checkPermi(['member:designerView:incomeList'])">
+          <SettlementList  />
+        </el-tab-pane>
+        <el-tab-pane label="提现记录" lazy v-if="checkPermi(['member:designerView:withdrawalList'])">
+          <PayoutList  />
         </el-tab-pane>
       </el-tabs>
     </el-card>
@@ -90,7 +92,6 @@ import TeamList from './TeamList.vue'
 import ContractList from './ContractList.vue'
 import AppointmentList from './AppointmentList.vue'
 import SettlementList from './SettlementList.vue'
-import UserBrokerageList from '@/views/member/user/detail/UserBrokerageList.vue'
 import UserWallet from '@/views/member/certification/detail/UserWallet.vue'
 import { checkPermi } from '@/utils/permission'
 defineOptions({ name: 'MemberDetail' })

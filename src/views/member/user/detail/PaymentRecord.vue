@@ -120,18 +120,8 @@
             link
             type="primary"
             @click="openForm('detail', row)"
-            v-hasPermi="['member:payment-record:query']"
           >
             详情
-          </el-button>
-          <el-button
-            link
-            type="success"
-            v-if="row.paymentStatus == 1"
-            @click="openForm('audit', row)"
-            v-hasPermi="['member:payment-record:checkUserOrder']"
-          >
-            审核
           </el-button>
         </template>
       </el-table-column>
@@ -151,8 +141,8 @@
 <script setup>
 import { dateFormatter } from '@/utils/formatTime'
 import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
-import { PaymentRecordApi } from '@/api/member/paymentrecord'
 import CustomerPaymentForm from '@/views/member/customerPayment/CustomerPaymentForm.vue'
+import { getUserPaymentRecordList } from "@/api/member/view/user";
 
 const tableRef = ref() // 表格的引用
 /** 设计师发起支付记录 列表 */
@@ -179,15 +169,16 @@ const queryParams = reactive({
   payTime: []
 })
 const queryFormRef = ref() // 搜索的表单
-
+const route = useRoute()
 /** 查询列表 */
 const getList = async () => {
   loading.value = true
 
   try {
-    const data = await PaymentRecordApi.getPaymentRecordPage({
+    const data = await getUserPaymentRecordList({
       ...queryParams,
-      type: 2
+      type: 2,
+      customerId:route.params.id
     })
     list.value = data.list
     total.value = data.total

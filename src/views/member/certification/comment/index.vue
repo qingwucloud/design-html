@@ -60,7 +60,7 @@
   <!-- 列表 -->
   <ContentWrap>
     <el-table v-loading="loading" :data="list" :stripe="true" :show-overflow-tooltip="false">
-      <el-table-column label="编号" align="center" prop="id" />
+      <el-table-column label="编号" align="center" prop="id" width="100"/>
       <el-table-column label="合同名称" align="center" prop="contractName">
         <template #default="scope">
           <span class="cursor-pointer">
@@ -101,15 +101,18 @@
         :formatter="dateFormatter"
         width="180"
       />
-      <el-table-column label="是否展示" align="center" width="80px">
+      <el-table-column label="是否展示" align="center" width="80px"  >
         <template #default="scope">
           <el-switch
+            v-if="checkPermi(['customer:comment:update'])"
             v-model="scope.row.visible"
             :active-value="true"
             :inactive-value="false"
-            v-hasPermi="['customer:comment:update']"
             @change="handleVisibleChange(scope.row)"
           />
+          <div v-else>
+            {{scope.row.visible? '是' : '否'}}
+          </div>
         </template>
       </el-table-column>
     </el-table>
@@ -130,14 +133,11 @@
 import { dateFormatter } from '@/utils/formatTime'
 import * as CommentApi from '@/api/member/comment'
 import CommentForm from './CommentForm.vue'
+import { getDesignerCommentList } from "@/api/member/view/designer";
+import { checkPermi } from "@/utils/permission";
 
 defineOptions({ name: 'DesignerComment' })
-const props = defineProps({
-  bindUserId: {
-    type: Number,
-    default: undefined
-  }
-})
+
 const message = useMessage() // 消息弹窗
 
 const loading = ref(true) // 列表的加载中
@@ -151,16 +151,16 @@ const queryParams = reactive({
   createTime: []
 })
 const queryFormRef = ref() // 搜索的表单
-
+const route = useRoute()
 /** 查询列表 */
 const getList = async () => {
   loading.value = true
   try {
     const params = {
       ...queryParams,
-      designerId: props.bindUserId
+      designerId: route.params.id
     }
-    const data = await CommentApi.getCommentPage(params)
+    const data = await getDesignerCommentList(params)
     // visible 如果为 null，会导致刷新的时候触发 e-switch 的 change 事件
     data.list.forEach((item) => {
       if (!item.visible) {

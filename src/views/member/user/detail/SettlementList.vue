@@ -146,6 +146,7 @@ import { DICT_TYPE } from '@/utils/dict'
 import { ElMessage } from 'element-plus'
 import { useMitt } from '@/hooks/web/useMitt'
 import { getDesignerIncomeList } from "@/api/member/view/designer";
+import { getUserIncomeList } from "@/api/member/view/user";
 
 // 获取事件总线
 const { emitter } = useMitt()
@@ -184,7 +185,7 @@ const rules = {
 const getList = async () => {
   loading.value = true
   try {
-    const data = await getDesignerIncomeList({
+    const data = await getUserIncomeList({
       ...queryParams,
       userId: Number(route.params.id)
     })

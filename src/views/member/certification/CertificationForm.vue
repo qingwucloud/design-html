@@ -131,6 +131,11 @@
                 show-progress
                 fit="cover"
               />
+              <el-button
+                v-if="!formData.certificates.length"
+                type="primary"
+                text
+                >暂无证书</el-button>
             </div>
           </el-form-item>
         </el-col>
@@ -265,7 +270,7 @@ const open = async (id) => {
   let data = await CertificationApi.getCertification(id)
   formData.value = {
     ...data,
-    certificates: data.certificates?.split(',') || [],
+    certificates: data.certificates ? data.certificates.split(',') : [],
     designerStyleType: data.designerStyleType?.split(',').map((item) => Number(item)) || [],
     certStatus: 1,
     rejectReason: ''

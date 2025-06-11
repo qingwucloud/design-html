@@ -170,7 +170,7 @@
       <el-table-column label="驳回原因" align="center" prop="rejectReason" />
       <el-table-column label="精选排序号" align="center" prop="startSort" />
       <el-table-column label="审核人" align="center" prop="checker" />
-      <el-table-column label="操作" align="center" min-width="120px">
+      <el-table-column label="操作" align="center" min-width="120px" fixed="right">
         <template #default="scope">
           <div class="flex items-center justify-center">
             <el-button

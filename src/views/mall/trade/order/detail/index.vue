@@ -1,25 +1,25 @@
 <template>
   <ContentWrap>
     <!-- 订单信息 -->
-    <el-descriptions title="订单信息">
+    <el-descriptions title="订单信息" :column="2">
       <el-descriptions-item label="订单号: ">{{ formData.no }}</el-descriptions-item>
       <el-descriptions-item label="买家: ">
         <el-button link type="primary" @click="goToUserDetail">
           {{ formData?.user?.nickname }}
         </el-button>
       </el-descriptions-item>
-      <el-descriptions-item label="订单类型: ">
-        <dict-tag :type="DICT_TYPE.TRADE_ORDER_TYPE" :value="formData.type!" />
-      </el-descriptions-item>
-      <el-descriptions-item label="订单来源: ">
-        <dict-tag :type="DICT_TYPE.TERMINAL" :value="formData.terminal!" />
-      </el-descriptions-item>
-      <el-descriptions-item label="买家留言: ">{{ formData.userRemark }}</el-descriptions-item>
-      <el-descriptions-item label="商家备注: ">{{ formData.remark }}</el-descriptions-item>
+<!--      <el-descriptions-item label="订单类型: ">-->
+<!--        <dict-tag :type="DICT_TYPE.TRADE_ORDER_TYPE" :value="formData.type!" />-->
+<!--      </el-descriptions-item>-->
+<!--      <el-descriptions-item label="订单来源: ">-->
+<!--        <dict-tag :type="DICT_TYPE.TERMINAL" :value="formData.terminal!" />-->
+<!--      </el-descriptions-item>-->
       <el-descriptions-item label="支付单号: ">{{ formData.payOrderId }}</el-descriptions-item>
       <el-descriptions-item label="付款方式: ">
         <dict-tag :type="DICT_TYPE.PAY_CHANNEL_CODE" :value="formData.payChannelCode!" />
       </el-descriptions-item>
+      <el-descriptions-item label="买家留言: " :span="2">{{ formData.userRemark }}</el-descriptions-item>
+      <el-descriptions-item label="商家备注: " :span="2">{{ formData.remark }}</el-descriptions-item>
       <!-- <el-descriptions-item v-if="formData.brokerageUser" label="推广用户: ">
         {{ formData.brokerageUser?.nickname }}
       </el-descriptions-item> -->
@@ -435,4 +435,15 @@ onMounted(async () => {
     align-items: center;
   }
 }
+//
+//:deep(.el-descriptions__content){
+//  display: inline-block;
+//  max-width: 400px !important;
+//}
+//
+//:deep(.el-descriptions__label){
+//  vertical-align: top;
+//}
+
+
 </style>

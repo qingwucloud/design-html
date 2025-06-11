@@ -18,7 +18,7 @@ import { useUserStore } from '@/store/modules/user'
 import { useUpload } from '@/components/UploadFile/src/useUpload'
 import { UploadRequestOptions } from 'element-plus/es/components/upload/src/upload'
 
-// TODO @芋艿：合并到 ProfileUser 组件中，更简洁一点
+// TODO @taosiqi：合并到 ProfileUser 组件中，更简洁一点
 defineOptions({ name: 'UserAvatar' })
 
 defineProps({

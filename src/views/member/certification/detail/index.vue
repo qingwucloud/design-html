@@ -61,7 +61,7 @@
         <el-tab-pane label="作品集" lazy>
           <DesignList :bind-user-id="id" />
         </el-tab-pane>
-        <el-tab-pane label="评论" lazy v-if="checkPermi(['customer:comment:query'])">
+        <el-tab-pane label="评论" lazy >
           <UserCommentList :bind-user-id="id" />
         </el-tab-pane>
         <el-tab-pane label="余额明细" lazy>

@@ -40,20 +40,20 @@
           <CardTitle title="数据视图" />
         </template>
         <el-tabs>
-          <el-tab-pane label="订单管理" v-if="checkPermi(['trade:order:query'])">
+          <el-tab-pane label="订单管理" >
             <UserOrderList :user-id="id" />
           </el-tab-pane>
-          <el-tab-pane label="售后管理" lazy v-if="checkPermi(['trade:after-sale:query'])">
+          <el-tab-pane label="售后管理" lazy >
             <UserAfterSaleList :user-id="id" />
           </el-tab-pane>
           <el-tab-pane
             label="预约设计师"
             lazy
-            v-if="checkPermi(['member:designer-appointment:query'])"
+
           >
             <UserAppointment :user-id="id" />
           </el-tab-pane>
-          <el-tab-pane label="合同列表" lazy v-if="checkPermi(['member:contract:query'])">
+          <el-tab-pane label="合同列表" lazy >
             <UserContract :user-id="id" />
           </el-tab-pane>
           <el-tab-pane label="合同付款" lazy>

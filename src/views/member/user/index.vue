@@ -109,7 +109,7 @@
       >
         <template #default="scope">
           <div class="flex items-center justify-center">
-            <el-button link type="primary" @click="openDetail(scope.row.id)">详情</el-button>
+            <el-button link type="primary" v-hasPermi="['member:user:detail']" @click="openDetail(scope.row.id)">详情</el-button>
             <el-button link type="warning" v-hasPermi="['member:user:update']" @click="handleCommand('handleUpdate',scope.row)">编辑</el-button>
           </div>
         </template>

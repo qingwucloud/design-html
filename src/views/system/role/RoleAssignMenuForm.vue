@@ -1,5 +1,5 @@
 <template>
-  <Dialog v-model="dialogVisible" title="菜单权限">
+  <Dialog v-model="dialogVisible" title="菜单权限" is-center>
     <el-form ref="formRef" v-loading="formLoading" :model="formData" label-width="80px">
       <el-form-item label="角色名称">
         <el-tag>{{ formData.name }}</el-tag>

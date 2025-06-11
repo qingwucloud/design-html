@@ -1,5 +1,5 @@
 <template>
-  <Dialog v-model="dialogVisible" :title="dialogTitle">
+  <Dialog v-model="dialogVisible" :title="dialogTitle" is-center>
     <el-form
       ref="formRef"
       v-loading="formLoading"

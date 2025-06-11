@@ -234,9 +234,15 @@
                   </el-dropdown-item>
                   <el-dropdown-item
                     command="handleSort"
-                    v-if="scope.row.status === 1 && checkPermi(['member:portfolio:recommend'])"
+                    v-if="scope.row.status === 1 && checkPermi(['member:portfolio:recommend']) && scope.row.sortNum==0"
                   >
                     精选排序
+                  </el-dropdown-item>
+                  <el-dropdown-item
+                    command="handleCancelSort"
+                    v-if="scope.row.status === 1 && checkPermi(['member:portfolio:recommend']) && scope.row.sortNum>0"
+                  >
+                    取消精选排序
                   </el-dropdown-item>
                   <el-dropdown-item
                     command="handleDelete"
@@ -365,6 +371,23 @@ const handleDelete = async (id: any) => {
   } catch {}
 }
 
+const handleCancelSort= async (id: any) => {
+  ElMessageBox.confirm('确定需要取消精选排序吗？', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  })
+    .then(async () => {
+      await PortfolioApi.recommendPortfolio({
+        sortNum: 0,
+        id
+      })
+      message.success('取消成功')
+      resetQuery()
+    })
+    .catch(() => {})
+  }
+
 /** 操作分发 */
 const handleCommand = (command: string, row: any) => {
   switch (command) {
@@ -376,6 +399,8 @@ const handleCommand = (command: string, row: any) => {
       break
     case 'handleDelete':
       handleDelete(row.id)
+    case 'handleCancelSort':
+      handleCancelSort(row.id)
       break
     default:
       break

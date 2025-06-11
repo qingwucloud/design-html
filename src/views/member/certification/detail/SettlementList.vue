@@ -46,9 +46,9 @@
       <el-form-item>
         <el-button @click="handleQuery"><Icon icon="ep:search" class="mr-5px" /> 搜索</el-button>
         <el-button @click="resetQuery"><Icon icon="ep:refresh" class="mr-5px" /> 重置</el-button>
-        <el-button type="primary" plain @click="openBalanceDialog">
-          <Icon icon="ep:edit" class="mr-5px" /> 余额调整
-        </el-button>
+<!--        <el-button type="primary" plain @click="openBalanceDialog">-->
+<!--          <Icon icon="ep:edit" class="mr-5px" /> 余额调整-->
+<!--        </el-button>-->
       </el-form-item>
     </el-form>
   </ContentWrap>

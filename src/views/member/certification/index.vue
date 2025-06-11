@@ -196,14 +196,20 @@
               v-if="scope.row.certStatus === 1"
               v-hasPermi="['member:certification:recommend', 'member:certification:updateScore']"
             >
-              <el-button link type="primary"> 更多 </el-button>
+              <el-button link type="primary"> 更多</el-button>
               <template #dropdown>
                 <el-dropdown-menu>
                   <el-dropdown-item
-                    v-if="checkPermi(['member:certification:recommend'])"
+                    v-if="checkPermi(['member:certification:recommend']) && scope.row.startSort == 0"
                     @click="sortOfActions(scope.row)"
                   >
                     精选排序
+                  </el-dropdown-item>
+                  <el-dropdown-item
+                    v-if="checkPermi(['member:certification:recommend']) && scope.row.startSort > 0"
+                    @click="handleCancelSort(scope.row.id)"
+                  >
+                    取消精选排序
                   </el-dropdown-item>
                   <el-dropdown-item
                     v-if="checkPermi(['member:certification:updateScore'])"
@@ -242,6 +248,8 @@ import CertificationForm from './CertificationForm.vue'
 import ScoreForm from './ScoreForm.vue'
 import { getIntDictOptions, DICT_TYPE } from '@/utils/dict'
 import { checkPermi } from '@/utils/permission'
+import { PortfolioApi } from '@/api/member/portfolio'
+
 /** 设计师认证 列表 */
 defineOptions({ name: 'MemberCertification' })
 
@@ -333,6 +341,22 @@ const sortOfActions = async (row) => {
     .catch(() => {})
 }
 
+const handleCancelSort = async (id: any) => {
+  ElMessageBox.confirm('确定需要取消精选排序吗？', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  })
+    .then(async () => {
+      await CertificationApi.recommendCertification({
+        startSort: 0,
+        id
+      })
+      message.success('取消成功')
+      resetQuery()
+    })
+    .catch(() => {})
+}
 /** 初始化 **/
 onMounted(() => {
   getList()

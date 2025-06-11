@@ -24,6 +24,8 @@ export interface ContractVO {
   checker: string // 审核人
   startTime: Date // 合同开始时间
   endTime: Date // 合同结束时间
+  caseShowAmount:number,
+  covers:string
   memberContractConfirmStatus: number // 设计合同用户确认状态 见dict_type
 }
 

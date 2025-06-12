@@ -12,12 +12,12 @@
       <el-descriptions-item label="收货人: ">
         {{ formData.order.receiverName }}
       </el-descriptions-item>
-      <!-- <el-descriptions-item label="买家留言: ">
+       <el-descriptions-item label="买家留言: ">
         {{ formData.order.userRemark }}
       </el-descriptions-item>
-      <el-descriptions-item label="订单来源: ">
-        <dict-tag :type="DICT_TYPE.TERMINAL" :value="formData.order.terminal" />
-      </el-descriptions-item> -->
+      <!-- <el-descriptions-item label="订单来源: ">
+         <dict-tag :type="DICT_TYPE.TERMINAL" :value="formData.order.terminal" />
+       </el-descriptions-item> -->
       <el-descriptions-item label="联系电话: ">
         {{ formData.order.receiverMobile }}
       </el-descriptions-item>
@@ -25,9 +25,9 @@
       <el-descriptions-item label="支付单号: ">
         {{ formData.order.payOrderId }}
       </el-descriptions-item>
-      <!-- <el-descriptions-item label="付款方式: ">
+      <el-descriptions-item label="付款方式: ">
         <dict-tag :type="DICT_TYPE.PAY_CHANNEL_CODE" :value="formData.order.payChannelCode" />
-      </el-descriptions-item> -->
+      </el-descriptions-item>
       <el-descriptions-item label="买家: ">{{ formData?.user?.nickname }}</el-descriptions-item>
     </el-descriptions>
 
@@ -54,7 +54,7 @@
         <el-image
           v-for="(item, index) in formData.applyPicUrls"
           :key="index"
-          :src="item.url"
+          :src="item"
           class="mr-10px h-60px w-60px"
           @click="imagePreview(formData.applyPicUrls)"
         />
@@ -257,7 +257,7 @@ const imagePreview = (args) => {
   const urlList = []
   if (isArray(args)) {
     args.forEach((item) => {
-      urlList.push(item.url)
+      urlList.push(item)
     })
   } else {
     urlList.push(args)
@@ -354,5 +354,11 @@ onMounted(async () => {
     justify-content: center;
     align-items: center;
   }
+
+
+}
+
+:deep(.el-descriptions__label:not(.is-bordered-label)){
+  vertical-align: top;
 }
 </style>

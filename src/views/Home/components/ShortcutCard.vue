@@ -33,19 +33,6 @@ const router = useRouter() // 路由
 const menuList = [
   { name: '会员管理', icon: 'ep:user-filled', bgColor: 'bg-red-400', routerName: 'MemberUser' },
   {
-    name: '商品管理',
-    icon: 'fluent-mdl2:product',
-    bgColor: 'bg-orange-400',
-    routerName: 'ProductSpu'
-  },
-  { name: '订单管理', icon: 'ep:list', bgColor: 'bg-yellow-500', routerName: 'TradeOrder' },
-  {
-    name: '售后管理',
-    icon: 'ri:refund-2-line',
-    bgColor: 'bg-green-600',
-    routerName: 'TradeAfterSale'
-  },
-  {
     name: '设计师管理',
     icon: 'fa-solid:project-diagram',
     bgColor: 'bg-cyan-500',
@@ -63,12 +50,26 @@ const menuList = [
     bgColor: 'bg-purple-500',
     routerName: 'DesignerAppointment'
   },
+
   {
     name: '合同管理',
     icon: 'vaadin:money-withdraw',
     bgColor: 'bg-rose-500',
     routerName: 'ContractList'
-  }
+  },
+  {
+    name: '提现管理',
+    icon: 'fluent-mdl2:product',
+    bgColor: 'bg-orange-400',
+    routerName: 'CommissionSettle'
+  },
+  { name: '订单管理', icon: 'ep:list', bgColor: 'bg-yellow-500', routerName: 'TradeOrder' },
+  {
+    name: '售后管理',
+    icon: 'ri:refund-2-line',
+    bgColor: 'bg-green-600',
+    routerName: 'TradeAfterSale'
+  },
 ]
 
 /**

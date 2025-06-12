@@ -94,6 +94,7 @@
         <!--        </el-col>-->
         <el-col :span="24">
           <el-form-item label="文章内容">
+            <div>图片太大无法上传？使用无损压缩后上传 <a target="_blank"  href="https://www.iloveimg.com/zh-cn/compress-image/compress-jpg">点击跳转压缩</a></div>
             <Editor v-model="formData.content" height="200px" />
           </el-form-item>
         </el-col>

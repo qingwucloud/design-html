@@ -5,9 +5,11 @@
       <el-col :md="6" :sm="12" :xs="24" :loading="loading">
         <ComparisonCard
           tag="今日"
-          title="新增会员"
-          :value="userComparison?.value?.registerUserCount || 0"
-          :reference="userComparison?.reference?.registerUserCount || 0"
+          title="销售额"
+          prefix="￥"
+          :decimals="2"
+          :value="fenToYuan(orderComparison?.value?.orderPayPrice || 0)"
+          :reference="fenToYuan(orderComparison?.reference?.orderPayPrice || 0)"
         />
       </el-col>
       <el-col :md="6" :sm="12" :xs="24" :loading="loading">
@@ -21,17 +23,17 @@
       <el-col :md="6" :sm="12" :xs="24" :loading="loading">
         <ComparisonCard
           tag="今日"
-          title="预约量"
-          :value="userComparison?.value?.registerUserCount || 0"
-          :reference="userComparison?.reference?.registerUserCount || 0"
+          title="订单量"
+          :value="orderComparison?.value?.orderPayCount || 0"
+          :reference="orderComparison?.reference?.orderPayCount || 0"
         />
       </el-col>
       <el-col :md="6" :sm="12" :xs="24" :loading="loading">
         <ComparisonCard
           tag="今日"
           title="新增用户"
-          :value="orderComparison?.value?.orderPayCount || 0"
-          :reference="orderComparison?.reference?.orderPayCount || 0"
+          :value="userComparison?.value?.registerUserCount || 0"
+          :reference="userComparison?.reference?.registerUserCount || 0"
         />
       </el-col>
     </el-row>
@@ -91,6 +93,7 @@ import ShortcutCard from './components/ShortcutCard.vue'
 import TradeTrendCard from './components/TradeTrendCard.vue'
 import { useUserStore } from '@/store/modules/user'
 import { checkPermi } from '@/utils/permission'
+import { fenToYuan } from "@/utils";
 // import MemberTerminalCard from '@/views/mall/statistics/member/components/MemberTerminalCard.vue'
 // import MemberFunnelCard from '@/views/mall/statistics/member/components/MemberFunnelCard.vue'
 

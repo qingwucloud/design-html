@@ -96,6 +96,7 @@ import TeamList from './TeamList.vue'
 import ContractList from './ContractList.vue'
 import AppointmentList from './AppointmentList.vue'
 import SettlementList from './SettlementList.vue'
+import PayoutList from './PayoutList.vue'
 import UserWallet from '@/views/member/certification/detail/UserWallet.vue'
 import { checkPermi } from '@/utils/permission'
 defineOptions({ name: 'MemberDetail' })

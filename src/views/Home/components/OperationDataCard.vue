@@ -34,18 +34,27 @@ const router = useRouter() // 路由
 
 /** 数据 */
 const data = reactive({
-  orderWaitePickUp: { name: '所有会员', value: 0, routerName: 'TradeOrder' },
-  rechargePrice: {
-    name: '待审核设计师',
-    value: 0,
-    routerName: 'PayWalletRecharge'
-  },
-  orderUndelivered: { name: '订单', value: 9, routerName: 'TradeOrder' },
-  orderAfterSaleApply: { name: '退款中订单', value: 4, routerName: 'TradeAfterSale' },
-  productAlertStock: { name: '库存预警', value: 0, routerName: 'ProductSpu' },
-  productForSale: { name: '上架商品', value: 0, routerName: 'ProductSpu' },
-  productInWarehouse: { name: '仓库商品', value: 0, routerName: 'ProductSpu' },
-  withdrawAuditing: { name: '待结算', value: 0, routerName: 'FullSettle' }
+  orderWaitePickUp: { name: '设计师审核', value: 0, routerName: 'MemberCertification' },
+  rechargePrice: { name: '作品集审核', value: 0, routerName: 'MemberPortfolio' },
+  productInWarehouse: { name: '预约审核', value: 0, routerName: 'DesignerAppointment' },
+  withdrawAuditing: { name: '合同审核', value: 0, routerName: 'ContractList' },
+  orderUndelivered: { name: '提现审核', value: 9, routerName: 'CommissionSettle' },
+  orderAfterSaleApply: { name: '全案结算', value: 4, routerName: 'FullSettle' },
+  productAlertStock: { name: '退款中订单', value: 0, routerName: 'TradeAfterSale' },
+  productForSale: { name: '待核销订单', value: 0, routerName: 'TradeOrder' },
+
+  // orderWaitePickUp: { name: '所有会员', value: 0, routerName: 'TradeOrder' },
+  // rechargePrice: {
+  //   name: '待审核设计师',
+  //   value: 0,
+  //   routerName: 'PayWalletRecharge'
+  // },
+  // orderUndelivered: { name: '订单', value: 9, routerName: 'TradeOrder' },
+  // orderAfterSaleApply: { name: '退款中订单', value: 4, routerName: 'TradeAfterSale' },
+  // productAlertStock: { name: '库存预警', value: 0, routerName: 'ProductSpu' },
+  // productForSale: { name: '上架商品', value: 0, routerName: 'ProductSpu' },
+  // productInWarehouse: { name: '仓库商品', value: 0, routerName: 'ProductSpu' },
+  // withdrawAuditing: { name: '待结算', value: 0, routerName: 'FullSettle' }
 })
 
 /** 查询订单数据 */
@@ -67,7 +76,6 @@ const getOrderData = async () => {
 
 /** 查询商品数据 */
 const getProductData = async () => {
-  // TODO: @taosiqi：这个接口的返回值，是不是用命名字段更好些？
   const productCount = await ProductSpuApi.getTabsCount()
   data.productForSale.value = productCount['0']
   data.productInWarehouse.value = productCount['1']
@@ -93,13 +101,13 @@ const handleClick = (routerName: string) => {
 onActivated(() => {
   getOrderData()
   getProductData()
-  getWalletRechargeData()
+  // getWalletRechargeData()
 })
 
 /** 初始化 **/
 onMounted(() => {
   getOrderData()
   getProductData()
-  getWalletRechargeData()
+  // getWalletRechargeData()
 })
 </script>

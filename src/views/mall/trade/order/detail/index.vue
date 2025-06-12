@@ -342,7 +342,7 @@ const clipboardSuccess = () => {
 const deliveryExpressList = ref([]) // 物流公司
 const expressTrackList = ref([]) // 物流详情
 const pickUpStore = ref({}) // 自提门店
-onUpdated(async () => {
+onActivated(async () => {
   await getDetail()
   // 如果配送方式为快递，则查询物流公司
   if (formData.value.deliveryType === DeliveryTypeEnum.EXPRESS.type) {
@@ -351,11 +351,11 @@ onUpdated(async () => {
       expressTrackList.value = await TradeOrderApi.getExpressTrackList(formData.value.id!)
     }
   } else if (formData.value.deliveryType === DeliveryTypeEnum.PICK_UP.type) {
-    if (formData.value.pickUpStoreId) {
-      pickUpStore.value = await DeliveryPickUpStoreApi.getDeliveryPickUpStore(
-        formData.value.pickUpStoreId
-      )
-    }
+    // if (formData.value.pickUpStoreId) {
+    //   pickUpStore.value = await DeliveryPickUpStoreApi.getDeliveryPickUpStore(
+    //     formData.value.pickUpStoreId
+    //   )
+    // }
   }
 })
 </script>

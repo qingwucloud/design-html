@@ -48,26 +48,30 @@
         <CardTitle title="数据视图" />
       </template>
       <el-tabs>
-        <el-tab-pane label="团队列表" lazy  v-if="checkPermi(['member:designerView:inviteList'])">
-          <TeamList/>
+        <el-tab-pane label="团队列表" lazy v-if="checkPermi(['member:designerView:inviteList'])">
+          <TeamList />
         </el-tab-pane>
         <el-tab-pane label="合同列表" lazy v-if="checkPermi(['member:designerView:contractList'])">
-          <ContractList  />
+          <ContractList />
         </el-tab-pane>
         <el-tab-pane label="预约" lazy v-if="checkPermi(['member:designerView:appointmentList'])">
-          <AppointmentList  />
+          <AppointmentList />
         </el-tab-pane>
         <el-tab-pane label="作品集" lazy v-if="checkPermi(['member:designerView:portfolioList'])">
-          <DesignList  />
+          <DesignList />
         </el-tab-pane>
-        <el-tab-pane label="评论" lazy v-if="checkPermi(['member:designerView:commentList'])" >
-          <UserCommentList  />
+        <el-tab-pane label="评论" lazy v-if="checkPermi(['member:designerView:commentList'])">
+          <UserCommentList />
         </el-tab-pane>
         <el-tab-pane label="收入明细" lazy v-if="checkPermi(['member:designerView:incomeList'])">
-          <SettlementList  />
+          <SettlementList />
         </el-tab-pane>
-        <el-tab-pane label="提现记录" lazy v-if="checkPermi(['member:designerView:withdrawalList'])">
-          <PayoutList  />
+        <el-tab-pane
+          label="提现记录"
+          lazy
+          v-if="checkPermi(['member:designerView:withdrawalList'])"
+        >
+          <PayoutList />
         </el-tab-pane>
       </el-tabs>
     </el-card>
@@ -86,7 +90,7 @@ import { CardTitle } from '@/components/Card/index'
 import { ElMessage } from 'element-plus'
 import { CertificationApi } from '@/api/member/certification'
 import DesignerAccountInfo from '@/views/member/certification/detail/DesignerAccountInfo.vue'
-import UserCommentList from '../comment/index.vue'
+import UserCommentList from './Comment.vue'
 import DesignList from './DesignList.vue'
 import TeamList from './TeamList.vue'
 import ContractList from './ContractList.vue'

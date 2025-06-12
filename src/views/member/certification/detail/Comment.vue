@@ -60,7 +60,7 @@
   <!-- 列表 -->
   <ContentWrap>
     <el-table v-loading="loading" :data="list" :stripe="true" :show-overflow-tooltip="false">
-      <el-table-column label="编号" align="center" prop="id" width="100" />
+      <el-table-column label="编号" align="center" prop="id" width="100"/>
       <el-table-column label="合同名称" align="center" prop="contractName">
         <template #default="scope">
           <span class="cursor-pointer">
@@ -101,7 +101,7 @@
         :formatter="dateFormatter"
         width="180"
       />
-      <el-table-column label="是否展示" align="center" width="80px">
+      <el-table-column label="是否展示" align="center" width="80px"  >
         <template #default="scope">
           <el-switch
             v-if="checkPermi(['customer:comment:update'])"
@@ -111,7 +111,7 @@
             @change="handleVisibleChange(scope.row)"
           />
           <div v-else>
-            {{ scope.row.visible ? '是' : '否' }}
+            {{scope.row.visible? '是' : '否'}}
           </div>
         </template>
       </el-table-column>
@@ -132,8 +132,9 @@
 <script setup lang="ts">
 import { dateFormatter } from '@/utils/formatTime'
 import * as CommentApi from '@/api/member/comment'
-import CommentForm from './CommentForm.vue'
-import { checkPermi } from '@/utils/permission'
+import CommentForm from '../comment/CommentForm.vue'
+import { getDesignerCommentList } from "@/api/member/view/designer";
+import { checkPermi } from "@/utils/permission";
 
 defineOptions({ name: 'DesignerComment' })
 
@@ -150,11 +151,16 @@ const queryParams = reactive({
   createTime: []
 })
 const queryFormRef = ref() // 搜索的表单
+const route = useRoute()
 /** 查询列表 */
 const getList = async () => {
   loading.value = true
   try {
-    const data = await CommentApi.getCommentPage(queryParams)
+    const params = {
+      ...queryParams,
+      designerId: route.params.id
+    }
+    const data = await getDesignerCommentList(params)
     // visible 如果为 null，会导致刷新的时候触发 e-switch 的 change 事件
     data.list.forEach((item) => {
       if (!item.visible) {

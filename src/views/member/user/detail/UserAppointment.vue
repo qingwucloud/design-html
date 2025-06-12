@@ -128,18 +128,17 @@
       @pagination="getList"
     />
   </ContentWrap>
-
 </template>
 
 <script setup lang="ts">
 import { dateFormatter } from '@/utils/formatTime'
 import { getIntDictOptions, DICT_TYPE } from '@/utils/dict'
-import { getUserAppointmentList } from "@/api/member/view/user";
+import { getUserAppointmentList } from '@/api/member/view/user'
 
 /** 客户预约设计师 列表 */
 defineOptions({ name: 'UserInfoAppointment' })
 const loading = ref(true) // 列表的加载中
-const list = ref<DesignerAppointmentVO[]>([]) // 列表的数据
+const list = ref<any[]>([]) // 列表的数据
 const total = ref(0) // 列表的总页数
 const queryParams = reactive({
   pageNo: 1,
@@ -163,7 +162,7 @@ const getList = async () => {
   try {
     const data = await getUserAppointmentList({
       ...queryParams,
-      customerId:route.params.id
+      customerId: route.params.id
     })
     list.value = data.list
     total.value = data.total

@@ -204,10 +204,10 @@
             精选排序
           </el-button>
           <el-button
-            v-hasPermi="['member:contract:recommend'] "
+            v-hasPermi="['member:contract:recommend']"
             link
             type="success"
-            v-if="[1, 3].includes(scope.row.memberContractStatus) &&  scope.row.startSort > 0"
+            v-if="[1, 3].includes(scope.row.memberContractStatus) && scope.row.startSort > 0"
             @click="handleCancelSort(scope.row)"
           >
             取消精选排序
@@ -233,7 +233,7 @@ import { dateFormatter } from '@/utils/formatTime'
 import { ContractApi, ContractVO } from '@/api/member/contract'
 import ContractSortDialog from './components/ContractSortDialog.vue'
 import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
-import { ElMessageBox } from "element-plus";
+import { ElMessageBox } from 'element-plus'
 
 /** 用户合同 列表 */
 defineOptions({ name: 'Contract' })
@@ -256,7 +256,7 @@ const queryParams = reactive({
   checkTime: [],
   memberContractStatus: undefined
 })
-const message=useMessage()
+const message = useMessage()
 const queryFormRef = ref() // 搜索的表单
 const sortDialogRef = ref() // 排序弹窗引用
 
@@ -305,7 +305,7 @@ const handleCancelSort = async (row: ContractVO) => {
         startSort: 0,
         covers: row.covers,
         caseShowAmount: row.caseShowAmount,
-        id:row.id
+        id: row.id
       })
       message.success('取消成功')
       resetQuery()

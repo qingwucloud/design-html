@@ -116,7 +116,7 @@
           <el-button link type="primary" @click="openForm('detail', row)"> 详情 </el-button>
           <el-button
             link
-            type="success"
+            type="danger"
             v-if="row.checkStatus === 0"
             @click="openForm('settlement', row)"
             v-hasPermi="['member:commission:checkWithdrawal']"

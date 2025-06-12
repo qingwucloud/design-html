@@ -161,7 +161,7 @@
           </el-button>
           <el-button
             link
-            type="success"
+            type="danger"
             v-if="row.settlementStatus == 0"
             @click="openForm('settlement', row)"
             v-hasPermi="['member:payment-record:checkFullSettlement']"

@@ -1,6 +1,4 @@
 <template>
-
-
   <ContentWrap>
     <!-- 搜索工作栏 -->
     <el-form
@@ -73,15 +71,21 @@
       @selection-change="handleSelectionChange"
     >
       <el-table-column type="selection" width="55" />
-      <el-table-column align="center" label="编号" prop="id" />
-      <el-table-column align="center" label="头像" prop="avatar" >
+      <el-table-column align="center" label="编号" prop="id" width="80" />
+      <el-table-column align="center" label="头像" prop="avatar">
         <template #default="scope">
-          <img :src="scope.row.avatar" style="width: 40px" />
+          <img
+            :src="
+              scope.row.avatar ||
+              'https://80du-design.oss-cn-shenzhen.aliyuncs.com/static/avatar.png'
+            "
+            style="width: 40px"
+          />
         </template>
       </el-table-column>
-      <el-table-column align="center" label="手机号" prop="mobile"  />
+      <el-table-column align="center" label="手机号" prop="mobile" />
       <el-table-column align="center" label="昵称" prop="nickname" />
-      <el-table-column align="center" label="状态" prop="status" >
+      <el-table-column align="center" label="状态" prop="status">
         <template #default="scope">
           <dict-tag :type="DICT_TYPE.COMMON_STATUS" :value="scope.row.status" />
         </template>
@@ -91,14 +95,13 @@
         align="center"
         label="登录时间"
         prop="loginDate"
-        width="180px"
       />
       <el-table-column
         :formatter="dateFormatter"
         align="center"
         label="注册时间"
         prop="createTime"
-        width="180px"
+
       />
       <el-table-column
         :show-overflow-tooltip="false"
@@ -109,8 +112,20 @@
       >
         <template #default="scope">
           <div class="flex items-center justify-center">
-            <el-button link type="primary" v-hasPermi="['member:user:detail']" @click="openDetail(scope.row.id)">详情</el-button>
-            <el-button link type="warning" v-hasPermi="['member:user:update']" @click="handleCommand('handleUpdate',scope.row)">编辑</el-button>
+            <el-button
+              link
+              type="primary"
+              v-hasPermi="['member:user:detail']"
+              @click="openDetail(scope.row.id)"
+              >详情</el-button
+            >
+            <el-button
+              link
+              type="warning"
+              v-hasPermi="['member:user:update']"
+              @click="handleCommand('handleUpdate', scope.row)"
+              >编辑</el-button
+            >
           </div>
         </template>
       </el-table-column>
@@ -192,7 +207,6 @@ const openForm = (type: string, id?: number) => {
 const handleSelectionChange = (rows: UserApi.UserVO[]) => {
   selectedIds.value = rows.map((row) => row.id)
 }
-
 
 /** 操作分发 */
 const handleCommand = (command: string, row: UserApi.UserVO) => {

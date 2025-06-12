@@ -126,7 +126,7 @@
           </el-button>
           <el-button
             link
-            type="success"
+            type="danger"
             v-if="row.paymentStatus == 1"
             @click="openForm('audit', row)"
             v-hasPermi="['member:payment-record:checkUserOrder']"

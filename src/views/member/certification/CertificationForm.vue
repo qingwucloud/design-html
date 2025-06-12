@@ -1,5 +1,5 @@
 <template>
-  <Dialog title="审核" v-model="dialogVisible" width="1080px" top="2vh">
+  <Dialog title="审核" v-model="dialogVisible" width="1080px" is-center>
     <el-form ref="formRef" :model="formData" label-width="120px" v-loading="formLoading">
       <el-row>
         <el-col :span="12">
@@ -131,11 +131,9 @@
                 show-progress
                 fit="cover"
               />
-              <el-button
-                v-if="!formData.certificates.length"
-                type="primary"
-                text
-                >暂无证书</el-button>
+              <el-button v-if="!formData.certificates.length" type="primary" text
+                >暂无证书</el-button
+              >
             </div>
           </el-form-item>
         </el-col>

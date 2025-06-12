@@ -196,7 +196,7 @@
             <!-- 待审核状态显示审核按钮 -->
             <el-button
               link
-              type="success"
+              type="danger"
               v-if="scope.row.status === 0"
               @click="openCheckForm('check', scope.row.id)"
               v-hasPermi="['member:portfolio:check']"
@@ -234,13 +234,21 @@
                   </el-dropdown-item>
                   <el-dropdown-item
                     command="handleSort"
-                    v-if="scope.row.status === 1 && checkPermi(['member:portfolio:recommend']) && scope.row.sortNum==0"
+                    v-if="
+                      scope.row.status === 1 &&
+                      checkPermi(['member:portfolio:recommend']) &&
+                      scope.row.sortNum == 0
+                    "
                   >
                     精选排序
                   </el-dropdown-item>
                   <el-dropdown-item
                     command="handleCancelSort"
-                    v-if="scope.row.status === 1 && checkPermi(['member:portfolio:recommend']) && scope.row.sortNum>0"
+                    v-if="
+                      scope.row.status === 1 &&
+                      checkPermi(['member:portfolio:recommend']) &&
+                      scope.row.sortNum > 0
+                    "
                   >
                     取消精选排序
                   </el-dropdown-item>
@@ -371,7 +379,7 @@ const handleDelete = async (id: any) => {
   } catch {}
 }
 
-const handleCancelSort= async (id: any) => {
+const handleCancelSort = async (id: any) => {
   ElMessageBox.confirm('确定需要取消精选排序吗？', '提示', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
@@ -386,7 +394,7 @@ const handleCancelSort= async (id: any) => {
       resetQuery()
     })
     .catch(() => {})
-  }
+}
 
 /** 操作分发 */
 const handleCommand = (command: string, row: any) => {

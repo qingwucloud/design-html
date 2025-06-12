@@ -124,7 +124,7 @@
           <el-button
             v-if="[0, 1].includes(row.designerAppointmentStatus)"
             link
-            type="primary"
+            type="danger"
             @click="openForm(row)"
             v-hasPermi="['member:designer-appointment:assigned']"
           >
@@ -134,7 +134,7 @@
             link
             v-hasPermi="['trade:order:query']"
             v-if="row.tradeOrderId"
-            type="success"
+            type="primary"
             @click="openDetail(row.tradeOrderId)"
           >
             订单

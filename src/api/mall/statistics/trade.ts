@@ -117,3 +117,23 @@ export const getOrderCountTrendComparison = (
 const formatDateParam = (params: TradeTrendReqVO) => {
   return { times: [formatDate(params.times[0]), formatDate(params.times[1])] } as TradeTrendReqVO
 }
+
+
+
+
+// 运营数据统计
+export const getOperationalCount = async () => {
+  return await request.get<any>({ url: `/statistics/member/operational-count` })
+}
+
+
+// 获得用户数量对照
+export const getuserCountComparison = async () => {
+  return await request.get<any>({ url: `/statistics/member/user-count-comparison` })
+}
+
+
+// 业务数据统计
+export const getBusinessCount = async (type:string) => {
+  return await request.get<any>({ url: `/statistics/member/business-count?type=${type}` })
+}

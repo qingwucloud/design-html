@@ -7,7 +7,7 @@
       <div
         v-for="menu in menuList"
         :key="menu.name"
-        class="h-20 w-20% flex flex-col cursor-pointer items-center justify-center gap-2"
+        class="h-20 w-26% flex flex-col cursor-pointer items-center justify-center gap-2"
         @click="handleMenuClick(menu.routerName)"
       >
         <div
@@ -63,13 +63,13 @@ const menuList = [
     bgColor: 'bg-orange-400',
     routerName: 'CommissionSettle'
   },
-  { name: '订单管理', icon: 'ep:list', bgColor: 'bg-yellow-500', routerName: 'TradeOrder' },
-  {
-    name: '售后管理',
-    icon: 'ri:refund-2-line',
-    bgColor: 'bg-green-600',
-    routerName: 'TradeAfterSale'
-  },
+  // { name: '订单管理', icon: 'ep:list', bgColor: 'bg-yellow-500', routerName: 'TradeOrder' },
+  // {
+  //   name: '售后管理',
+  //   icon: 'ri:refund-2-line',
+  //   bgColor: 'bg-green-600',
+  //   routerName: 'TradeAfterSale'
+  // },
 ]
 
 /**

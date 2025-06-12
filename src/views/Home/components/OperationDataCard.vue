@@ -11,9 +11,7 @@
         @click="handleClick(item.routerName)"
       >
         <CountTo
-          :decimals="item.decimals"
           :end-val="item.value"
-          :prefix="item.prefix"
           class="text-3xl"
         />
         <span class="text-center">{{ item.name }}</span>
@@ -22,10 +20,8 @@
   </el-card>
 </template>
 <script lang="ts" setup>
-import * as ProductSpuApi from '@/api/mall/product/spu'
-import * as TradeStatisticsApi from '@/api/mall/statistics/trade'
-import * as PayStatisticsApi from '@/api/mall/statistics/pay'
 import { CardTitle } from '@/components/Card'
+import { getOperationalCount } from "@/api/mall/statistics/trade";
 
 /** 运营数据卡片 */
 defineOptions({ name: 'OperationDataCard' })
@@ -34,14 +30,14 @@ const router = useRouter() // 路由
 
 /** 数据 */
 const data = reactive({
-  orderWaitePickUp: { name: '设计师审核', value: 0, routerName: 'MemberCertification' },
-  rechargePrice: { name: '作品集审核', value: 0, routerName: 'MemberPortfolio' },
-  productInWarehouse: { name: '预约审核', value: 0, routerName: 'DesignerAppointment' },
-  withdrawAuditing: { name: '合同审核', value: 0, routerName: 'ContractList' },
-  orderUndelivered: { name: '提现审核', value: 9, routerName: 'CommissionSettle' },
-  orderAfterSaleApply: { name: '全案结算', value: 4, routerName: 'FullSettle' },
-  productAlertStock: { name: '退款中订单', value: 0, routerName: 'TradeAfterSale' },
-  productForSale: { name: '待核销订单', value: 0, routerName: 'TradeOrder' },
+  designerCheckCount: { name: '设计师待审核', value: 0, routerName: 'MemberCertification' },
+  portfolioCheckCount: { name: '作品集待审核', value: 0, routerName: 'MemberPortfolio' },
+  appointmentCheckCount: { name: '预约待指派', value: 0, routerName: 'DesignerAppointment' },
+  contractCheckCount: { name: '合同待审核', value: 0, routerName: 'ContractList' },
+  customerPaidCheckCount: { name: '客户付款待审核', value: 9, routerName: 'CustomerPayment' },
+  fullSettlementCheckCount: { name: '全案结算待审核', value: 4, routerName: 'FullSettle' },
+  withdrawCheckCount: { name: '提现待审核', value: 0, routerName: 'CommissionSettle' },
+  pickUpCount: { name: '待核销订单', value: 0, routerName: 'TradeOrder' },
 
   // orderWaitePickUp: { name: '所有会员', value: 0, routerName: 'TradeOrder' },
   // rechargePrice: {
@@ -59,34 +55,48 @@ const data = reactive({
 
 /** 查询订单数据 */
 const getOrderData = async () => {
-  const orderCount = await TradeStatisticsApi.getOrderCount()
-  if (orderCount.undelivered != null) {
-    data.orderUndelivered.value = orderCount.undelivered
+  const orderCount:any = await getOperationalCount()
+  if (orderCount.designerCheckCount != null) {
+    data.designerCheckCount.value = orderCount.designerCheckCount
   }
-  if (orderCount.afterSaleApply != null) {
-    data.orderAfterSaleApply.value = orderCount.afterSaleApply
+  if (orderCount.portfolioCheckCount != null) {
+    data.portfolioCheckCount.value = orderCount.portfolioCheckCount
   }
-  if (orderCount.pickUp != null) {
-    data.orderWaitePickUp.value = orderCount.pickUp
+  if (orderCount.appointmentCheckCount != null) {
+    data.appointmentCheckCount.value = orderCount.appointmentCheckCount
   }
-  if (orderCount.auditingWithdraw != null) {
-    data.withdrawAuditing.value = orderCount.auditingWithdraw
+  if (orderCount.contractCheckCount != null) {
+    data.contractCheckCount.value = orderCount.contractCheckCount
+  }
+
+
+  if (orderCount.customerPaidCheckCount != null) {
+    data.customerPaidCheckCount.value = orderCount.customerPaidCheckCount
+  }
+  if (orderCount.fullSettlementCheckCount != null) {
+    data.fullSettlementCheckCount.value = orderCount.fullSettlementCheckCount
+  }
+  if (orderCount.withdrawCheckCount != null) {
+    data.withdrawCheckCount.value = orderCount.withdrawCheckCount
+  }
+  if (orderCount.pickUpCount != null) {
+    data.pickUpCount.value = orderCount.pickUpCount
   }
 }
 
 /** 查询商品数据 */
 const getProductData = async () => {
-  const productCount = await ProductSpuApi.getTabsCount()
-  data.productForSale.value = productCount['0']
-  data.productInWarehouse.value = productCount['1']
-  data.productAlertStock.value = productCount['3']
+  // const productCount = await ProductSpuApi.getTabsCount()
+  // data.productForSale.value = productCount['0']
+  // data.productInWarehouse.value = productCount['1']
+  // data.productAlertStock.value = productCount['3']
 }
 
 /** 查询钱包充值数据 */
-const getWalletRechargeData = async () => {
-  const paySummary = await PayStatisticsApi.getWalletRechargePrice()
-  data.rechargePrice.value = paySummary.rechargePrice
-}
+// const getWalletRechargeData = async () => {
+//   const paySummary = await PayStatisticsApi.getWalletRechargePrice()
+//   data.rechargePrice.value = paySummary.rechargePrice
+// }
 
 /**
  * 跳转到对应页面
@@ -100,7 +110,7 @@ const handleClick = (routerName: string) => {
 /** 激活时 */
 onActivated(() => {
   getOrderData()
-  getProductData()
+  // getProductData()
   // getWalletRechargeData()
 })
 

@@ -13,7 +13,7 @@
       <el-col :md="6" :sm="12" :xs="24" :loading="loading">
         <ComparisonCard
           tag="今日"
-          title="新增设计师"
+          title="用户访问量"
           :value="userComparison?.value?.visitUserCount || 0"
           :reference="userComparison?.reference?.visitUserCount || 0"
         />
@@ -29,7 +29,7 @@
       <el-col :md="6" :sm="12" :xs="24" :loading="loading">
         <ComparisonCard
           tag="今日"
-          title="新增合同"
+          title="新增用户"
           :value="orderComparison?.value?.orderPayCount || 0"
           :reference="orderComparison?.reference?.orderPayCount || 0"
         />

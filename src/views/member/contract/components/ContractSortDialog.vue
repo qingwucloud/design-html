@@ -8,7 +8,7 @@
           :precision="0"
           placeholder="请输入排序值"
         />
-        <div class="form-tips ml-10px">排序值最大的8个会显示在小程序首页</div>
+        <div class="form-tips ml-10px">排序值最大的8个会显示在小程序首页，数字越大排的越靠前</div>
       </el-form-item>
 
       <el-form-item label="合同展示金额" prop="caseShowAmount">

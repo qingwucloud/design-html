@@ -174,44 +174,52 @@
         width="180px"
       />
       <el-table-column label="精选排序号" align="center" prop="startSort" width="100" />
-      <el-table-column label="操作" align="center" min-width="180px" fixed="right">
+      <el-table-column label="操作" align="center" min-width="120px" fixed="right">
         <template #default="scope">
-          <el-button
-            link
-            type="danger"
-            v-if="scope.row.memberContractStatus === 0"
-            @click="handleDetail('check', scope.row.id)"
-            v-hasPermi="['member:contract:check']"
-          >
-            审核
-          </el-button>
-          <el-button
-            link
-            type="primary"
-            v-if="scope.row.memberContractStatus !== 0"
-            @click="handleDetail('detail', scope.row.id)"
-            v-hasPermi="['member:contract:detail']"
-          >
-            详情
-          </el-button>
-          <el-button
-            v-hasPermi="['member:contract:recommend']"
-            link
-            type="success"
-            v-if="[1, 3].includes(scope.row.memberContractStatus) && scope.row.startSort == 0"
-            @click="handleSort(scope.row)"
-          >
-            精选排序
-          </el-button>
-          <el-button
-            v-hasPermi="['member:contract:recommend']"
-            link
-            type="success"
-            v-if="[1, 3].includes(scope.row.memberContractStatus) && scope.row.startSort > 0"
-            @click="handleCancelSort(scope.row)"
-          >
-            取消精选排序
-          </el-button>
+          <div class="flex items-center justify-center">
+            <!-- 待审核状态显示审核按钮 -->
+            <el-button
+              link
+              type="danger"
+              v-if="scope.row.memberContractStatus === 0"
+              @click="handleDetail('check', scope.row.id)"
+              v-hasPermi="['member:contract:check']"
+            >
+              审核
+            </el-button>
+
+            <!-- 已审核状态显示详情按钮 -->
+            <el-button
+              link
+              type="primary"
+              v-if="scope.row.memberContractStatus !== 0"
+              @click="handleDetail('detail', scope.row.id)"
+              v-hasPermi="['member:contract:detail']"
+            >
+              详情
+            </el-button>
+
+            <!-- 更多操作下拉菜单 -->
+            <el-dropdown
+              v-if="
+                [1, 3].includes(scope.row.memberContractStatus) &&
+                checkPermi(['member:contract:recommend'])
+              "
+              @command="(command) => handleCommand(command, scope.row)"
+            >
+              <el-button link type="primary"> 更多</el-button>
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item command="handleSort" v-if="scope.row.startSort == 0">
+                    精选排序
+                  </el-dropdown-item>
+                  <el-dropdown-item command="handleCancelSort" v-if="scope.row.startSort > 0">
+                    取消精选
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
+          </div>
         </template>
       </el-table-column>
     </el-table>
@@ -234,6 +242,7 @@ import { ContractApi, ContractVO } from '@/api/member/contract'
 import ContractSortDialog from './components/ContractSortDialog.vue'
 import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
 import { ElMessageBox } from 'element-plus'
+import { checkPermi } from '@/utils/permission'
 
 /** 用户合同 列表 */
 defineOptions({ name: 'Contract' })
@@ -290,12 +299,26 @@ const handleDetail = (type: string, id?: number) => {
   push({ name: 'MemberContractDetail', params: { type, id } })
 }
 
+/** 操作分发 */
+const handleCommand = (command: string, row: ContractVO) => {
+  switch (command) {
+    case 'handleSort':
+      handleSort(row)
+      break
+    case 'handleCancelSort':
+      handleCancelSort(row)
+      break
+    default:
+      break
+  }
+}
+
 /** 精选排序操作 */
 const handleSort = (row: ContractVO) => {
   sortDialogRef.value?.open(row)
 }
 const handleCancelSort = async (row: ContractVO) => {
-  ElMessageBox.confirm('确定需要取消精选排序吗？', '提示', {
+  ElMessageBox.confirm('确定需要取消精选吗？', '提示', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
     type: 'warning'

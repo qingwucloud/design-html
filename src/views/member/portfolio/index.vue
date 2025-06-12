@@ -250,7 +250,7 @@
                       scope.row.sortNum > 0
                     "
                   >
-                    取消精选排序
+                    取消精选
                   </el-dropdown-item>
                   <el-dropdown-item
                     command="handleDelete"
@@ -341,7 +341,7 @@ const resetQuery = () => {
 }
 
 const handleSort = (row) => {
-  ElMessageBox.prompt('排序值最大的8个会显示在小程序首页', '请输入排序值', {
+  ElMessageBox.prompt('排序值最大的8个会显示在小程序首页，数字越大排的越靠前', '请输入排序值', {
     inputPattern: /^[0-9]\d*$/,
     inputType: 'number',
     inputValue: row.sortNum,
@@ -380,7 +380,7 @@ const handleDelete = async (id: any) => {
 }
 
 const handleCancelSort = async (id: any) => {
-  ElMessageBox.confirm('确定需要取消精选排序吗？', '提示', {
+  ElMessageBox.confirm('确定需要取消精选吗？', '提示', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
     type: 'warning'

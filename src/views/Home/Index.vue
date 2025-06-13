@@ -35,16 +35,17 @@
         />
       </el-col>
     </el-row>
+    <BusinessCard class="mb-4"/>
     <el-row :gutter="16" class="row">
-      <el-col :md="10">
+      <el-col :md="12">
         <!-- 运营数据 -->
         <OperationDataCard />
       </el-col>
-      <el-col :md="8">
-        <!-- 业务数据 -->
-        <BusinessCard />
-      </el-col>
-      <el-col :md="6">
+<!--      <el-col :md="8">-->
+<!--        &lt;!&ndash; 业务数据 &ndash;&gt;-->
+<!--        <BusinessCard />-->
+<!--      </el-col>-->
+      <el-col :md="12">
         <!-- 快捷入口 -->
         <ShortcutCard />
       </el-col>

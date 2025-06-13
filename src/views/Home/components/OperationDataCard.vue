@@ -3,11 +3,11 @@
     <template #header>
       <CardTitle title="运营数据" />
     </template>
-    <div class="flex flex-row flex-wrap items-center gap-8 p-4">
+    <div class="grid grid-cols-4 gap-8 p-4">
       <div
         v-for="item in data"
         :key="item.name"
-        class="h-20 w-20% flex flex-col cursor-pointer items-center justify-center gap-2"
+        class="h-20 cursor-pointer flex flex-col items-center justify-center gap-2"
         @click="handleClick(item.routerName)"
       >
         <CountTo

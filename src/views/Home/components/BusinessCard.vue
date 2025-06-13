@@ -12,13 +12,8 @@
         </div>
       </div>
     </template>
-    <div class="flex flex-row flex-wrap items-center gap-8 py-4">
-      <div
-        v-for="item in menuList"
-        :key="item.name"
-        @click="handleMenuClick(item.routerName)"
-        class="h-20 w-22% flex flex-col cursor-pointer items-center justify-center gap-2"
-      >
+    <div class="flex flex-row flex-wrap justify-between items-center gap-8 py-4 px-20">
+      <div v-for="item in menuList" :key="item.name" @click="handleMenuClick(item.routerName)" class="h-20 flex flex-col cursor-pointer items-center justify-center gap-2">
         <div class="text-4xl" >{{item.value}}</div>
         <span class="text-center">{{ item.name }}(元)</span>
       </div>

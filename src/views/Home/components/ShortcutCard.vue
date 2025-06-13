@@ -3,11 +3,11 @@
     <template #header>
       <CardTitle title="快捷入口" />
     </template>
-    <div class="flex flex-row flex-wrap gap-8 p-4">
+    <div class="grid grid-cols-4 gap-8 p-4">
       <div
         v-for="menu in menuList"
         :key="menu.name"
-        class="h-20 w-21% flex flex-col cursor-pointer items-center justify-center gap-2"
+        class="h-20 flex flex-col cursor-pointer items-center justify-center gap-2"
         @click="handleMenuClick(menu.routerName)"
       >
         <div

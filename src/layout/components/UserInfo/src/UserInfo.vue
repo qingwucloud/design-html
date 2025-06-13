@@ -49,9 +49,7 @@ const loginOut = async () => {
 const toProfile = async () => {
   push('/user/profile')
 }
-const toDocument = () => {
-  window.open('https://doc.iocoder.cn/')
-}
+
 </script>
 
 <template>

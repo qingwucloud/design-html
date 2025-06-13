@@ -216,16 +216,16 @@
               <template #dropdown>
                 <el-dropdown-menu>
                   <!-- 如果是【快递】，并且【未发货】，则展示【发货】按钮 -->
-                  <el-dropdown-item
-                    v-if="
-                      row.deliveryType === DeliveryTypeEnum.EXPRESS.type &&
-                      row.status === TradeOrderStatusEnum.UNDELIVERED.status
-                    "
-                    command="delivery"
-                  >
-                    <Icon icon="ep:takeaway-box" />
-                    发货
-                  </el-dropdown-item>
+<!--                  <el-dropdown-item-->
+<!--                    v-if="-->
+<!--                      row.deliveryType === DeliveryTypeEnum.EXPRESS.type &&-->
+<!--                      row.status === TradeOrderStatusEnum.UNDELIVERED.status-->
+<!--                    "-->
+<!--                    command="delivery"-->
+<!--                  >-->
+<!--                    <Icon icon="ep:takeaway-box" />-->
+<!--                    发货-->
+<!--                  </el-dropdown-item>-->
                   <el-dropdown-item
                     v-if="
                       row.status! === TradeOrderStatusEnum.UNDELIVERED.status &&

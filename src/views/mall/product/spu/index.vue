@@ -328,7 +328,9 @@ const handleStatus02Change = async (row: any, newStatus: number) => {
     await getTabsCount()
     // 刷新列表
     await getList()
-  } catch {}
+  } catch(error) {
+    message.error(error)
+  }
 }
 
 /** 更新上架/下架状态 */

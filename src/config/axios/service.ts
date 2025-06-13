@@ -22,7 +22,8 @@ const { result_code, base_url, request_timeout } = config
 // 需要忽略的提示。忽略后，自动 Promise.reject('error')
 const ignoreMsgs = [
   '无效的刷新令牌', // 刷新令牌被删除时，不用提示
-  '刷新令牌已过期' // 使用刷新令牌，刷新获取新的访问令牌时，结果因为过期失败，此时需要忽略。否则，会导致继续 401，无法跳转到登出界面
+  '刷新令牌已过期', // 使用刷新令牌，刷新获取新的访问令牌时，结果因为过期失败，此时需要忽略。否则，会导致继续 401，无法跳转到登出界面]
+  '预约量房定金不允许修改'
 ]
 // 是否显示重新登录
 export const isRelogin = { show: false }
@@ -167,15 +168,7 @@ service.interceptors.response.use(
       ElMessage.error({
         offset: 300,
         dangerouslyUseHTMLString: true,
-        message:
-          '<div>' +
-          t('sys.api.errMsg901') +
-          '</div>' +
-          '<div> &nbsp; </div>' +
-          '<div>参考 https://doc.iocoder.cn/ 教程</div>' +
-          '<div> &nbsp; </div>' +
-          '<div>5 分钟搭建本地环境</div>'
-      })
+        message: ''})
       return Promise.reject(new Error(msg))
     } else if (code !== 200) {
       if (msg === '无效的刷新令牌') {

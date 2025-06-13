@@ -329,6 +329,8 @@ const handleStatus02Change = async (row: any, newStatus: number) => {
     // 刷新列表
     await getList()
   } catch(error) {
+    console.log(error);
+    if (error?.message) return
     message.error(error)
   }
 }

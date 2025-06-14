@@ -1,8 +1,4 @@
 <template>
-
-
-
-
   <ContentWrap>
     <el-form
       class="-mb-15px"

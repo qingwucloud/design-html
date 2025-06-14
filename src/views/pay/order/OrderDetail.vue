@@ -1,5 +1,5 @@
 <template>
-  <Dialog v-model="dialogVisible" title="订单详情" width="700px">
+  <Dialog v-model="dialogVisible" title="订单详情" width="900px" is-center>
     <el-descriptions :column="2" label-class-name="desc-label">
       <el-descriptions-item label="商户单号">
         <el-tag size="small">{{ detailData.merchantOrderId }}</el-tag>
@@ -62,7 +62,7 @@
     <el-divider />
     <el-descriptions :column="1" label-class-name="desc-label" direction="vertical" border>
       <el-descriptions-item label="支付通道异步回调内容">
-        <el-text style="white-space: pre-wrap; word-break: break-word">
+        <el-text style=" word-break: break-word;white-space: pre-wrap">
           {{ detailData.extension.channelNotifyData }}
         </el-text>
       </el-descriptions-item>
@@ -78,7 +78,7 @@ defineOptions({ name: 'PayOrderDetail' })
 
 const dialogVisible = ref(false) // 弹窗的是否展示
 const detailLoading = ref(false) // 表单的加载中
-const detailData = ref({
+const detailData = ref<any>({
   extension: {}
 })
 

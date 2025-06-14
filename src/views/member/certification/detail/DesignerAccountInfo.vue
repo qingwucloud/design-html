@@ -65,22 +65,25 @@
     <el-form disabled ref="formRef" :model="designerInfo.resumes" label-width="120px">
       <div v-for="(resume, index) in designerInfo.resumes" :key="resume.id" class="mb-20px">
         <div class="font-700">履历{{ index + 1 }}</div>
-        <el-form-item label="公司名称" prop="companyName">
-          <el-input v-model="resume.companyName" />
-        </el-form-item>
+
         <el-row>
+          <el-col :span="12">
+            <el-form-item label="公司名称" prop="companyName">
+              <el-input v-model="resume.companyName" />
+            </el-form-item>
+          </el-col>
           <el-col :span="12">
             <el-form-item label="职位名称" prop="job">
               <el-input v-model="resume.job" />
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="12">
             <el-form-item label="开始日期" prop="job">
               <el-input :value="dayjs(Number(resume.startTime)).format('YYYY-MM-DD')" />
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
           <el-col :span="12">
             <el-form-item label="结束日期" prop="job">
               <el-input
@@ -90,7 +93,9 @@
               />
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+        </el-row>
+        <el-row>
+          <el-col :span="24">
             <el-form-item label="岗位职责" prop="remark">
               <el-input v-model="resume.remark" type="textarea" autosize />
             </el-form-item>

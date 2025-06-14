@@ -127,15 +127,15 @@
       </el-table-column>
       <el-table-column label="订单号" align="left" width="300">
         <template #default="scope">
-          <p class="order-font">
-            <el-tag size="small"> 商户</el-tag> {{ scope.row.merchantOrderId }}
-          </p>
+<!--          <p class="order-font">-->
+<!--            <el-tag size="small"> 商户</el-tag> {{ scope.row.merchantOrderId }}-->
+<!--          </p>-->
           <p class="order-font" v-if="scope.row.no">
             <el-tag size="small" type="warning">支付</el-tag> {{ scope.row.no }}
           </p>
-          <p class="order-font" v-if="scope.row.channelOrderNo">
-            <el-tag size="small" type="success">渠道</el-tag> {{ scope.row.channelOrderNo }}
-          </p>
+<!--          <p class="order-font" v-if="scope.row.channelOrderNo">-->
+<!--            <el-tag size="small" type="success">渠道</el-tag> {{ scope.row.channelOrderNo }}-->
+<!--          </p>-->
         </template>
       </el-table-column>
       <el-table-column label="支付状态" align="center" prop="status">

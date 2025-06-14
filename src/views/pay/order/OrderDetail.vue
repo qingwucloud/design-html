@@ -1,13 +1,13 @@
 <template>
   <Dialog v-model="dialogVisible" title="订单详情" width="900px" is-center>
     <el-descriptions :column="2" label-class-name="desc-label">
-      <el-descriptions-item label="商户单号">
-        <el-tag size="small">{{ detailData.merchantOrderId }}</el-tag>
-      </el-descriptions-item>
+<!--      <el-descriptions-item label="商户单号">-->
+<!--        <el-tag size="small">{{ detailData.merchantOrderId }}</el-tag>-->
+<!--      </el-descriptions-item>-->
       <el-descriptions-item label="支付单号">
         <el-tag type="warning" size="small" v-if="detailData.no">{{ detailData.no }}</el-tag>
       </el-descriptions-item>
-      <el-descriptions-item label="应用编号">{{ detailData.appId }}</el-descriptions-item>
+<!--      <el-descriptions-item label="应用编号">{{ detailData.appId }}</el-descriptions-item>-->
       <el-descriptions-item label="应用名称">{{ detailData.appName }}</el-descriptions-item>
       <el-descriptions-item label="支付状态">
         <dict-tag :type="DICT_TYPE.PAY_ORDER_STATUS" :value="detailData.status" size="small" />
@@ -50,7 +50,7 @@
           {{ detailData.channelOrderNo }}
         </el-tag>
       </el-descriptions-item>
-      <el-descriptions-item label="渠道用户">{{ detailData.channelUserId }}</el-descriptions-item>
+<!--      <el-descriptions-item label="渠道用户">{{ detailData.channelUserId }}</el-descriptions-item>-->
       <el-descriptions-item label="退款金额">
         <el-tag size="mini" type="danger">
           ￥{{ (detailData.refundPrice / 100.0).toFixed(2) }}

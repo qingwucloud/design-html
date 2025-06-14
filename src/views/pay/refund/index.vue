@@ -136,15 +136,15 @@
       </el-table-column>
       <el-table-column label="退款订单号" align="left" width="300">
         <template #default="scope">
-          <p class="order-font">
-            <el-tag size="small">商户</el-tag> {{ scope.row.merchantRefundId }}
-          </p>
+<!--          <p class="order-font">-->
+<!--            <el-tag size="small">商户</el-tag> {{ scope.row.merchantRefundId }}-->
+<!--          </p>-->
           <p class="order-font">
             <el-tag size="small" type="warning">退款</el-tag> {{ scope.row.no }}
           </p>
-          <p class="order-font" v-if="scope.row.channelRefundNo">
-            <el-tag size="small" type="success">渠道</el-tag> {{ scope.row.channelRefundNo }}
-          </p>
+<!--          <p class="order-font" v-if="scope.row.channelRefundNo">-->
+<!--            <el-tag size="small" type="success">渠道</el-tag> {{ scope.row.channelRefundNo }}-->
+<!--          </p>-->
         </template>
       </el-table-column>
       <el-table-column label="支付订单号" align="left" width="300">

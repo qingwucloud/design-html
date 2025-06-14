@@ -70,12 +70,12 @@
           </el-button>
         </template>
       </el-descriptions-item>
-      <el-descriptions-item>
-        <template #label><span style="color: red">提醒: </span></template>
-        买家付款成功后，货款将直接进入您的商户号<br />
-        <!-- 请及时关注你发出的包裹状态，确保可以配送至买家手中 <br />
-        如果买家表示没收到货或货物有问题，请及时联系买家处理，友好协商 -->
-      </el-descriptions-item>
+<!--      <el-descriptions-item>-->
+<!--        <template #label><span style="color: red">提醒: </span></template>-->
+<!--        买家付款成功后，货款将直接进入您的商户号<br />-->
+<!--        &lt;!&ndash; 请及时关注你发出的包裹状态，确保可以配送至买家手中 <br />-->
+<!--        如果买家表示没收到货或货物有问题，请及时联系买家处理，友好协商 &ndash;&gt;-->
+<!--      </el-descriptions-item>-->
     </el-descriptions>
 
     <!-- 商品信息 -->

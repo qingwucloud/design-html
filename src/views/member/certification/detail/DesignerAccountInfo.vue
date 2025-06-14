@@ -10,7 +10,7 @@
       <template #label>
         <descriptions-item-label label="评分" />
       </template>
-      <el-rate :value="designerInfo.score" show-score disabled score-template="{value} 分" />
+      <el-rate :model-value="designerInfo.score" show-score disabled score-template="{value} 分" />
     </el-descriptions-item>
     <el-descriptions-item>
       <template #label>

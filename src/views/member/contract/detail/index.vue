@@ -491,7 +491,7 @@ const parseAttachments = (url) => {
     }
 
     &.remaining {
-      color: #e6a23c;
+      color: #f56c6c;
     }
   }
 

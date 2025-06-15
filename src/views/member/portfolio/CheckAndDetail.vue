@@ -184,43 +184,42 @@
         </el-col>
         <el-col :span="12" />
       </el-row>
-
+      <el-form
+        v-if="formType === 'check'"
+        ref="formRef"
+        :model="checkData"
+        label-width="130px"
+        v-loading="formLoading"
+      >
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="审核意见" prop="status">
+              <el-radio-group v-model="checkData.status">
+                <el-radio :value="1">通过</el-radio>
+                <el-radio :value="2">驳回</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12" v-if="checkData.status == 2">
+            <el-form-item
+              :rules="[{ required: true, message: '请输入驳回意见' }]"
+              label="驳回原因"
+              prop="rejectReason"
+              v-if="checkData.status"
+            >
+              <el-input
+                v-model="checkData.rejectReason"
+                :rows="2"
+                type="textarea"
+                placeholder="请输入驳回原因"
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
       <el-form-item label="内容" prop="content">
         <div v-html="formData.content"></div>
       </el-form-item>
-    </el-form>
-    <el-form
-      v-if="formType === 'check'"
-      ref="formRef"
-      :model="checkData"
-      label-width="130px"
-      v-loading="formLoading"
-    >
-      <el-row>
-        <el-col :span="12">
-          <el-form-item label="审核意见" prop="status">
-            <el-radio-group v-model="checkData.status">
-              <el-radio :value="1">通过</el-radio>
-              <el-radio :value="2">驳回</el-radio>
-            </el-radio-group>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12" v-if="checkData.status == 2">
-          <el-form-item
-            :rules="[{ required: true, message: '请输入驳回意见' }]"
-            label="驳回原因"
-            prop="rejectReason"
-            v-if="checkData.status"
-          >
-            <el-input
-              v-model="checkData.rejectReason"
-              :rows="2"
-              type="textarea"
-              placeholder="请输入驳回原因"
-            />
-          </el-form-item>
-        </el-col>
-      </el-row>
     </el-form>
     <template #footer>
       <el-button

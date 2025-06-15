@@ -50,11 +50,15 @@
       />
     </el-form-item>
     <el-form-item label="商品封面图" prop="picUrl">
-      <UploadImg v-model="formData.picUrl" :disabled="isDetail" height="80px" />
+     <div>
+       <UploadImg v-model="formData.picUrl" :disabled="isDetail" height="80px" />
+       <div class="opacity-[0.7]">封面图和轮播图尺寸使用 3:2</div>
+     </div>
     </el-form-item>
     <el-form-item label="商品轮播图" prop="sliderPicUrls">
       <UploadImgs v-model="formData.sliderPicUrls" :disabled="isDetail" />
     </el-form-item>
+
   </el-form>
 </template>
 <script lang="ts" setup>

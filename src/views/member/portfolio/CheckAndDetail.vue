@@ -159,7 +159,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="驳回原因" prop="rejectReason" v-if="formType === 'detail'">
+          <el-form-item label="驳回原因" prop="rejectReason" v-if="formType === 'detail' && formData.rejectReason">
             <el-input
               disabled
               v-model="formData.rejectReason"
@@ -218,7 +218,9 @@
         </el-row>
       </el-form>
       <el-form-item label="内容" prop="content">
-        <div v-html="formData.content"></div>
+       <div class="w-400px!">
+         <div v-html="formData.content"></div>
+       </div>
       </el-form-item>
     </el-form>
     <template #footer>

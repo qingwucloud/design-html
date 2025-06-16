@@ -257,6 +257,9 @@ const initTencentLbsMap = async () => {
 onMounted(async () => {
   areaList.value = await getAreaTree()
   // 加载地图
-  await initTencentLbsMap()
+  // 腾讯地图 key
+  // tencent.lbs.key
+  // TVDBZ-TDILD-4ON4B-PFDZA-RNLKH-VVF6E
+  // await initTencentLbsMap()
 })
 </script>

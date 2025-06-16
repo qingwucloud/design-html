@@ -26,7 +26,7 @@ import { CardTitle } from '@/components/Card'
 import { getBusinessCount } from '@/api/mall/statistics/trade'
 const router = useRouter() // 路由
 defineOptions({ name: 'BusinessCard' })
-const timeRangeType = ref('week') // 日期快捷选择按钮, 默认30天
+const timeRangeType = ref('month') // 日期快捷选择按钮, 默认30天
 const timeRange = [
   {
     name: '周',

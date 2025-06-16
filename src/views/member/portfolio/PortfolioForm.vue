@@ -129,7 +129,10 @@
         </el-col>
       </el-row>
       <el-form-item label="主图" prop="coverUrl">
-        <upload-img v-model="formData.coverUrl" />
+        <div class="">
+          <upload-img v-model="formData.coverUrl" />
+          <p>推荐使用 2:1尺寸图片</p>
+        </div>
       </el-form-item>
 
       <el-form-item label="内容" prop="content">

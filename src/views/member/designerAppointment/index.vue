@@ -122,7 +122,7 @@
       <el-table-column label="操作" align="center" fixed="right" min-width="120px">
         <template #default="{ row }">
           <el-button
-            v-if="[0, 1].includes(row.designerAppointmentStatus)"
+            v-if="[0, 1].includes(row.designerAppointmentStatus) && !row.tradeOrderId"
             link
             type="danger"
             @click="openForm(row)"

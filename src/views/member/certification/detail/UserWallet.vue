@@ -32,7 +32,7 @@
       </template>
       {{
         formData.lastSettlementTime
-          ? formatTime(formData.lastSettlementTime, 'YYYY-MM-DD HH:mm:ss')
+          ? formatDate(formData.lastSettlementTime)
           : '未结算'
       }}
     </el-descriptions-item>
@@ -41,8 +41,8 @@
 <script lang="ts" setup>
 import { DescriptionsItemLabel } from '@/components/Descriptions'
 import { WalletRecordApi } from '@/api/member/wallet'
-import { formatTime } from '@/utils'
 import { useMitt } from '@/hooks/web/useMitt'
+import { formatDate } from '@/utils/formatTime'
 
 const route = useRoute()
 const formData = ref({

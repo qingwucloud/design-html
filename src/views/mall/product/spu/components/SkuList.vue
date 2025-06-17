@@ -8,11 +8,11 @@
     max-height="500"
     size="small"
   >
-    <el-table-column align="center" label="图片" min-width="65">
-      <template #default="{ row }">
-        <UploadImg v-model="row.picUrl" height="50px" width="50px" />
-      </template>
-    </el-table-column>
+<!--    <el-table-column align="center" label="图片" min-width="65">-->
+<!--      <template #default="{ row }">-->
+<!--        <UploadImg v-model="row.picUrl" height="50px" width="50px" />-->
+<!--      </template>-->
+<!--    </el-table-column>-->
     <template v-if="formData!.specType && !isBatch">
       <!--  根据商品属性动态添加 -->
       <el-table-column
@@ -29,11 +29,11 @@
         </template>
       </el-table-column>
     </template>
-    <el-table-column align="center" label="商品条码" min-width="168">
-      <template #default="{ row }">
-        <el-input v-model="row.barCode" class="w-100%" />
-      </template>
-    </el-table-column>
+<!--    <el-table-column align="center" label="商品条码" min-width="168">-->
+<!--      <template #default="{ row }">-->
+<!--        <el-input v-model="row.barCode" class="w-100%" />-->
+<!--      </template>-->
+<!--    </el-table-column>-->
     <el-table-column align="center" label="销售价" min-width="168">
       <template #default="{ row }">
         <el-input-number
@@ -75,30 +75,30 @@
         <el-input-number v-model="row.stock" :min="0" class="w-100%" controls-position="right" />
       </template>
     </el-table-column>
-    <el-table-column align="center" label="重量(kg)" min-width="168">
-      <template #default="{ row }">
-        <el-input-number
-          v-model="row.weight"
-          :min="0"
-          :precision="2"
-          :step="0.1"
-          class="w-100%"
-          controls-position="right"
-        />
-      </template>
-    </el-table-column>
-    <el-table-column align="center" label="体积(m^3)" min-width="168">
-      <template #default="{ row }">
-        <el-input-number
-          v-model="row.volume"
-          :min="0"
-          :precision="2"
-          :step="0.1"
-          class="w-100%"
-          controls-position="right"
-        />
-      </template>
-    </el-table-column>
+<!--    <el-table-column align="center" label="重量(kg)" min-width="168">-->
+<!--      <template #default="{ row }">-->
+<!--        <el-input-number-->
+<!--          v-model="row.weight"-->
+<!--          :min="0"-->
+<!--          :precision="2"-->
+<!--          :step="0.1"-->
+<!--          class="w-100%"-->
+<!--          controls-position="right"-->
+<!--        />-->
+<!--      </template>-->
+<!--    </el-table-column>-->
+<!--    <el-table-column align="center" label="体积(m^3)" min-width="168">-->
+<!--      <template #default="{ row }">-->
+<!--        <el-input-number-->
+<!--          v-model="row.volume"-->
+<!--          :min="0"-->
+<!--          :precision="2"-->
+<!--          :step="0.1"-->
+<!--          class="w-100%"-->
+<!--          controls-position="right"-->
+<!--        />-->
+<!--      </template>-->
+<!--    </el-table-column>-->
 <!--    <template v-if="formData!.subCommissionType">-->
 <!--      <el-table-column align="center" label="一级返佣(元)" min-width="168">-->
 <!--        <template #default="{ row }">-->

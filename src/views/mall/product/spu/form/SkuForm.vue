@@ -18,14 +18,14 @@
         <el-radio :value="true" class="radio">单独设置</el-radio>
       </el-radio-group>
     </el-form-item> -->
-    <el-form-item label="商品规格" prop="specType">
-      <el-radio-group v-model="formData.specType" class="w-80" @change="onChangeSpec">
-        <el-radio :value="false" class="radio">单规格</el-radio>
+<!--    <el-form-item label="商品规格" prop="specType">-->
+<!--      <el-radio-group v-model="formData.specType" class="w-80" @change="onChangeSpec">-->
+<!--        <el-radio :value="false" class="radio">单规格</el-radio>-->
         <!-- <el-radio :value="true">多规格</el-radio> -->
-      </el-radio-group>
-    </el-form-item>
+<!--      </el-radio-group>-->
+<!--    </el-form-item>-->
     <!-- 多规格添加-->
-    <el-form-item v-if="!formData.specType">
+    <el-form-item  label="商品规格" v-if="!formData.specType">
       <SkuList
         ref="skuListRef"
         :prop-form-data="formData"

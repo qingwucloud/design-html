@@ -99,32 +99,32 @@
         />
       </template>
     </el-table-column>
-    <template v-if="formData!.subCommissionType">
-      <el-table-column align="center" label="一级返佣(元)" min-width="168">
-        <template #default="{ row }">
-          <el-input-number
-            v-model="row.firstBrokeragePrice"
-            :min="0"
-            :precision="2"
-            :step="0.1"
-            class="w-100%"
-            controls-position="right"
-          />
-        </template>
-      </el-table-column>
-      <el-table-column align="center" label="二级返佣(元)" min-width="168">
-        <template #default="{ row }">
-          <el-input-number
-            v-model="row.secondBrokeragePrice"
-            :min="0"
-            :precision="2"
-            :step="0.1"
-            class="w-100%"
-            controls-position="right"
-          />
-        </template>
-      </el-table-column>
-    </template>
+<!--    <template v-if="formData!.subCommissionType">-->
+<!--      <el-table-column align="center" label="一级返佣(元)" min-width="168">-->
+<!--        <template #default="{ row }">-->
+<!--          <el-input-number-->
+<!--            v-model="row.firstBrokeragePrice"-->
+<!--            :min="0"-->
+<!--            :precision="2"-->
+<!--            :step="0.1"-->
+<!--            class="w-100%"-->
+<!--            controls-position="right"-->
+<!--          />-->
+<!--        </template>-->
+<!--      </el-table-column>-->
+<!--      <el-table-column align="center" label="二级返佣(元)" min-width="168">-->
+<!--        <template #default="{ row }">-->
+<!--          <el-input-number-->
+<!--            v-model="row.secondBrokeragePrice"-->
+<!--            :min="0"-->
+<!--            :precision="2"-->
+<!--            :step="0.1"-->
+<!--            class="w-100%"-->
+<!--            controls-position="right"-->
+<!--          />-->
+<!--        </template>-->
+<!--      </el-table-column>-->
+<!--    </template>-->
     <el-table-column v-if="formData?.specType" align="center" fixed="right" label="操作" width="80">
       <template #default="{ row }">
         <el-button v-if="isBatch" link size="small" type="primary" @click="batchAdd">

@@ -23,8 +23,6 @@
           <div class="flex items-center justify-center flex-1">
             <!-- 账号登录 -->
             <LoginForm class="m-auto h-auto p-20px lt-xl:(rounded-3xl light:bg-white)" />
-            <!-- 手机登录 -->
-            <MobileForm class="m-auto h-auto p-20px lt-xl:(rounded-3xl light:bg-white)" />
           </div>
         </Transition>
         <div class="copyright"
@@ -37,13 +35,10 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { underlineToHump } from '@/utils'
-
 import { useDesign } from '@/hooks/web/useDesign'
 import { useAppStore } from '@/store/modules/app'
-import { ThemeSwitch } from '@/layout/components/ThemeSwitch'
 
-import { LoginForm, MobileForm } from './components'
+import { LoginForm } from './components'
 
 defineOptions({ name: 'Login' })
 

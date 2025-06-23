@@ -1,9 +1,4 @@
 <template>
-
-
-
-
-
   <!-- 操作工具栏 -->
   <el-row :gutter="10" class="mb8">
     <el-col :span="1.5">

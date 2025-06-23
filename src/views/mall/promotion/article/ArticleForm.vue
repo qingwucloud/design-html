@@ -105,14 +105,12 @@
       <el-button @click="dialogVisible = false">取 消</el-button>
     </template>
   </Dialog>
-  <SpuSelect ref="spuSelectRef" @confirm="selectSpu" />
 </template>
 <script lang="ts" setup>
 import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
 import * as ArticleApi from '@/api/mall/promotion/article'
 import * as ArticleCategoryApi from '@/api/mall/promotion/articleCategory'
 import * as ProductSpuApi from '@/api/mall/product/spu'
-import { SpuSelect } from '@/views/mall/promotion/components'
 
 defineOptions({ name: 'PromotionArticleForm' })
 

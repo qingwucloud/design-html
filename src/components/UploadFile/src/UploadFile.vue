@@ -56,7 +56,7 @@
 
   <!-- 上传操作禁用时 -->
   <div v-if="disabled" class="upload-file">
-    <div v-for="(file, index) in fileList" :key="index" class="flex items-center file-list-item">
+    <div v-for="(file, index) in fileList" :key="index" class="flex items-center justify-between file-list-item px-2 mb-2">
       <span>{{ file.name }}</span>
       <div class="ml-10px">
         <el-link :href="file.url" :underline="false" download target="_blank" type="primary">

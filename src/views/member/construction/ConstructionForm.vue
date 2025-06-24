@@ -182,6 +182,7 @@
 
       <el-form-item label="合同附件" prop="attachmentUrl">
         <UploadFile
+          :disabled="formType === 'detail'"
           v-model="formData.attachmentUrl"
           :file-type="['png', 'jpg', 'jpeg', 'pdf']"
           :limit="3"

@@ -1,11 +1,12 @@
 <template>
-  <Dialog :title="dialogTitle" v-model="dialogVisible" width="800px">
+  <Dialog :title="dialogTitle" v-model="dialogVisible" width="900px" is-center>
     <el-form
       ref="formRef"
       :model="formData"
       :rules="formRules"
       label-width="120px"
       v-loading="formLoading"
+      :disabled="formType === 'detail'"
     >
       <el-row :gutter="20">
         <el-col :span="12">
@@ -23,9 +24,9 @@
             >
               <el-option
                 v-for="item in userList"
-                :key="item.userId"
-                :label="item.name + '-' + item.mobile"
-                :value="item.userId"
+                :key="item.id"
+                :label="(item.name || item.nickname) + '-' + item.mobile"
+                :value="item.id"
               />
             </el-select>
           </el-form-item>
@@ -53,7 +54,12 @@
         </el-col>
         <el-col :span="12">
           <el-form-item label="工程地址" prop="projectAddress">
-            <el-input v-model="formData.projectAddress" placeholder="请输入工程地址" />
+            <el-input
+              v-model="formData.projectAddress"
+              type="textarea"
+              :rows="1"
+              :placeholder="formType === 'detail' ? '暂无' : '请输入详细的工程地址'"
+            />
           </el-form-item>
         </el-col>
       </el-row>
@@ -62,22 +68,38 @@
         <el-col :span="12">
           <el-form-item label="建筑面积(㎡)" prop="builtArea">
             <el-input-number
+              v-if="formType !== 'detail'"
               v-model="formData.builtArea"
               :min="0"
-              :precision="2"
+              :precision="0"
               placeholder="请输入建筑面积"
-              class="w-full"
+              class="w-full!"
+            />
+            <el-input
+              v-else
+              :value="formData.builtArea ? formData.builtArea + ' ㎡' : ''"
+              disabled
+              placeholder="暂无"
+              class="w-full!"
             />
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="实测面积(㎡)" prop="measuredArea">
             <el-input-number
+              v-if="formType !== 'detail'"
               v-model="formData.measuredArea"
               :min="0"
-              :precision="2"
+              :precision="0"
               placeholder="请输入实测面积"
-              class="w-full"
+              class="w-full!"
+            />
+            <el-input
+              v-else
+              :value="formData.measuredArea ? formData.measuredArea + ' ㎡' : ''"
+              disabled
+              placeholder="暂无"
+              class="w-full!"
             />
           </el-form-item>
         </el-col>
@@ -87,18 +109,55 @@
         <el-col :span="12">
           <el-form-item label="合同总金额(元)" prop="totalAmount">
             <el-input-number
+              v-if="formType !== 'detail'"
               v-model="formData.totalAmount"
               :min="0"
-              :precision="2"
+              :precision="0"
               placeholder="请输入合同总金额"
-              class="w-full"
+              class="w-full!"
             />
+            <el-input
+              v-else
+              :value="formData.totalAmount ? formData.totalAmount + ' 元' : ''"
+              disabled
+              placeholder="暂无"
+              class="w-full!"
+            />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="佣金比例(%)" prop="commissionRate">
+            <el-input-number
+              v-if="formType !== 'detail'"
+              v-model="formData.commissionRate"
+              :min="0"
+              :max="10"
+              :precision="1"
+              placeholder="请输入佣金比例"
+              class="w-full!"
+            />
+            <el-input
+              v-else
+              :value="formData.commissionRate ? formData.commissionRate + ' %' : ''"
+              disabled
+              placeholder="暂无"
+              class="w-full!"
+            />
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form-item label="返佣金额(元)">
+            <el-input :value="calculateCommissionAmount()" disabled class="w-full!" />
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="合同时间" prop="contractTime">
             <el-date-picker
-              v-model="contractTime"
+              v-if="formType !== 'detail'"
+              v-model="formData.contractTime"
               type="daterange"
               range-separator="至"
               start-placeholder="开始日期"
@@ -106,61 +165,54 @@
               value-format="YYYY-MM-DD"
               class="w-full"
             />
+            <el-input
+              v-else
+              :value="
+                formData.contractTime && formData.contractTime[0] && formData.contractTime[1]
+                  ? formData.contractTime[0] + ' 至 ' + formData.contractTime[1]
+                  : ''
+              "
+              disabled
+              placeholder="暂无"
+              class="w-full"
+            />
           </el-form-item>
         </el-col>
       </el-row>
 
-      <el-form-item label="补充说明" prop="footnote">
-        <el-input
-          v-model="formData.footnote"
-          type="textarea"
-          :rows="3"
-          placeholder="请输入补充说明"
-        />
-      </el-form-item>
-
       <el-form-item label="合同附件" prop="attachmentUrl">
         <UploadFile
           v-model="formData.attachmentUrl"
-          :file-type="['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'txt', 'pdf']"
-          :limit="1"
-          :file-size="20"
+          :file-type="['png', 'jpg', 'jpeg', 'pdf']"
+          :limit="3"
+          :file-size="9"
           class="w-full"
         />
       </el-form-item>
     </el-form>
     <template #footer>
-      <el-button @click="submitForm" type="primary" :disabled="formLoading">确 定</el-button>
-      <el-button @click="dialogVisible = false">取 消</el-button>
+      <el-button
+        v-if="formType === 'create'"
+        @click="submitForm"
+        type="primary"
+        :disabled="formLoading"
+      >
+        确 定
+      </el-button>
+      <el-button @click="dialogVisible = false">
+        {{ formType === 'detail' ? '关 闭' : '取 消' }}
+      </el-button>
     </template>
   </Dialog>
 </template>
 <script setup lang="ts">
 import { CertificationApi } from '@/api/member/certification'
 import { ContractApi } from '@/api/member/contract'
-
+import { formatDate } from '@/utils/formatTime'
 /** 施工合同表单 */
 defineOptions({ name: 'ConstructionForm' })
 
 const message = useMessage() // 消息弹窗
-
-// 施工合同保存请求类型
-interface ContractConstructionSaveReqVO {
-  id?: number
-  attachmentUrl: string
-  builtArea: number
-  communityName: string
-  contractName: string
-  customerMobile: string
-  customerName: string
-  endTime: string
-  footnote?: string
-  measuredArea: number
-  projectAddress: string
-  startTime: string
-  totalAmount: number
-  userId: number
-}
 
 // 返佣客户列表
 const userList = ref<any[]>([])
@@ -169,25 +221,23 @@ const dialogTitle = ref('') // 弹窗的标题
 const formLoading = ref(false) // 表单的加载中：1）修改时的数据加载；2）提交的按钮禁用
 const formType = ref('') // 表单的类型：create - 新增；detail - 详情
 
-// 合同时间范围
-const contractTime = ref<[string, string]>(['', ''])
-
 // 表单数据
 const formData = ref({
-  id: undefined,
+  id: undefined as number | undefined,
   contractName: '',
-  userId: undefined,
+  userId: undefined as number | undefined,
   customerName: '',
   customerMobile: '',
   communityName: '',
   projectAddress: '',
-  builtArea: undefined,
-  measuredArea: undefined,
-  totalAmount: undefined,
-  startTime: '',
-  endTime: '',
+  builtArea: undefined as number | undefined,
+  measuredArea: undefined as number | undefined,
+  totalAmount: undefined as number | undefined,
+  commissionRate: 2, // 默认佣金比例2%
+  commissionAmount: undefined as number | undefined, // 添加佣金金额字段
   footnote: '',
-  attachmentUrl: ''
+  attachmentUrl: '',
+  contractTime: ['', ''] as [string, string]
 })
 
 // 表单验证规则
@@ -197,26 +247,31 @@ const formRules = reactive({
   customerName: [{ required: true, message: '客户姓名不能为空', trigger: 'blur' }],
   customerMobile: [
     { required: true, message: '客户手机号不能为空', trigger: 'blur' },
-    { pattern: /^1[3-9]\d{9}$/, message: '请输入正确的手机号', trigger: 'blur' }
+    { pattern: /^1[2-9]\d{9}$/, message: '请输入正确的手机号', trigger: 'blur' }
   ],
   communityName: [{ required: true, message: '小区名称不能为空', trigger: 'blur' }],
   projectAddress: [{ required: true, message: '工程地址不能为空', trigger: 'blur' }],
-  builtArea: [{ required: true, message: '建筑面积不能为空', trigger: 'blur' }],
-  measuredArea: [{ required: true, message: '实测面积不能为空', trigger: 'blur' }],
   totalAmount: [{ required: true, message: '合同总金额不能为空', trigger: 'blur' }],
-  contractTime: [{ required: true, message: '请选择合同时间', trigger: 'change' }],
-  attachmentUrl: [{ required: true, message: '请上传合同附件', trigger: 'change' }]
+  commissionRate: [{ required: true, message: '佣金比例不能为空', trigger: 'blur' }],
+  attachmentUrl: [{ required: true, message: '请上传合同附件', trigger: ['change', 'blur'] }]
 })
 
 const formRef = ref() // 表单 Ref
 
-// 监听合同时间变化
-watch(contractTime, (newVal) => {
-  if (newVal && newVal.length === 2) {
-    formData.value.startTime = newVal[0]
-    formData.value.endTime = newVal[1]
+/** 计算返佣金额 */
+const calculateCommissionAmount = () => {
+  // 详情模式时，如果有后端返回的佣金金额，直接显示
+  if (formType.value === 'detail' && typeof formData.value.commissionAmount === 'number') {
+    return formData.value.commissionAmount.toFixed(2)
   }
-})
+
+  // 新增模式时，根据合同金额和佣金比例自动计算
+  if (!formData.value.totalAmount || !formData.value.commissionRate) {
+    return '0.00'
+  }
+  const amount = ((formData.value.totalAmount * formData.value.commissionRate) / 100).toFixed(2)
+  return amount
+}
 
 /** 打开弹窗 */
 const open = async (type: string, row?: any) => {
@@ -226,29 +281,28 @@ const open = async (type: string, row?: any) => {
   resetForm()
 
   // 获取返佣客户列表
-  try {
-    const data = await CertificationApi.getAllDesignerUserPage()
-    userList.value = data
-  } catch (error) {
-    console.error('获取用户列表失败:', error)
-  }
+  const data = await CertificationApi.getAllUserPage()
+  userList.value = data
 
   // 详情时，设置数据
   if (type === 'detail' && row?.id) {
     formLoading.value = true
     try {
       const data = await ContractApi.getConstruction(row.id)
-      formData.value = { ...data }
+      formData.value = {
+        ...data,
+        commissionAmount: row.commissionAmount || 0,
+        commissionRate: row.commissionRate || 2 // 如果没有佣金比例，默认设置为2%
+      }
 
       // 设置合同时间
       if (data.startTime && data.endTime) {
-        contractTime.value = [
+        formData.value.contractTime = [
           formatDate(data.startTime, 'YYYY-MM-DD'),
           formatDate(data.endTime, 'YYYY-MM-DD')
         ]
       }
     } catch (error) {
-      console.error('获取合同详情失败:', error)
       message.error('获取合同详情失败')
     } finally {
       formLoading.value = false
@@ -271,16 +325,10 @@ const submitForm = async () => {
   // 校验表单
   await formRef.value.validate()
 
-  // 检查合同时间
-  if (!contractTime.value || contractTime.value.length !== 2) {
-    message.error('请选择合同时间')
-    return
-  }
-
   // 提交请求
   formLoading.value = true
   try {
-    const submitData: ContractConstructionSaveReqVO = {
+    const submitData: any = {
       contractName: formData.value.contractName,
       userId: formData.value.userId!,
       customerName: formData.value.customerName,
@@ -290,8 +338,9 @@ const submitForm = async () => {
       builtArea: formData.value.builtArea!,
       measuredArea: formData.value.measuredArea!,
       totalAmount: formData.value.totalAmount!,
-      startTime: contractTime.value[0],
-      endTime: contractTime.value[1],
+      commissionRate: formData.value.commissionRate!,
+      startTime: formData.value.contractTime[0],
+      endTime: formData.value.contractTime[1],
       footnote: formData.value.footnote,
       attachmentUrl: formData.value.attachmentUrl
     }
@@ -306,7 +355,6 @@ const submitForm = async () => {
     // 发送操作成功的事件
     emit('success')
   } catch (error) {
-    console.error('提交失败:', error)
     message.error('提交失败')
   } finally {
     formLoading.value = false
@@ -326,26 +374,18 @@ const resetForm = () => {
     builtArea: undefined,
     measuredArea: undefined,
     totalAmount: undefined,
-    startTime: '',
-    endTime: '',
+    commissionRate: 2, // 重置时也设为默认值2%
+    commissionAmount: undefined, // 添加佣金金额字段
     footnote: '',
-    attachmentUrl: ''
+    attachmentUrl: '',
+    contractTime: ['', '']
   }
-  contractTime.value = ['', '']
   formRef.value?.resetFields()
 }
-
-/** 格式化日期 */
-const formatDate = (date: any, format: string) => {
-  if (!date) return ''
-  const d = new Date(date)
-  const year = d.getFullYear()
-  const month = String(d.getMonth() + 1).padStart(2, '0')
-  const day = String(d.getDate()).padStart(2, '0')
-
-  if (format === 'YYYY-MM-DD') {
-    return `${year}-${month}-${day}`
-  }
-  return date
-}
 </script>
+
+<style lang="scss" scoped>
+:deep(.el-input-number .el-input__inner) {
+  text-align: left;
+}
+</style>

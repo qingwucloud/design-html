@@ -114,7 +114,7 @@
       <el-table-column label="返佣金额(元)" align="center" width="120">
         <template #default="{ row }">
           <span class="text-green-600 font-medium">
-            {{ row.totalAmount ? (row.totalAmount * 0.02).toFixed(2) : '-' }}
+            {{ row.commissionAmount || '-' }}
           </span>
         </template>
       </el-table-column>

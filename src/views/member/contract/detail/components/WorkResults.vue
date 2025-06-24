@@ -135,7 +135,7 @@
             </span>
           </div>
           <!-- 其他链接 -->
-          <div  class="other-links" v-if="item.otherLinks">
+          <div class="other-links" v-if="item.otherLinks">
             <el-button type="primary" link @click="openOtherLink(item.otherLinks)">
               点击预览3D效果图
             </el-button>
@@ -177,30 +177,57 @@ defineProps<Props>()
 // 判断是否为图片文件
 const isImageFile = (url: string) => {
   if (!url) return false
-  return /\.(jpg|jpeg|png|gif|webp|bmp)$/i.test(url)
+  // 移除查询参数，只保留主URL部分进行判断
+  const cleanUrl = url.split('?')[0]
+  return /\.(jpg|jpeg|png|gif|webp|bmp)$/i.test(cleanUrl)
 }
 
 // 判断是否为视频文件
 const isVideoFile = (url: string) => {
   if (!url) return false
-  return /\.(mp4|avi|mov|wmv|flv|webm|mkv)$/i.test(url)
+  // 移除查询参数，只保留主URL部分进行判断
+  const cleanUrl = url.split('?')[0]
+  return /\.(mp4|avi|mov|wmv|flv|webm|mkv)$/i.test(cleanUrl)
 }
 
 // 判断是否为音频文件
 const isAudioFile = (url: string) => {
   if (!url) return false
-  return /\.(mp3|wav|flac|aac|ogg|wma)$/i.test(url)
+  // 移除查询参数，只保留主URL部分进行判断
+  const cleanUrl = url.split('?')[0]
+  return /\.(mp3|wav|flac|aac|ogg|wma)$/i.test(cleanUrl)
 }
 
 // 判断是否为文档文件
 const isDocumentFile = (url: string) => {
   if (!url) return false
-  return /\.(pdf|doc|docx|xls|xlsx|ppt|pptx|txt|zip|rar|7z)$/i.test(url)
+  // 移除查询参数，只保留主URL部分进行判断
+  const cleanUrl = url.split('?')[0]
+  return /\.(pdf|doc|docx|xls|xlsx|ppt|pptx|txt|zip|rar|7z)$/i.test(cleanUrl)
 }
 
 // 从URL中提取文件名
 const getFileNameFromUrl = (url: string): string => {
-  return url.split('?')[1]?.split('=')[1] || ''
+  if (!url) return ''
+
+  // 首先尝试从查询参数 fileName 中获取
+  const urlObj = new URL(url)
+  const fileNameFromQuery = urlObj.searchParams.get('fileName')
+  if (fileNameFromQuery) {
+    return fileNameFromQuery
+  }
+
+  // 如果查询参数中没有文件名，从URL路径中提取
+  const cleanUrl = url.split('?')[0]
+  const pathParts = cleanUrl.split('/')
+  const lastPart = pathParts[pathParts.length - 1]
+
+  // 如果最后一部分包含文件扩展名，则返回它
+  if (lastPart && /\.[a-zA-Z0-9]+$/.test(lastPart)) {
+    return lastPart
+  }
+
+  return ''
 }
 
 // 获取文件类型

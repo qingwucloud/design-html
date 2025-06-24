@@ -90,7 +90,7 @@
   <ContentWrap>
     <el-table v-loading="loading" :data="list" :stripe="true" :show-overflow-tooltip="true">
       <el-table-column label="编号" align="center" prop="id" width="80" />
-      <el-table-column label="合同名称" align="center" prop="contractName" min-width="150" />
+      <el-table-column label="合同名称" align="center" prop="contractName" min-width="100" />
       <el-table-column label="客户姓名" align="center" prop="customerName" width="120" />
       <el-table-column label="客户手机号" align="center" prop="customerMobile" width="130" />
       <el-table-column label="返佣客户" align="center" width="120">
@@ -98,9 +98,9 @@
           <span>{{ row.agentName || '-' }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="返佣手机号" align="center" prop="agentMobile" width="130" />
-      <el-table-column label="小区名称" align="center" prop="communityName" min-width="120" />
-      <el-table-column label="建筑面积(㎡)" align="center" prop="builtArea" width="120">
+      <el-table-column label="返佣手机号" align="center" prop="agentMobile" />
+      <el-table-column label="小区名称" align="center" prop="communityName" />
+      <el-table-column label="建筑面积(㎡)" align="center" prop="builtArea">
         <template #default="{ row }">
           <span>{{ row.builtArea || '-' }}</span>
         </template>
@@ -108,9 +108,14 @@
 
       <el-table-column label="合同金额(元)" align="center" prop="totalAmount" width="120">
         <template #default="{ row }">
-          <span class="text-red-500 font-medium">{{
-            row.totalAmount?.toLocaleString() || '-'
-          }}</span>
+          <span class="text-red-500 font-medium">{{ row.totalAmount || '-' }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="返佣金额(元)" align="center" width="120">
+        <template #default="{ row }">
+          <span class="text-green-600 font-medium">
+            {{ row.totalAmount ? (row.totalAmount * 0.02).toFixed(2) : '-' }}
+          </span>
         </template>
       </el-table-column>
       <el-table-column
@@ -118,7 +123,7 @@
         :formatter="dateFormatter"
         align="center"
         prop="createTime"
-        width="150"
+        width="180"
       />
       <el-table-column label="操作" align="center" fixed="right" width="120">
         <template #default="scope">

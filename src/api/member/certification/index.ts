@@ -48,6 +48,11 @@ export const CertificationApi = {
     return await request.get({ url: `/member/certification/getDesignerAllList` })
   },
 
+  // 获取所有用户
+  getAllUserPage: async () => {
+    return await request.get({ url: `/member/user/getAllList` })
+  },
+
   // 修改设计师评分
   updateCertificationScore: async (data: any) => {
     return await request.post({ url: `/member/certification/updateScore`, data })

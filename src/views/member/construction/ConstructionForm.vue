@@ -186,7 +186,7 @@
           v-model="formData.attachmentUrl"
           :file-type="['png', 'jpg', 'jpeg', 'pdf']"
           :limit="3"
-          :file-size="9"
+          :file-size="20"
           class="w-full"
         />
       </el-form-item>

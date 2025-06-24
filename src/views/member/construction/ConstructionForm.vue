@@ -185,7 +185,7 @@
           :disabled="formType === 'detail'"
           v-model="formData.attachmentUrl"
           :file-type="['png', 'jpg', 'jpeg', 'pdf']"
-          :limit="3"
+          :limit="9"
           :file-size="20"
           class="w-full"
         />

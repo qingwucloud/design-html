@@ -168,12 +168,12 @@
             <el-input
               v-else
               :value="
-                formData.startTime && formData.endTime
-                  ? formData.startTime + ' 至 ' + formData.endTime
+                formData.contractTime && formData.contractTime[0] && formData.contractTime[1]
+                  ? formData.contractTime[0] + ' 至 ' + formData.contractTime[1]
                   : ''
               "
               disabled
-              placeholder="暂无"
+              placeholder="-"
               class="w-full"
             />
           </el-form-item>
@@ -210,6 +210,7 @@
 import { CertificationApi } from '@/api/member/certification'
 import { ContractApi } from '@/api/member/contract'
 import { formatDate } from '@/utils/formatTime'
+
 /** 施工合同表单 */
 defineOptions({ name: 'ConstructionForm' })
 
@@ -238,7 +239,7 @@ const formData = ref({
   commissionAmount: undefined as number | undefined, // 添加佣金金额字段
   footnote: '',
   attachmentUrl: '',
-  endTime:'',
+  endTime: '',
   startTime: '',
   contractTime: ['', ''] as [string, string]
 })
@@ -348,8 +349,13 @@ const submitForm = async () => {
       measuredArea: formData.value.measuredArea!,
       totalAmount: formData.value.totalAmount!,
       commissionRate: formData.value.commissionRate!,
-      startTime: formData.value.contractTime[0],
-      endTime: formData.value.contractTime[1],
+      // 后端需要毫秒 unix 时间戳
+      startTime: formData.value.contractTime?.[0]
+        ? new Date(formData.value.contractTime[0]).getTime()
+        : 0,
+      endTime: formData.value.contractTime?.[1]
+        ? new Date(formData.value.contractTime[1]).getTime()
+        : 0,
       footnote: formData.value.footnote,
       attachmentUrl: formData.value.attachmentUrl
     }

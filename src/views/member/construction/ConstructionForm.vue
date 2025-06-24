@@ -239,8 +239,6 @@ const formData = ref({
   commissionAmount: undefined as number | undefined, // 添加佣金金额字段
   footnote: '',
   attachmentUrl: '',
-  endTime: '',
-  startTime: '',
   contractTime: ['', ''] as [string, string]
 })
 

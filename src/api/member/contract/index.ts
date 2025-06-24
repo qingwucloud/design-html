@@ -120,24 +120,19 @@ export const ContractApi = {
   //设置推荐案例
   recommendContract: async (data: any) => {
     return await request.put({ url: `/member/contract/recommend`, data })
-  }
-  // 新增用户合同
-  // createContract: async (data: ContractVO) => {
-  //   return await request.post({ url: `/member/contract/create`, data })
-  // },
+  },
+  // 查询施工合同分页
+  getConstructionPage: async (params: any) => {
+    return await request.get({ url: `/member/contract-construction/page`, params })
+  },
 
-  // 修改用户合同
-  // updateContract: async (data: ContractVO) => {
-  //   return await request.put({ url: `/member/contract/update`, data })
-  // },
+  // 创建施工合同
+  createConstruction: async (data: ContractCheckVO) => {
+    return await request.post({ url: `/member/contract-construction/create`, data })
+  },
 
-  // // 删除用户合同
-  // deleteContract: async (id: number) => {
-  //   return await request.delete({ url: `/member/contract/delete?id=` + id })
-  // },
-  //
-  // // 导出用户合同 Excel
-  // exportContract: async (params) => {
-  //   return await request.download({ url: `/member/contract/export-excel`, params })
-  // }
+  // 获得施工合同详情
+  getConstruction: async (id: number) => {
+    return await request.get({ url: `/member/contract-construction/get?id=` + id })
+  },
 }

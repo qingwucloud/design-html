@@ -57,7 +57,7 @@
             <el-input
               v-model="formData.projectAddress"
               type="textarea"
-              :rows="1"
+              :rows="2"
               :placeholder="formType === 'detail' ? '暂无' : '请输入详细的工程地址'"
             />
           </el-form-item>

@@ -252,6 +252,8 @@ const formRules = reactive({
   ],
   communityName: [{ required: true, message: '小区名称不能为空', trigger: 'blur' }],
   projectAddress: [{ required: true, message: '工程地址不能为空', trigger: 'blur' }],
+  builtArea: [{ required: true, message: '建筑面积不能为空', trigger: 'blur' }],
+  measuredArea: [{ required: true, message: '实测面积不能为空', trigger: 'blur' }],
   totalAmount: [{ required: true, message: '合同总金额不能为空', trigger: 'blur' }],
   commissionRate: [{ required: true, message: '佣金比例不能为空', trigger: 'blur' }],
   attachmentUrl: [{ required: true, message: '请上传合同附件', trigger: ['change', 'blur'] }]
@@ -326,6 +328,10 @@ const submitForm = async () => {
   // 校验表单
   await formRef.value.validate()
 
+  // 添加确认对话框
+  const confirmMsg = '确认提交该施工合同？提交后，佣金将会打款至用户余额'
+  await message.confirm(confirmMsg)
+
   // 提交请求
   formLoading.value = true
   try {
@@ -349,11 +355,11 @@ const submitForm = async () => {
     if (formType.value === 'create') {
       // 由于接口类型定义有问题，我们直接使用 any 类型
       await ContractApi.createConstruction(submitData as any)
-      message.success('创建成功')
+      message.success('提交成功')
     }
 
     dialogVisible.value = false
-    // 发送操作成功的事件
+    // 发送操作成功的事件，通知父组件刷新列表
     emit('success')
   } catch (error) {
     message.error('提交失败')

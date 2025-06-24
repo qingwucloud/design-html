@@ -1,5 +1,10 @@
 <template>
-  <div v-if="!disabled" class="upload-file">
+  <div
+    v-if="!disabled"
+    class="upload-file"
+    v-loading="uploading"
+    element-loading-text="正在上传文件，请稍候..."
+  >
     <el-upload
       ref="uploadRef"
       v-model:file-list="fileList"
@@ -56,7 +61,11 @@
 
   <!-- 上传操作禁用时 -->
   <div v-if="disabled" class="upload-file">
-    <div v-for="(file, index) in fileList" :key="index" class="flex items-center justify-between file-list-item px-2 mb-2">
+    <div
+      v-for="(file, index) in fileList"
+      :key="index"
+      class="flex items-center justify-between file-list-item px-2 mb-2"
+    >
       <span>{{ file.name }}</span>
       <div class="ml-10px">
         <el-link :href="file.url" :underline="false" download target="_blank" type="primary">
@@ -95,6 +104,7 @@ const uploadRef = ref<UploadInstance>()
 const uploadList = ref<UploadUserFile[]>([])
 const fileList = ref<UploadUserFile[]>([])
 const uploadNumber = ref<number>(0)
+const uploading = ref<boolean>(false)
 
 const { uploadUrl, httpRequest } = useUpload(props.directory)
 
@@ -121,7 +131,8 @@ const beforeUpload: UploadProps['beforeUpload'] = (file: UploadRawFile) => {
     message.error(`上传文件大小不能超过${props.fileSize}MB!`)
     return false
   }
-  message.success('正在上传文件，请稍候...')
+  uploading.value = true
+  // message.success('正在上传文件，请稍候...')
   uploadNumber.value++
 }
 // 处理上传的文件发生变化
@@ -130,15 +141,20 @@ const beforeUpload: UploadProps['beforeUpload'] = (file: UploadRawFile) => {
 // }
 // 文件上传成功
 const handleFileSuccess: UploadProps['onSuccess'] = (res: any): void => {
-  message.success('上传成功')
+  // message.success('上传成功')
   // 删除自身
-  const index = fileList.value.findIndex((item) => item.response?.data === res.data)
-  fileList.value.splice(index, 1)
+  const index = fileList.value.findIndex(
+    (item) => item.response && (item.response as any).data === res.data
+  )
+  if (index > -1) {
+    fileList.value.splice(index, 1)
+  }
   uploadList.value.push({ name: res.data, url: res.data })
   if (uploadList.value.length == uploadNumber.value) {
     fileList.value.push(...uploadList.value)
     uploadList.value = []
     uploadNumber.value = 0
+    uploading.value = false // 所有文件上传完成后才关闭loading
     emitUpdateModelValue()
   }
 }
@@ -148,6 +164,11 @@ const handleExceed: UploadProps['onExceed'] = (): void => {
 }
 // 上传错误提示
 const excelUploadError: UploadProps['onError'] = (): void => {
+  uploadNumber.value-- // 减少计数器
+  if (uploadNumber.value <= 0) {
+    uploading.value = false // 当没有文件在上传时关闭loading
+    uploadNumber.value = 0 // 重置计数器
+  }
   message.error('导入数据失败，请您重新上传！')
 }
 // 删除上传文件

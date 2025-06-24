@@ -138,7 +138,7 @@
             />
             <el-input
               v-else
-              :value="formData.commissionRate ? formData.commissionRate + ' %' : ''"
+              :value="formData.commissionRate ? formData.commissionRate : ''"
               disabled
               placeholder="暂无"
               class="w-full!"
@@ -168,8 +168,8 @@
             <el-input
               v-else
               :value="
-                formData.contractTime && formData.contractTime[0] && formData.contractTime[1]
-                  ? formData.contractTime[0] + ' 至 ' + formData.contractTime[1]
+                formData.startTime && formData.endTime
+                  ? formData.startTime + ' 至 ' + formData.endTime
                   : ''
               "
               disabled
@@ -238,6 +238,8 @@ const formData = ref({
   commissionAmount: undefined as number | undefined, // 添加佣金金额字段
   footnote: '',
   attachmentUrl: '',
+  endTime:'',
+  startTime: '',
   contractTime: ['', ''] as [string, string]
 })
 

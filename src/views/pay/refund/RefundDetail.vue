@@ -1,5 +1,5 @@
 <template>
-  <Dialog v-model="dialogVisible" title="详情" width="700px" is-center>
+  <Dialog v-model="dialogVisible" title="详情" width="900px" is-center>
     <el-descriptions :column="2" label-class-name="desc-label">
       <el-descriptions-item label="商户退款单号">
         <el-tag size="small">{{ refundDetail.merchantRefundId }}</el-tag>

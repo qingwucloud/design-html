@@ -6,7 +6,7 @@
       </template>
       {{ designerInfo.cardName }}
     </el-descriptions-item>
-    <el-descriptions-item span="2">
+    <el-descriptions-item :span="2">
       <template #label>
         <descriptions-item-label label=" 身份证号码 " />
       </template>
@@ -39,19 +39,19 @@
         fit="cover"
       />
     </el-descriptions-item>
-    <el-descriptions-item span="3">
+    <el-descriptions-item :span="2">
       <template #label>
         <descriptions-item-label label=" 身份证地址 " />
       </template>
       {{ designerInfo.cardAddr }}
     </el-descriptions-item>
-    <el-descriptions-item span="3">
+    <el-descriptions-item :span="2">
       <template #label>
         <descriptions-item-label label=" 身份证签发机关 " />
       </template>
       {{ designerInfo.cardOrgan }}
     </el-descriptions-item>
-    <el-descriptions-item span="3">
+    <el-descriptions-item :span="2">
       <template #label>
         <descriptions-item-label label=" 身份证有效期 " />
       </template>

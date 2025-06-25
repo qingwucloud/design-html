@@ -9,11 +9,25 @@
           <template #header>
             <div class="card-header">
               <CardTitle title="基本信息" />
+              <el-button size="small" text type="primary" @click="openForm('update')">
+                编辑
+              </el-button>
             </div>
           </template>
         </UserBasicInfo>
       </el-col>
       <el-col :span="12" class="mb-20">
+        <!-- 账户余额 -->
+        <el-card shadow="never" class="h-full">
+          <template #header>
+            <CardTitle title="账户余额" />
+          </template>
+          <UserWallet />
+        </el-card>
+
+      </el-col>
+      <!-- 第二行卡片 -->
+      <el-col :span="12">
         <!-- 设计师信息 -->
         <el-card shadow="never" class="h-full">
           <template #header>
@@ -22,8 +36,6 @@
           <DesignerAccountInfo :user="user" :designer-info="designerInfo" />
         </el-card>
       </el-col>
-
-      <!-- 第二行卡片 -->
       <el-col :span="12">
         <!-- 身份证信息 -->
         <el-card shadow="never" class="h-full">
@@ -32,15 +44,7 @@
           </template>
           <UserAccountInfo :user="user" :designerInfo="designerInfo" />
         </el-card>
-      </el-col>
-      <el-col :span="12">
-        <!-- 账户余额 -->
-        <el-card shadow="never" class="h-full">
-          <template #header>
-            <CardTitle title="账户余额" />
-          </template>
-          <UserWallet />
-        </el-card>
+
       </el-col>
     </el-row>
     <el-card header="数据视图" shadow="never" style="width: 100%; margin-top: 20px">
@@ -78,7 +82,7 @@
   </div>
 
   <!-- 表单弹窗：添加/修改 -->
-  <UserForm ref="formRef" @success="getUserData(id)" />
+  <UserForm ref="formRef" @success="getUserData(id)" :showStatus="false" />
 </template>
 <script setup>
 import * as UserApi from '@/api/member/user'
@@ -106,6 +110,9 @@ const user = ref({})
 
 /** 添加/修改操作 */
 const formRef = ref()
+const openForm = (type) => {
+  formRef.value.open(type, id)
+}
 
 const designerInfo = ref({})
 /** 获得用户 */

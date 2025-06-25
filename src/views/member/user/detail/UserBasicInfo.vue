@@ -22,12 +22,12 @@
             </template>
             {{ user.nickname }}
           </el-descriptions-item>
-          <el-descriptions-item>
-            <template #label>
-              <descriptions-item-label label="用户名" />
-            </template>
-            {{ user.name || '空' }}
-          </el-descriptions-item>
+<!--          <el-descriptions-item>-->
+<!--            <template #label>-->
+<!--              <descriptions-item-label label="用户名" />-->
+<!--            </template>-->
+<!--            {{ user.name || '空' }}-->
+<!--          </el-descriptions-item>-->
           <el-descriptions-item label="手机号">
             <template #label>
               <descriptions-item-label label="手机号" />
@@ -40,31 +40,31 @@
             </template>
             <dict-tag :type="DICT_TYPE.SYSTEM_USER_SEX" :value="user.sex" />
           </el-descriptions-item>
-          <el-descriptions-item>
-            <template #label>
-              <descriptions-item-label label="所在地" />
-            </template>
-            {{ user.areaName }}
-          </el-descriptions-item>
+<!--          <el-descriptions-item>-->
+<!--            <template #label>-->
+<!--              <descriptions-item-label label="所在地" />-->
+<!--            </template>-->
+<!--            {{ user.areaName }}-->
+<!--          </el-descriptions-item>-->
           <el-descriptions-item>
             <template #label>
               <descriptions-item-label label="注册 IP" />
             </template>
             {{ user.registerIp }}
           </el-descriptions-item>
-          <el-descriptions-item>
-            <template #label>
-              <descriptions-item-label label="生日" />
-            </template>
-            {{ user.birthday ? formatDate(user.birthday as any) : '空' }}
-          </el-descriptions-item>
-          <el-descriptions-item>
+<!--          <el-descriptions-item>-->
+<!--            <template #label>-->
+<!--              <descriptions-item-label label="生日" />-->
+<!--            </template>-->
+<!--            {{ user.birthday ? formatDate(user.birthday as any) : '空' }}-->
+<!--          </el-descriptions-item>-->
+          <el-descriptions-item :span="2">
             <template #label>
               <descriptions-item-label label="注册时间" />
             </template>
             {{ user.createTime ? formatDate(user.createTime as any) : '空' }}
           </el-descriptions-item>
-          <el-descriptions-item>
+          <el-descriptions-item  :span="2">
             <template #label>
               <descriptions-item-label label="最后登录时间" />
             </template>

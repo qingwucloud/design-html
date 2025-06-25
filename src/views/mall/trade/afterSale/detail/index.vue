@@ -79,7 +79,7 @@
       </el-descriptions-item>
       <el-descriptions-item>
         <template #label><span style="color: red">提醒: </span></template>
-        如果未收货，请点击同意退款给买家。<br />
+        如果未收货，请点击同意退款给买家。
         如果实际已收货，请主动与买家联系。<br />
         <!-- 如果订单整体退款后，优惠券和余额会退还给买家. -->
       </el-descriptions-item>

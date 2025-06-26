@@ -23,13 +23,16 @@
       </el-form-item>
 
       <el-form-item label="封面图片" prop="covers">
-        <UploadImg
-          v-model="formData.covers"
-          :limit="1"
-          :file-size="10"
-          height="120px"
-          width="200px"
-        />
+       <div>
+         <div>建议无损压缩后上传 <a target="_blank"  href="https://www.iloveimg.com/zh-cn/compress-image/compress-jpg">点击跳转压缩</a></div>
+         <UploadImg
+           v-model="formData.covers"
+           :limit="1"
+           :file-size="10"
+           height="120px"
+           width="200px"
+         />
+       </div>
       </el-form-item>
     </el-form>
 

@@ -136,6 +136,7 @@
       </el-form-item>
 
       <el-form-item label="内容" prop="content">
+        <div>建议无损压缩后上传,有利于加快加载速度 <a target="_blank"  href="https://www.iloveimg.com/zh-cn/compress-image/compress-jpg">点击跳转压缩</a></div>
         <Editor v-model="formData.content" height="350px" />
       </el-form-item>
     </el-form>

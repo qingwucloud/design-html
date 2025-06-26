@@ -6,19 +6,19 @@
       </template>
       {{ designerInfo.workExperience }} 年
     </el-descriptions-item>
-    <el-descriptions-item>
+    <el-descriptions-item >
       <template #label>
         <descriptions-item-label label="评分" />
       </template>
       <el-rate :model-value="designerInfo.score" show-score disabled score-template="{value} 分" />
     </el-descriptions-item>
-    <el-descriptions-item>
-      <template #label>
-        <descriptions-item-label label=" 设计师等级 " />
-      </template>
-      <DictTag :type="DICT_TYPE.DESIGNER_GRADE_TYPE" :value="designerInfo.designerGradeType" />
-    </el-descriptions-item>
-    <el-descriptions-item>
+<!--    <el-descriptions-item>-->
+<!--      <template #label>-->
+<!--        <descriptions-item-label label=" 设计师等级 " />-->
+<!--      </template>-->
+<!--      <DictTag :type="DICT_TYPE.DESIGNER_GRADE_TYPE" :value="designerInfo.designerGradeType" />-->
+<!--    </el-descriptions-item>-->
+    <el-descriptions-item :span="3">
       <template #label>
         <descriptions-item-label label=" 擅长风格" />
       </template>

@@ -80,20 +80,6 @@
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="设计师等级" prop="designerGradeType">
-            <el-select disabled v-model="formData.designerGradeType">
-              <el-option
-                v-for="dict in getIntDictOptions(DICT_TYPE.DESIGNER_GRADE_TYPE)"
-                :key="dict.value"
-                :label="dict.label"
-                :value="dict.value"
-              />
-            </el-select>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="12">
           <el-form-item label="擅长风格" prop="designerStyleType">
             <el-select
               disabled
@@ -109,12 +95,27 @@
               />
             </el-select>
           </el-form-item>
+<!--          <el-form-item label="设计师等级" prop="designerGradeType">-->
+<!--            <el-select disabled v-model="formData.designerGradeType">-->
+<!--              <el-option-->
+<!--                v-for="dict in getIntDictOptions(DICT_TYPE.DESIGNER_GRADE_TYPE)"-->
+<!--                :key="dict.value"-->
+<!--                :label="dict.label"-->
+<!--                :value="dict.value"-->
+<!--              />-->
+<!--            </el-select>-->
+<!--          </el-form-item>-->
         </el-col>
-        <el-col :span="12">
+      </el-row>
+      <el-row>
+        <el-col :span="24">
           <el-form-item label="居住地址" prop="address">
             <el-input disabled v-model="formData.address" autosize type="textarea" />
           </el-form-item>
         </el-col>
+<!--        <el-col :span="12">-->
+<!--         -->
+<!--        </el-col>-->
       </el-row>
 
       <el-row>

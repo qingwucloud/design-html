@@ -74,8 +74,14 @@
         />
       </el-form-item>
       <el-form-item>
-        <el-button @click="handleQuery"><Icon icon="ep:search" class="mr-5px" /> 搜索</el-button>
-        <el-button @click="resetQuery"><Icon icon="ep:refresh" class="mr-5px" /> 重置</el-button>
+        <el-button @click="handleQuery">
+          <Icon icon="ep:search" class="mr-5px" />
+          搜索
+        </el-button>
+        <el-button @click="resetQuery">
+          <Icon icon="ep:refresh" class="mr-5px" />
+          重置
+        </el-button>
       </el-form-item>
     </el-form>
   </ContentWrap>
@@ -122,7 +128,7 @@
       <el-table-column label="操作" align="center" fixed="right" min-width="120px">
         <template #default="{ row }">
           <el-button
-            v-if="[0, 1].includes(row.designerAppointmentStatus) && !row.tradeOrderId"
+            v-if="[0, 1, 2].includes(row.designerAppointmentStatus) && !row.contractId"
             link
             type="danger"
             @click="openForm(row)"

@@ -196,7 +196,7 @@
             <!-- 已通过的认证才显示更多功能 -->
             <el-dropdown
               v-if="scope.row.certStatus === 1"
-              v-hasPermi="['member:certification:recommend', 'member:certification:updateScore']"
+              v-hasPermi="['member:certification:recommend', 'member:certification:updateScore','member:certification:setVirtualContractCnt']"
             >
               <el-button link type="primary"> 更多</el-button>
               <template #dropdown>
@@ -221,6 +221,12 @@
                   >
                     修改评分
                   </el-dropdown-item>
+                  <el-dropdown-item
+                    v-if="checkPermi(['member:certification:setVirtualContractCnt'])"
+                    @click="openVirtualContractCntForm(scope.row)"
+                  >
+                    设置虚拟合同数
+                  </el-dropdown-item>
                 </el-dropdown-menu>
               </template>
             </el-dropdown>
@@ -242,6 +248,9 @@
 
   <!-- 评分表单弹窗 -->
   <ScoreForm ref="scoreFormRef" @success="getList" />
+
+  <!-- 设置虚拟合同数表单弹窗 -->
+  <SetVirtualContractCnt ref="virtualContractCntForm" @success="getList" />
 </template>
 
 <script setup lang="ts">
@@ -250,6 +259,7 @@ import { dateFormatter } from '@/utils/formatTime'
 import { CertificationApi, CertificationVO } from '@/api/member/certification'
 import CertificationForm from './CertificationForm.vue'
 import ScoreForm from './ScoreForm.vue'
+import SetVirtualContractCnt from './SetVirtualContractCnt.vue'
 import { getIntDictOptions, DICT_TYPE } from '@/utils/dict'
 import { checkPermi } from '@/utils/permission'
 
@@ -325,6 +335,13 @@ const scoreFormRef = ref()
 const openScoreForm = (row) => {
   scoreFormRef.value.open(row)
 }
+
+/** 设置虚拟合同数量操作 */
+const virtualContractCntForm = ref()
+const openVirtualContractCntForm = (row) => {
+  virtualContractCntForm.value.open(row)
+}
+
 /** 排序按钮操作 */
 const sortOfActions = async (row) => {
   ElMessageBox.prompt('排序值最大的8个会显示在小程序首页，数字越大排的越靠前', '请输入排序值', {

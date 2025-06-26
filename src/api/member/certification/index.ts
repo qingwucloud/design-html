@@ -56,5 +56,10 @@ export const CertificationApi = {
   // 修改设计师评分
   updateCertificationScore: async (data: any) => {
     return await request.post({ url: `/member/certification/updateScore`, data })
-  }
+  },
+
+  //设置虚拟合同数量
+  setVirtualContractCnt: async (data: any) => {
+    return await request.post({ url: `/member/certification/setVirtualContractCnt`, data })
+  },
 }

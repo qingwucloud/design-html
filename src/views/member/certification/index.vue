@@ -147,6 +147,7 @@
         :formatter="dateFormatter"
         width="180px"
       />
+      <el-table-column label="合同数量" align="center" prop="contractCount" />
       <el-table-column label="认证状态" align="center" prop="certStatus">
         <template #default="scope">
           <el-tag v-if="scope.row.certStatus === 1" type="primary" size="small">已通过</el-tag>

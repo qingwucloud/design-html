@@ -37,8 +37,17 @@
                 {{ contractData?.checker || '' }}
               </el-descriptions-item>
               <el-descriptions-item label="合同周期">
-                {{ formatDate(contractData?.startTime, 'YYYY-MM-DD') }} -
-                {{ formatDate(contractData?.endTime, 'YYYY-MM-DD') }}
+                <template v-if="contractData?.startTime && contractData?.endTime">
+                  {{ formatDate(contractData.startTime, 'YYYY-MM-DD') }} -
+                  {{ formatDate(contractData.endTime, 'YYYY-MM-DD') }}
+                </template>
+                <template v-else-if="contractData?.startTime">
+                  {{ formatDate(contractData.startTime, 'YYYY-MM-DD') }} 起
+                </template>
+                <template v-else-if="contractData?.endTime">
+                  截止至 {{ formatDate(contractData.endTime, 'YYYY-MM-DD') }}
+                </template>
+                <template v-else>-</template>
               </el-descriptions-item>
 
               <!-- 客户信息 -->

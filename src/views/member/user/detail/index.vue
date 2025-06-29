@@ -9,7 +9,7 @@
               <template #header>
                 <div class="card-header">
                   <CardTitle title="基本信息" />
-                  <el-button size="small" text type="primary" @click="openForm('update')">
+                  <el-button size="small"  v-hasPermi="['member:user:update']" text type="primary" @click="openForm('update')">
                     编辑
                   </el-button>
                 </div>

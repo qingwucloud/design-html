@@ -9,7 +9,13 @@
           <template #header>
             <div class="card-header">
               <CardTitle title="基本信息" />
-              <el-button size="small" text type="primary" @click="openForm('update')">
+              <el-button
+                size="small"
+                text
+                v-hasPermi="['member:user:update']"
+                type="primary"
+                @click="openForm('update')"
+              >
                 编辑
               </el-button>
             </div>
@@ -24,7 +30,6 @@
           </template>
           <UserWallet />
         </el-card>
-
       </el-col>
       <!-- 第二行卡片 -->
       <el-col :span="12">
@@ -44,7 +49,6 @@
           </template>
           <UserAccountInfo :user="user" :designerInfo="designerInfo" />
         </el-card>
-
       </el-col>
     </el-row>
     <el-card header="数据视图" shadow="never" style="width: 100%; margin-top: 20px">
@@ -103,6 +107,7 @@ import SettlementList from './SettlementList.vue'
 import PayoutList from './PayoutList.vue'
 import UserWallet from '@/views/member/certification/detail/UserWallet.vue'
 import { checkPermi } from '@/utils/permission'
+
 defineOptions({ name: 'MemberDetail' })
 
 const loading = ref(true) // 加载中

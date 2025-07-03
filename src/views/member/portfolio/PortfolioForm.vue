@@ -228,6 +228,24 @@ const open = async (type: string, id?: number) => {
     } finally {
       formLoading.value = false
     }
+  } else if (type === 'create') {
+    // 新建时检查是否有草稿
+    const draft = checkDraft()
+    if (draft && hasDraft.value) {
+      ElMessageBox.confirm('发现本地保存的草稿，是否恢复？', '提示', {
+        confirmButtonText: '恢复草稿',
+        cancelButtonText: '不需要',
+        type: 'info'
+      })
+        .then(() => {
+          formData.value = draft
+          message.success('草稿已恢复')
+        })
+        .catch(() => {
+          clearDraft()
+          message.info('草稿已清除')
+        })
+    }
   }
 }
 defineExpose({ open }) // 提供 open 方法，用于打开弹窗
@@ -257,6 +275,8 @@ const submitForm = async () => {
     if (formType.value === 'create') {
       await PortfolioApi.createPortfolio(data)
       message.success(t('common.createSuccess'))
+      // 提交成功后清除草稿
+      clearDraft()
     } else {
       await PortfolioApi.updatePortfolio(data)
       message.success(t('common.updateSuccess'))
@@ -295,4 +315,81 @@ const resetForm = () => {
   }
   formRef.value?.resetFields()
 }
+
+/** 本地草稿功能 */
+const DRAFT_KEY = 'portfolio_draft'
+const hasDraft = ref(false)
+
+// 计算属性：判断表单是否有实际内容
+const hasFormContent = (data) => {
+  // 特殊处理富文本内容
+  let isContentValid = false
+  if (data.content) {
+    // 检查富文本是否只包含图片
+    const hasImgTag = /<img[^>]*>/i.test(data.content)
+    const textWithoutTags = (data.content || '').replace(/<[^>]*>?/gm, '').trim()
+
+    // 如果有图片或有文本内容，则认为内容是有效的
+    if (hasImgTag || textWithoutTags) {
+      isContentValid = true
+    }
+  }
+
+  return data.title ||
+         data.userId ||
+         data.communityName ||
+         isContentValid ||  // 使用处理后的内容有效性判断
+         data.area ||
+         data.totalMoney ||
+         data.portfolioHouseType ||
+         data.coverUrl ||
+         (Array.isArray(data.portfolioTagType) && data.portfolioTagType.length > 0) ||
+         (Array.isArray(data.designerStyleType) && data.designerStyleType.length > 0);
+}
+
+// 初始化时检查是否有草稿
+const checkDraft = () => {
+  const draft = localStorage.getItem(DRAFT_KEY)
+  if (draft) {
+    try {
+      const draftData = JSON.parse(draft)
+      // 使用公共函数检查草稿是否有内容
+      if (hasFormContent(draftData)) {
+        hasDraft.value = true
+        return draftData
+      }
+    } catch (e) {
+      // 如果解析出错，清除无效草稿
+      localStorage.removeItem(DRAFT_KEY)
+    }
+  }
+  hasDraft.value = false
+  return null
+}
+
+// 保存草稿
+const saveDraft = (data) => {
+  localStorage.setItem(DRAFT_KEY, JSON.stringify(data))
+  hasDraft.value = true
+}
+
+// 清除草稿
+const clearDraft = () => {
+  localStorage.removeItem(DRAFT_KEY)
+  hasDraft.value = false
+}
+
+// 监听表单数据变化，自动保存草稿
+watch(
+  () => formData.value,
+  (newVal) => {
+    if (formType.value === 'create') {
+      // 使用公共函数检查表单是否有内容
+      if (hasFormContent(newVal)) {
+        saveDraft(newVal)
+      }
+    }
+  },
+  { deep: true }
+)
 </script>

@@ -91,7 +91,7 @@
               maxlength="10"
               placeholder="请输入总造价金额"
             >
-              <template #append>元</template>
+              <template #suffix>万元</template>
             </el-input>
           </el-form-item>
         </el-col>

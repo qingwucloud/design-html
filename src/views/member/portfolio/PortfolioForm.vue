@@ -83,11 +83,11 @@
             <el-input-number
               v-model="formData.totalMoney"
               :max="999999"
-              :precision="0"
+              :precision="2"
               class="w-full!"
               placeholder="请输入总造价金额"
             >
-              <template #append>元</template>
+              <template #suffix>万元</template>
             </el-input-number>
           </el-form-item>
         </el-col>

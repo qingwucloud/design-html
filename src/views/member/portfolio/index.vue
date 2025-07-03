@@ -408,6 +408,7 @@ const handleCommand = (command: string, row: any) => {
       break
     case 'handleDelete':
       handleDelete(row.id)
+      break
     case 'handleCancelSort':
       handleCancelSort(row.id)
       break

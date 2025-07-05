@@ -142,6 +142,7 @@
           >
           <!--          <Editor v-model="formData.content" height="350px" />-->
           <Tinymce
+            v-if="showTinymce"
             :toolbar="simpleToolbar"
             :plugins="simplePlugins"
             v-model="formData.content"
@@ -178,7 +179,7 @@ defineOptions({ name: 'PortfolioForm' })
 const { t } = useI18n() // 国际化
 const message = useMessage() // 消息弹窗
 const { delView } = useTagsViewStore() // 视图操作
-
+const showTinymce = ref(false)
 
 const dialogTitle = ref('') // 弹窗的标题
 const formLoading = ref(false) // 表单的加载中：1）修改时的数据加载；2）提交的按钮禁用
@@ -227,6 +228,7 @@ const formRef = ref() // 表单 Ref
 const designerList = ref<any[]>([]) // 设计师列表
 const route = useRoute() // 路由对象
 const open = async (type: string, id?: number) => {
+  showTinymce.value = false
   dialogTitle.value = t('action.' + type)
   formType.value = type
   resetForm()
@@ -264,7 +266,9 @@ const open = async (type: string, id?: number) => {
         .catch(() => {
           clearDraft()
           message.info('草稿已清除')
-        })
+        }).finally(()=>{
+
+      })
     }
   }
 }
@@ -274,7 +278,12 @@ onMounted(() => {
   const id = Array.isArray(route.params.id) ? Number(route.params.id[0]) : Number(route.params.id)
   open(type, id || undefined)
 })
-
+onActivated(()=>{
+  showTinymce.value = false
+  setTimeout(()=>{
+    showTinymce.value = true
+  },100)
+})
 const submitForm = async () => {
   // 校验表单
   await formRef.value.validate()
@@ -316,8 +325,6 @@ const closeCurrentTab = () => {
   delView(unref(currentRoute))
   push({ name: 'MemberPortfolio' })
 }
-
-
 
 /** 重置表单 */
 const resetForm = () => {

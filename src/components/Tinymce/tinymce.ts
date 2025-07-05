@@ -13,7 +13,7 @@ export const toolbar = [
 ]
 
 export const simplePlugins = [
-  'advlist anchor autolink autosave directionality fullscreen hr insertdatetime lists image nonbreaking noneditable pagebreak paste preview print save searchreplace tabfocus template textpattern visualblocks visualchars wordcount textcolor'
+  'advlist anchor autolink autosave directionality fullscreen hr insertdatetime lists image nonbreaking noneditable paste preview print save searchreplace tabfocus textpattern visualblocks visualchars wordcount textcolor'
 ]
 
 export const simpleToolbar = [

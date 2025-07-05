@@ -128,54 +128,69 @@ export default defineComponent({
         const files = e.target.files
         if (!files || files.length === 0) return
 
-        for (let i = 0; i < files.length; i++) {
-          const file = files[i]
+        // 创建全屏 loading
+        const loading = ElLoading.service({
+          lock: true,
+          text: '图片上传中...',
+          background: 'rgba(0, 0, 0, 0.7)'
+        })
 
-          // 检查文件大小限制 - 10MB
-          const maxFileSize = 10 * 1024 * 1024
-          if (file.size > maxFileSize) {
-            editor.windowManager.alert('文件大小不能超过 10MB')
-            continue
-          }
+        try {
+          for (let i = 0; i < files.length; i++) {
+            const file = files[i]
 
-          // 检查文件类型
-          const allowedTypes = ['image/png', 'image/jpg', 'image/jpeg', 'image/gif', 'image/webp']
-          if (!allowedTypes.includes(file.type)) {
-            editor.windowManager.alert('只支持 PNG、JPG、JPEG、GIF、WEBP 格式的图片')
-            continue
-          }
-
-          try {
-            const formData = new FormData()
-            formData.append('file', file)
-
-            const response = await fetch(getUploadUrl(), {
-              method: 'POST',
-              body: formData,
-              headers: {
-                Accept: '*',
-                Authorization: 'Bearer ' + getRefreshToken(),
-                'tenant-id': getTenantId()
-              }
-            })
-
-            const result = await response.json()
-
-            if (result.code === 0) {
-              const imageUrl = result.data
-              const fileName = file.name
-
-              // 插入图片到编辑器当前光标位置
-              editor.insertContent(
-                `<img src="${imageUrl}" alt="${fileName}" style="max-width: 100%; height: auto;" />`
-              )
-            } else {
-              editor.windowManager.alert(result.msg || '上传失败')
+            // 检查文件大小限制 - 10MB
+            const maxFileSize = 10 * 1024 * 1024
+            if (file.size > maxFileSize) {
+              editor.windowManager.alert('文件大小不能超过 10MB')
+              continue
             }
-          } catch (error) {
-            console.error('上传错误:', error)
-            editor.windowManager.alert('上传失败')
+
+            // 检查文件类型
+            const allowedTypes = ['image/png', 'image/jpg', 'image/jpeg', 'image/gif', 'image/webp']
+            if (!allowedTypes.includes(file.type)) {
+              editor.windowManager.alert('只支持 PNG、JPG、JPEG、GIF、WEBP 格式的图片')
+              continue
+            }
+
+            try {
+              // 更新 loading 文本显示当前上传进度
+              loading.setText(`正在上传第 ${i + 1}/${files.length} 张图片...`)
+
+              const formData = new FormData()
+              formData.append('file', file)
+
+              const response = await fetch(getUploadUrl(), {
+                method: 'POST',
+                body: formData,
+                headers: {
+                  Accept: '*',
+                  Authorization: 'Bearer ' + getRefreshToken(),
+                  'tenant-id': getTenantId()
+                }
+              })
+
+              const result = await response.json()
+
+              if (result.code === 0) {
+                const imageUrl = result.data
+                const fileName = file.name
+
+                // 插入图片到编辑器当前光标位置
+                editor.insertContent(
+                  `<img src="${imageUrl}" alt="${fileName}" style="max-width: 100%; height: auto;" />`
+                )
+              } else {
+                editor.windowManager.alert(result.msg || '上传失败')
+              }
+            } catch (error) {
+              console.error('上传错误:', error)
+              editor.windowManager.alert('上传失败')
+            }
           }
+        } finally {
+          // 确保 loading 被关闭
+          loading.close()
         }
       }
 
@@ -188,7 +203,7 @@ export default defineComponent({
       return {
         selector: `#${unref(tinymceId)}`,
         height,
-        toolbar: toolbar.concat(['custom_upload']), // 添加自定义上传按钮到工具栏
+        toolbar: toolbar.concat(['custom_upload']), // 添加自定义上传按钮到���具栏
         menubar: '',
         plugins,
         language_url: publicPath + 'resource/tinymce/langs/zh_CN.js',

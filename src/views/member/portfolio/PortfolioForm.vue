@@ -155,19 +155,6 @@
 
     <!-- 固定在底部的操作按钮 -->
     <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 z-10">
-      <!-- 草稿操作区域 -->
-      <div v-if="formType === 'create' && hasDraft" class="flex justify-center mb-3">
-        <el-button @click="restoreDraft" type="info" plain size="small" class="mr-2">
-          <Icon icon="ep:document" class="mr-1" />
-          读取草稿
-        </el-button>
-        <el-button @click="clearDraft" type="danger" plain size="small">
-          <Icon icon="ep:delete" class="mr-1" />
-          清除草稿
-        </el-button>
-      </div>
-
-      <!-- 主要操作按钮 -->
       <div class="flex justify-center">
         <el-button @click="closeCurrentTab" class="mr-3">取 消</el-button>
         <el-button @click="submitForm" type="primary" :disabled="formLoading">确 定</el-button>
@@ -262,9 +249,23 @@ const open = async (type: string, id?: number) => {
       formLoading.value = false
     }
   } else if (type === 'create') {
-    // 时检查是否有草稿
-     checkDraft()
-
+    // ��建时检查是否有草稿
+    const draft = checkDraft()
+    if (draft && hasDraft.value) {
+      ElMessageBox.confirm('发现本地保存的草稿，是否恢复？', '提示', {
+        confirmButtonText: '恢复草稿',
+        cancelButtonText: '不需要',
+        type: 'info'
+      })
+        .then(() => {
+          formData.value = draft
+          message.success('草稿已恢复')
+        })
+        .catch(() => {
+          clearDraft()
+          message.info('草稿已清除')
+        })
+    }
   }
 }
 
@@ -390,7 +391,7 @@ const checkDraft = () => {
         return draftData
       }
     } catch (e) {
-      // 如���解析出错，清除无效草稿
+      // 如果解析出错，清除无效草稿
       localStorage.removeItem(DRAFT_KEY)
     }
   }
@@ -401,7 +402,7 @@ const checkDraft = () => {
 // 保存草稿
 const saveDraft = (data) => {
   localStorage.setItem(DRAFT_KEY, JSON.stringify(data))
-  // hasDraft.value = true
+  hasDraft.value = true
 }
 
 // 清除草稿
@@ -410,23 +411,12 @@ const clearDraft = () => {
   hasDraft.value = false
 }
 
-// 读取草稿
-const restoreDraft = () => {
-  const draft = checkDraft()
-  if (draft) {
-    formData.value = draft
-    message.success('草稿已恢复')
-  } else {
-    message.info('没有找到草��')
-  }
-}
-
 // 监听表单数据变化，自动保存草稿
 watch(
   () => formData.value,
   (newVal) => {
     if (formType.value === 'create') {
-      // 使用公��函数检查表单是否有内容
+      // 使用公共函数检查表单是否有内容
       if (hasFormContent(newVal)) {
         saveDraft(newVal)
       }

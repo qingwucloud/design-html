@@ -314,7 +314,7 @@ watch(
               },
               {
                 icon: 'ep:close',
-                label: t('common.closeTab'),
+                label: t('common.closeTab')+111,
                 disabled: !!visitedViews?.length && selectedTag?.meta.affix,
                 command: () => {
                   closeSelectedTag(item)
@@ -432,7 +432,7 @@ watch(
         },
         {
           icon: 'ep:close',
-          label: t('common.closeTab'),
+          label: t('common.closeTab')+111,
           disabled: !!visitedViews?.length && selectedTag?.meta.affix,
           command: () => {
             closeSelectedTag(selectedTag!)

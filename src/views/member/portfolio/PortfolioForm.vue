@@ -155,7 +155,7 @@
 
     <!-- 固定在底部的操作按钮 -->
     <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 z-10">
-      <div class="flex justify-end">
+      <div class="flex justify-center">
         <el-button @click="closeCurrentTab" class="mr-3">取 消</el-button>
         <el-button @click="submitForm" type="primary" :disabled="formLoading">确 定</el-button>
       </div>
@@ -169,16 +169,16 @@ import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
 import { CertificationApi } from '@/api/member/certification'
 import { validateCountWords } from '@/utils/formRules'
 import { onMounted } from 'vue'
-import { useTagsView } from '@/hooks/web/useTagsView'
 import { simplePlugins, simpleToolbar } from '@/components/Tinymce/tinymce'
+import { useTagsViewStore } from '@/store/modules/tagsView'
 
 /** 设计师作品集 表单 */
 defineOptions({ name: 'PortfolioForm' })
 
 const { t } = useI18n() // 国际化
 const message = useMessage() // 消息弹窗
-const { closeCurrent } = useTagsView() // 标签页操作
-const { currentRoute } = useRouter() // 路由
+const { delView } = useTagsViewStore() // 视图操作
+
 
 const dialogTitle = ref('') // 弹窗的标题
 const formLoading = ref(false) // 表单的加载中：1）修改时的数据加载；2）提交的按钮禁用
@@ -206,14 +206,14 @@ const formData = ref({
   checker: undefined
 })
 const formRules = reactive({
-  userId: [{ required: true, message: '设计师不能为��', trigger: 'blur' }],
+  userId: [{ required: true, message: '设计师不能为空', trigger: 'blur' }],
   communityName: [{ required: true, message: '小区名称不能为空', trigger: 'blur' }],
-  totalMoney: [{ required: true, message: '总造价金额不���为空', trigger: 'blur' }],
+  totalMoney: [{ required: true, message: '总造价金额不能为空', trigger: 'blur' }],
   title: [{ required: true, message: '作品标题不能为空', trigger: 'blur' }],
   coverUrl: [{ required: true, message: '主图不能为空', trigger: 'blur' }],
   portfolioHouseType: [{ required: true, message: '户型不能为空', trigger: 'blur' }],
   area: [{ required: true, message: '面积不能为空', trigger: 'blur' }],
-  portfolioTagType: [{ required: true, message: '作品���签类型不能为空', trigger: 'change' }],
+  portfolioTagType: [{ required: true, message: '作品签类型不能为空', trigger: 'change' }],
   designerStyleType: [{ required: true, message: '作品风格类型不能为空', trigger: 'change' }],
   content: [
     {
@@ -305,17 +305,19 @@ const submitForm = async () => {
       message.success(t('common.updateSuccess'))
     }
 
-    // 操作完成后���闭当前标签页
     closeCurrentTab()
   } finally {
     formLoading.value = false
   }
 }
-
+const { push, currentRoute } = useRouter() // 路由
 /** 关闭当前标签页 */
 const closeCurrentTab = () => {
-  closeCurrent(unref(currentRoute))
+  delView(unref(currentRoute))
+  push({ name: 'MemberPortfolio' })
 }
+
+
 
 /** 重置表单 */
 const resetForm = () => {

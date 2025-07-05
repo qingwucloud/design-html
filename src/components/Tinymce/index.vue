@@ -1,15 +1,5 @@
 <template>
   <div class="tinymce-container">
-    <UploadFile
-      ref="uploadFileRef"
-      v-model="uploadedFiles"
-      :is-show-tip="false"
-      :show-file-list="false"
-      :file-size="10"
-      buttonText="上传图片"
-      :file-type="['png', 'jpg', 'jpeg', 'gif', 'webp']"
-      @update:model-value="handleUploadSuccess"
-    />
     <textarea
       v-if="!initOptions.inline"
       :id="tinymceId"
@@ -114,8 +104,6 @@ export default defineComponent({
     const fullscreen = ref(false)
     const tinymceId = ref<string>(buildShortUUID('tiny-vue'))
     const elRef = ref<Nullable<HTMLElement>>(null)
-    const uploadFileRef = ref()
-    const uploadedFiles = ref('')
 
     const tinymceContent = computed(() => props.modelValue)
 
@@ -129,14 +117,79 @@ export default defineComponent({
 
     const skinName = ref('oxide')
 
+    // 处理文件上传的函数
+    const handleFileUpload = (editor: Editor) => {
+      const input = document.createElement('input')
+      input.type = 'file'
+      input.accept = 'image/*'
+      input.multiple = true
+
+      input.onchange = async (e: any) => {
+        const files = e.target.files
+        if (!files || files.length === 0) return
+
+        for (let i = 0; i < files.length; i++) {
+          const file = files[i]
+
+          // 检查文件大小限制 - 10MB
+          const maxFileSize = 10 * 1024 * 1024
+          if (file.size > maxFileSize) {
+            editor.windowManager.alert('文件大小不能超过 10MB')
+            continue
+          }
+
+          // 检查文件类型
+          const allowedTypes = ['image/png', 'image/jpg', 'image/jpeg', 'image/gif', 'image/webp']
+          if (!allowedTypes.includes(file.type)) {
+            editor.windowManager.alert('只支持 PNG、JPG、JPEG、GIF、WEBP 格式的图片')
+            continue
+          }
+
+          try {
+            const formData = new FormData()
+            formData.append('file', file)
+
+            const response = await fetch(getUploadUrl(), {
+              method: 'POST',
+              body: formData,
+              headers: {
+                Accept: '*',
+                Authorization: 'Bearer ' + getRefreshToken(),
+                'tenant-id': getTenantId()
+              }
+            })
+
+            const result = await response.json()
+
+            if (result.code === 0) {
+              const imageUrl = result.data
+              const fileName = file.name
+
+              // 插入图片到编辑器当前光标位置
+              editor.insertContent(
+                `<img src="${imageUrl}" alt="${fileName}" style="max-width: 100%; height: auto;" />`
+              )
+            } else {
+              editor.windowManager.alert(result.msg || '上传失败')
+            }
+          } catch (error) {
+            console.error('上传错误:', error)
+            editor.windowManager.alert('上传失败')
+          }
+        }
+      }
+
+      input.click()
+    }
+
     const initOptions = computed((): RawEditorSettings => {
       const { height, options, toolbar, plugins } = props
       const publicPath = import.meta.env.VITE_PUBLIC_PATH || '/'
       return {
         selector: `#${unref(tinymceId)}`,
         height,
-        toolbar,
-        menubar: 'file edit insert view',
+        toolbar: toolbar.concat(['custom_upload']), // 添加自定义上传按钮到工具栏
+        menubar: '',
         plugins,
         language_url: publicPath + 'resource/tinymce/langs/zh_CN.js',
         language: 'zh_CN',
@@ -161,7 +214,7 @@ export default defineComponent({
             }
             const formData = new FormData()
             formData.append('file', file, blobInfo.filename())
-            debugger
+
             const response = await fetch(getUploadUrl(), {
               method: 'POST',
               body: formData,
@@ -187,9 +240,19 @@ export default defineComponent({
             failureFun('上传失败')
           }
         },
+        convert_urls:false, // 禁用自动转换URL
         ...options,
         setup: (editor: Editor) => {
           editorRef.value = editor
+
+          // 注册自定义上传按钮
+          editor.ui.registry.addButton('custom_upload', {
+            text: '上传多张图片',
+            icon: 'image',
+            tooltip: '上传本地图片',
+            onAction: () => handleFileUpload(editor)
+          })
+
           editor.on('init', (e: any) => initSetup(e))
         }
       }
@@ -316,33 +379,6 @@ export default defineComponent({
       })
     }
 
-    // 处理上传成功，插入图片到编辑器
-    const handleUploadSuccess = (fileUrls: string) => {
-      const editor = unref(editorRef)
-      if (!editor || !fileUrls) return
-
-      // 处理多个文件URL（以逗号分隔）
-      const urls = fileUrls.split(',').filter((url) => url.trim())
-
-      urls.forEach((url) => {
-        // 获取��件名作为alt属性
-        const fileName = url.substring(url.lastIndexOf('/') + 1)
-
-        // 插入图片到编辑器当前光标位置
-        editor.insertContent(
-          `<img src="${url}" alt="${fileName}" style="max-width: 100%; height: auto;" />`
-        )
-      })
-
-      // 重置上传组件的值，准备下次上传
-      uploadedFiles.value = ''
-
-      // 触发编辑器内容变化事件
-      const content = editor.getContent({ format: attrs.outputFormat })
-      emit('update:modelValue', content)
-      emit('change', content)
-    }
-
     return {
       containerWidth,
       initOptions,
@@ -351,10 +387,7 @@ export default defineComponent({
       tinymceId,
       editorRef,
       fullscreen,
-      disabled,
-      uploadFileRef,
-      uploadedFiles,
-      handleUploadSuccess
+      disabled
     }
   }
 })

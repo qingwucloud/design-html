@@ -131,6 +131,9 @@ importers:
       steady-xml:
         specifier: ^0.1.0
         version: 0.1.0
+      tinymce:
+        specifier: ^5.10.9
+        version: 5.10.9
       url:
         specifier: ^0.11.3
         version: 0.11.4
@@ -4734,6 +4737,9 @@ packages:
   tinyglobby@0.2.10:
     resolution: {integrity: sha512-Zc+8eJlFMvgatPZTl6A9L/yht8QqdmUNtURHaKZLmKBE12hNPSrqNkUp2cs3M/UKmNVVAMFQYSjYIVHDjW5zew==, tarball: https://registry.npmmirror.com/tinyglobby/-/tinyglobby-0.2.10.tgz}
     engines: {node: '>=12.0.0'}
+
+  tinymce@5.10.9:
+    resolution: {integrity: sha512-5bkrors87X9LhYX2xq8GgPHrIgJYHl87YNs+kBcjQ5I3CiUgzo/vFcGvT3MZQ9QHsEeYMhYO6a5CLGGffR8hMg==}
 
   to-regex-range@5.0.1:
     resolution: {integrity: sha512-65P7iz6X5yEr1cwcgvQxbbIw7Uk3gOy5dIdtZ4rDveLqhrdJP+Li/Hx6tyK0NEb+2GCyneCMJiGqrADCSNk8sQ==, tarball: https://registry.npmmirror.com/to-regex-range/-/to-regex-range-5.0.1.tgz}
@@ -10089,6 +10095,8 @@ snapshots:
     dependencies:
       fdir: 6.4.2(picomatch@4.0.2)
       picomatch: 4.0.2
+
+  tinymce@5.10.9: {}
 
   to-regex-range@5.0.1:
     dependencies:

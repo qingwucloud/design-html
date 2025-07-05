@@ -247,7 +247,7 @@ export default defineComponent({
 
           // 注册自定义上传按钮
           editor.ui.registry.addButton('custom_upload', {
-            text: '上传多张图片',
+            text: '上传图片',
             icon: 'image',
             tooltip: '上传本地图片',
             onAction: () => handleFileUpload(editor)

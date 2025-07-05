@@ -140,13 +140,25 @@
               >点击跳转压缩</a
             ></div
           >
-          <!--        <Editor v-model="formData.content" height="350px" />-->
-          <Tinymce :toolbar="simpleToolbar" :plugins="simplePlugins" v-model="formData.content" height="700" />
+          <!--          <Editor v-model="formData.content" height="350px" />-->
+          <Tinymce
+            :toolbar="simpleToolbar"
+            :plugins="simplePlugins"
+            v-model="formData.content"
+            height="700"
+          />
         </div>
       </el-form-item>
+      <!-- 为固定底部按钮预留空间 -->
+      <div class="pb-20"></div>
     </el-form>
-    <div class="flex justify-end mt-10">
-      <el-button @click="submitForm" type="primary" :disabled="formLoading">确 定</el-button>
+
+    <!-- 固定在底部的操作按钮 -->
+    <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 z-10">
+      <div class="flex justify-end">
+        <el-button @click="closeCurrentTab" class="mr-3">取 消</el-button>
+        <el-button @click="submitForm" type="primary" :disabled="formLoading">确 定</el-button>
+      </div>
     </div>
     <!--      <el-button @click="dialogVisible = false">取 消</el-button>-->
   </ContentWrap>
@@ -157,13 +169,16 @@ import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
 import { CertificationApi } from '@/api/member/certification'
 import { validateCountWords } from '@/utils/formRules'
 import { onMounted } from 'vue'
-import { simplePlugins,simpleToolbar } from '@/components/Tinymce/tinymce'
+import { useTagsView } from '@/hooks/web/useTagsView'
+import { simplePlugins, simpleToolbar } from '@/components/Tinymce/tinymce'
 
 /** 设计师作品集 表单 */
 defineOptions({ name: 'PortfolioForm' })
 
 const { t } = useI18n() // 国际化
 const message = useMessage() // 消息弹窗
+const { closeCurrent } = useTagsView() // 标签页操作
+const { currentRoute } = useRouter() // 路由
 
 const dialogTitle = ref('') // 弹窗的标题
 const formLoading = ref(false) // 表单的加载中：1）修改时的数据加载；2）提交的按钮禁用
@@ -191,14 +206,14 @@ const formData = ref({
   checker: undefined
 })
 const formRules = reactive({
-  userId: [{ required: true, message: '设计师不能为空', trigger: 'blur' }],
+  userId: [{ required: true, message: '设计师不能为��', trigger: 'blur' }],
   communityName: [{ required: true, message: '小区名称不能为空', trigger: 'blur' }],
-  totalMoney: [{ required: true, message: '总造价金额不能为空', trigger: 'blur' }],
+  totalMoney: [{ required: true, message: '总造价金额不���为空', trigger: 'blur' }],
   title: [{ required: true, message: '作品标题不能为空', trigger: 'blur' }],
   coverUrl: [{ required: true, message: '主图不能为空', trigger: 'blur' }],
   portfolioHouseType: [{ required: true, message: '户型不能为空', trigger: 'blur' }],
   area: [{ required: true, message: '面积不能为空', trigger: 'blur' }],
-  portfolioTagType: [{ required: true, message: '作品标签类型不能为空', trigger: 'change' }],
+  portfolioTagType: [{ required: true, message: '作品���签类型不能为空', trigger: 'change' }],
   designerStyleType: [{ required: true, message: '作品风格类型不能为空', trigger: 'change' }],
   content: [
     {
@@ -234,7 +249,7 @@ const open = async (type: string, id?: number) => {
       formLoading.value = false
     }
   } else if (type === 'create') {
-    // 新建时检查是否有草稿
+    // ��建时检查是否有草稿
     const draft = checkDraft()
     if (draft && hasDraft.value) {
       ElMessageBox.confirm('发现本地保存的草稿，是否恢复？', '提示', {
@@ -255,7 +270,9 @@ const open = async (type: string, id?: number) => {
 }
 
 onMounted(() => {
-  open(route.params.type, route.params.id)
+  const type = Array.isArray(route.params.type) ? route.params.type[0] : route.params.type
+  const id = Array.isArray(route.params.id) ? Number(route.params.id[0]) : Number(route.params.id)
+  open(type, id || undefined)
 })
 
 const submitForm = async () => {
@@ -287,9 +304,17 @@ const submitForm = async () => {
       await PortfolioApi.updatePortfolio(data)
       message.success(t('common.updateSuccess'))
     }
+
+    // 操作完成后���闭当前标签页
+    closeCurrentTab()
   } finally {
     formLoading.value = false
   }
+}
+
+/** 关闭当前标签页 */
+const closeCurrentTab = () => {
+  closeCurrent(unref(currentRoute))
 }
 
 /** 重置表单 */
@@ -352,7 +377,7 @@ const hasFormContent = (data) => {
   )
 }
 
-// 初始化时检查是否有草稿
+// 初始��时检查是否有草稿
 const checkDraft = () => {
   const draft = localStorage.getItem(DRAFT_KEY)
   if (draft) {

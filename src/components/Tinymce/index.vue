@@ -1,11 +1,23 @@
 <template>
-  <textarea
-    v-if="!initOptions.inline"
-    :id="tinymceId"
-    ref="elRef"
-    :style="{ visibility: 'hidden' }"
-  ></textarea>
-  <slot v-else></slot>
+  <div class="tinymce-container">
+    <UploadFile
+      ref="uploadFileRef"
+      v-model="uploadedFiles"
+      :is-show-tip="false"
+      :show-file-list="false"
+      :file-size="10"
+      buttonText="上传图片"
+      :file-type="['png', 'jpg', 'jpeg', 'gif', 'webp']"
+      @update:model-value="handleUploadSuccess"
+    />
+    <textarea
+      v-if="!initOptions.inline"
+      :id="tinymceId"
+      ref="elRef"
+      :style="{ visibility: 'hidden' }"
+    ></textarea>
+    <slot v-else></slot>
+  </div>
 </template>
 
 <script lang="ts">
@@ -58,6 +70,8 @@ import { bindHandlers } from './helper'
 import { isNumber } from 'lodash-es'
 import { onMountedOrActivated } from '@/hooks/web/onMountedOrActivated'
 import { buildShortUUID } from '@/utils/uuid'
+import { getRefreshToken, getTenantId } from '@/utils/auth'
+import { getUploadUrl } from '@/components/UploadFile/src/useUpload'
 
 const tinymceProps = {
   options: {
@@ -100,6 +114,8 @@ export default defineComponent({
     const fullscreen = ref(false)
     const tinymceId = ref<string>(buildShortUUID('tiny-vue'))
     const elRef = ref<Nullable<HTMLElement>>(null)
+    const uploadFileRef = ref()
+    const uploadedFiles = ref('')
 
     const tinymceContent = computed(() => props.modelValue)
 
@@ -120,7 +136,7 @@ export default defineComponent({
         selector: `#${unref(tinymceId)}`,
         height,
         toolbar,
-        menubar: 'file edit insert view format table',
+        menubar: 'file edit insert view',
         plugins,
         language_url: publicPath + 'resource/tinymce/langs/zh_CN.js',
         language: 'zh_CN',
@@ -133,6 +149,44 @@ export default defineComponent({
         skin_url: publicPath + 'resource/tinymce/skins/ui/' + skinName.value,
         content_css:
           publicPath + 'resource/tinymce/skins/ui/' + skinName.value + '/content.min.css',
+        images_upload_handler: async (blobInfo: any, successFun: any, failureFun: any) => {
+          try {
+            const file = blobInfo.blob()
+
+            // 检查文件大小限制 - 10MB
+            const maxFileSize = 10 * 1024 * 1024 // 10MB
+            if (file.size > maxFileSize) {
+              failureFun('文件大小不能超过 10MB')
+              return
+            }
+            const formData = new FormData()
+            formData.append('file', file, blobInfo.filename())
+            debugger
+            const response = await fetch(getUploadUrl(), {
+              method: 'POST',
+              body: formData,
+              headers: {
+                Accept: '*',
+                Authorization: 'Bearer ' + getRefreshToken(),
+                'tenant-id': getTenantId()
+              }
+            })
+            const result = await response.json()
+            console.log('上传结果:', result)
+
+            if (result.code === 0) {
+              const imageUrl = result.data
+              console.log('图片URL:', imageUrl)
+              // 调用成功回调函数插入图片
+              successFun(imageUrl)
+            } else {
+              failureFun(result.msg || '上传失败')
+            }
+          } catch (error) {
+            console.error('上传错误:', error)
+            failureFun('上传失败')
+          }
+        },
         ...options,
         setup: (editor: Editor) => {
           editorRef.value = editor
@@ -262,6 +316,33 @@ export default defineComponent({
       })
     }
 
+    // 处理上传成功，插入图片到编辑器
+    const handleUploadSuccess = (fileUrls: string) => {
+      const editor = unref(editorRef)
+      if (!editor || !fileUrls) return
+
+      // 处理多个文件URL（以逗号分隔）
+      const urls = fileUrls.split(',').filter((url) => url.trim())
+
+      urls.forEach((url) => {
+        // 获取��件名作为alt属性
+        const fileName = url.substring(url.lastIndexOf('/') + 1)
+
+        // 插入图片到编辑器当前光标位置
+        editor.insertContent(
+          `<img src="${url}" alt="${fileName}" style="max-width: 100%; height: auto;" />`
+        )
+      })
+
+      // 重置上传组件的值，准备下次上传
+      uploadedFiles.value = ''
+
+      // 触发编辑器内容变化事件
+      const content = editor.getContent({ format: attrs.outputFormat })
+      emit('update:modelValue', content)
+      emit('change', content)
+    }
+
     return {
       containerWidth,
       initOptions,
@@ -270,7 +351,10 @@ export default defineComponent({
       tinymceId,
       editorRef,
       fullscreen,
-      disabled
+      disabled,
+      uploadFileRef,
+      uploadedFiles,
+      handleUploadSuccess
     }
   }
 })

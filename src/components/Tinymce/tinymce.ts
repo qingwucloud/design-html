@@ -13,9 +13,9 @@ export const toolbar = [
 ]
 
 export const simplePlugins = [
-  'advlist anchor autolink autosave directionality fullscreen hr insertdatetime lists image nonbreaking noneditable paste preview print save searchreplace tabfocus textpattern visualblocks visualchars wordcount textcolor'
+  'advlist anchor autolink axupimgs directionality fullscreen hr fullscreen insertdatetime lists image nonbreaking noneditable paste preview print save searchreplace tabfocus textpattern visualblocks visualchars wordcount textcolor'
 ]
 
 export const simpleToolbar = [
-  'lineheight bold italic underline fontsizeselect bullist numlist image fullscreen forecolor backcolor undo redo aligncenter '
+  'lineheight bold italic underline axupimgs fontsizeselect bullist numlist image  forecolor backcolor undo redo aligncenter fullscreen'
 ]

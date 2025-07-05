@@ -21,13 +21,13 @@
       :on-preview="handlePreview"
       :on-remove="handleRemove"
       :on-success="handleFileSuccess"
-      :show-file-list="true"
+      :show-file-list="props.showFileList"
       class="upload-file-uploader"
       name="file"
     >
       <el-button type="primary">
         <Icon icon="ep:upload-filled" />
-        选取文件
+        {{ props.buttonText }}
       </el-button>
       <template v-if="isShowTip" #tip>
         <div class="text-12px line-height-loose">
@@ -37,7 +37,7 @@
           格式为 <b style="color: #f56c6c">{{ fileType.join('/') }}</b> 的文件
         </div>
       </template>
-      <template #file="row">
+      <template v-if="showFileList" #file="row">
         <div class="flex items-center">
           <span>{{ row.file.name }}</span>
           <div class="ml-10px">
@@ -96,7 +96,9 @@ const props = defineProps({
   drag: propTypes.bool.def(false), // 拖拽上传
   isShowTip: propTypes.bool.def(true), // 是否显示提示
   disabled: propTypes.bool.def(false), // 是否禁用上传组件 ==> 非必传（默认为 false）
-  directory: propTypes.string.def(undefined) // 上传目录 ==> 非必传（默认为 undefined）
+  directory: propTypes.string.def(undefined), // 上传目录 ==> 非必传（默认为 undefined）
+  buttonText: propTypes.string.def('选取文件'), // 按钮文本 ==> 非必传（默认为"选取文件"）
+  showFileList: propTypes.bool.def(true) // 是否显示文件列表 ==> 非必传（默认为 true）
 })
 
 // ========== 上传相关 ==========

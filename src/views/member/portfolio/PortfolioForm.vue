@@ -1,12 +1,8 @@
 <template>
-  <Dialog
-    :title="dialogTitle"
-    v-model="dialogVisible"
-    width="1080px"
-    scroll
-    max-height="700px"
-    top="2vh"
-  >
+  <!--  <Dialog :title="dialogTitle" v-model="dialogVisible" max-height="1000" width="1080px" scroll is-center>-->
+  <!--   -->
+  <!--  </Dialog>-->
+  <ContentWrap>
     <el-form
       ref="formRef"
       :model="formData"
@@ -136,21 +132,32 @@
       </el-form-item>
 
       <el-form-item label="内容" prop="content">
-        <div>建议无损压缩后上传,有利于加快加载速度 <a target="_blank"  href="https://www.iloveimg.com/zh-cn/compress-image/compress-jpg">点击跳转压缩</a></div>
-        <Editor v-model="formData.content" height="350px" />
+        <div class="flex flex-col w-full">
+          <div
+            >建议无损压缩后上传,有利于加快加载速度<a
+              target="_blank"
+              href="https://www.iloveimg.com/zh-cn/compress-image/compress-jpg"
+              >点击跳转压缩</a
+            ></div
+          >
+          <!--        <Editor v-model="formData.content" height="350px" />-->
+          <Tinymce :toolbar="simpleToolbar" :plugins="simplePlugins" v-model="formData.content" height="700" />
+        </div>
       </el-form-item>
     </el-form>
-    <template #footer>
+    <div class="flex justify-end mt-10">
       <el-button @click="submitForm" type="primary" :disabled="formLoading">确 定</el-button>
-      <el-button @click="dialogVisible = false">取 消</el-button>
-    </template>
-  </Dialog>
+    </div>
+    <!--      <el-button @click="dialogVisible = false">取 消</el-button>-->
+  </ContentWrap>
 </template>
 <script setup lang="ts">
 import { PortfolioApi } from '@/api/member/portfolio'
 import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
 import { CertificationApi } from '@/api/member/certification'
 import { validateCountWords } from '@/utils/formRules'
+import { onMounted } from 'vue'
+import { simplePlugins,simpleToolbar } from '@/components/Tinymce/tinymce'
 
 /** 设计师作品集 表单 */
 defineOptions({ name: 'PortfolioForm' })
@@ -158,7 +165,6 @@ defineOptions({ name: 'PortfolioForm' })
 const { t } = useI18n() // 国际化
 const message = useMessage() // 消息弹窗
 
-const dialogVisible = ref(false) // 弹窗的是否展示
 const dialogTitle = ref('') // 弹窗的标题
 const formLoading = ref(false) // 表单的加载中：1）修改时的数据加载；2）提交的按钮禁用
 const formType = ref('') // 表单的类型：create - 新增；update - 修改
@@ -204,9 +210,8 @@ const formRules = reactive({
 })
 const formRef = ref() // 表单 Ref
 const designerList = ref<any[]>([]) // 设计师列表
-/** 打开弹窗 */
+const route = useRoute() // 路由对象
 const open = async (type: string, id?: number) => {
-  dialogVisible.value = true
   dialogTitle.value = t('action.' + type)
   formType.value = type
   resetForm()
@@ -248,10 +253,11 @@ const open = async (type: string, id?: number) => {
     }
   }
 }
-defineExpose({ open }) // 提供 open 方法，用于打开弹窗
 
-/** 提交表单 */
-const emit = defineEmits(['success']) // 定义 success 事件，用于操作成功后的回调
+onMounted(() => {
+  open(route.params.type, route.params.id)
+})
+
 const submitForm = async () => {
   // 校验表单
   await formRef.value.validate()
@@ -281,9 +287,6 @@ const submitForm = async () => {
       await PortfolioApi.updatePortfolio(data)
       message.success(t('common.updateSuccess'))
     }
-    dialogVisible.value = false
-    // 发送操作成功的事件
-    emit('success')
   } finally {
     formLoading.value = false
   }
@@ -335,16 +338,18 @@ const hasFormContent = (data) => {
     }
   }
 
-  return data.title ||
-         data.userId ||
-         data.communityName ||
-         isContentValid ||  // 使用处理后的内容有效性判断
-         data.area ||
-         data.totalMoney ||
-         data.portfolioHouseType ||
-         data.coverUrl ||
-         (Array.isArray(data.portfolioTagType) && data.portfolioTagType.length > 0) ||
-         (Array.isArray(data.designerStyleType) && data.designerStyleType.length > 0);
+  return (
+    data.title ||
+    data.userId ||
+    data.communityName ||
+    isContentValid || // 使用处理后的内容有效性判断
+    data.area ||
+    data.totalMoney ||
+    data.portfolioHouseType ||
+    data.coverUrl ||
+    (Array.isArray(data.portfolioTagType) && data.portfolioTagType.length > 0) ||
+    (Array.isArray(data.designerStyleType) && data.designerStyleType.length > 0)
+  )
 }
 
 // 初始化时检查是否有草稿

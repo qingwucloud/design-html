@@ -353,6 +353,16 @@ const remainingRouter: AppRouteRecordRaw[] = [
           hidden: true
         },
         component: () => import('@/views/member/contract/detail/index.vue')
+      },
+      {
+        path: 'portfolio/add/:type/:id?',
+        name: 'PortfolioForm',
+        meta: {
+          title: '作品集',
+          noCache: true,
+          hidden: true
+        },
+        component: () => import('@/views/member/portfolio/PortfolioForm.vue')
       }
     ]
   },

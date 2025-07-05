@@ -239,7 +239,7 @@
                   </el-dropdown-item>
                   <el-dropdown-item
                     v-if="checkPermi(['member:design:update'])"
-                    @click="formUserRef.open('update',scope.row.id)"
+                    @click="formUserRef.open('update',scope.row.userId)"
                   >
                     编辑
                   </el-dropdown-item>

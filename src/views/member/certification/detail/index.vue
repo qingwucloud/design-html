@@ -12,7 +12,7 @@
               <el-button
                 size="small"
                 text
-                v-hasPermi="['member:user:update']"
+                v-hasPermi="['member:design:update']"
                 type="primary"
                 @click="openForm('update')"
               >
@@ -86,12 +86,12 @@
   </div>
 
   <!-- 表单弹窗：添加/修改 -->
-  <UserForm ref="formRef" @success="getUserData(id)" :showStatus="false" />
+  <UserForm ref="formRef" @success="getUserData(id)"  />
 </template>
 <script setup>
 import * as UserApi from '@/api/member/user'
 import { useTagsViewStore } from '@/store/modules/tagsView'
-import UserForm from '@/views/member/user/UserForm.vue'
+import UserForm from '../UserForm.vue'
 import UserAccountInfo from './UserAccountInfo.vue'
 import UserBasicInfo from './UserBasicInfo.vue'
 import { CardTitle } from '@/components/Card/index'

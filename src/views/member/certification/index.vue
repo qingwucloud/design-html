@@ -149,6 +149,11 @@
       />
       <el-table-column label="合同数量" align="center" prop="contractCount" />
       <el-table-column label="虚拟合同数量" align="center" width="120" prop="virtualContractCnt" />
+      <el-table-column align="center" label="状态" prop="status">
+        <template #default="scope">
+          <dict-tag :type="DICT_TYPE.COMMON_STATUS" :value="scope.row.status" />
+        </template>
+      </el-table-column>
       <el-table-column label="认证状态" align="center" prop="certStatus">
         <template #default="scope">
           <el-tag v-if="scope.row.certStatus === 1" type="primary" size="small">已通过</el-tag>
@@ -170,7 +175,7 @@
         width="180px"
       />
       <el-table-column label="驳回原因" align="center" prop="rejectReason" />
-      <el-table-column label="精选排序号" align="center" prop="startSort" />
+      <el-table-column label="精选排序号" align="center" width="120" prop="startSort" />
       <el-table-column label="审核人" align="center" prop="checker" />
       <el-table-column label="操作" align="center" min-width="120px" fixed="right">
         <template #default="scope">
@@ -196,7 +201,12 @@
             <!-- 已通过的认证才显示更多功能 -->
             <el-dropdown
               v-if="scope.row.certStatus === 1"
-              v-hasPermi="['member:certification:recommend', 'member:certification:updateScore','member:certification:setVirtualContractCnt']"
+              v-hasPermi="[
+                'member:certification:recommend',
+                'member:certification:updateScore',
+                'member:certification:setVirtualContractCnt',
+                'member:design:update'
+              ]"
             >
               <el-button link type="primary"> 更多</el-button>
               <template #dropdown>
@@ -227,6 +237,12 @@
                   >
                     设置虚拟合同数
                   </el-dropdown-item>
+                  <el-dropdown-item
+                    v-if="checkPermi(['member:design:update'])"
+                    @click="formUserRef.open('update',scope.row.id)"
+                  >
+                    编辑
+                  </el-dropdown-item>
                 </el-dropdown-menu>
               </template>
             </el-dropdown>
@@ -242,7 +258,8 @@
       @pagination="getList"
     />
   </ContentWrap>
-
+  <!-- 用户表单弹窗 -->
+  <UserForm ref="formUserRef" @success="getList" />
   <!-- 表单弹窗：添加/修改 -->
   <CertificationForm ref="formRef" @success="getList" />
 
@@ -262,12 +279,13 @@ import ScoreForm from './ScoreForm.vue'
 import SetVirtualContractCnt from './SetVirtualContractCnt.vue'
 import { getIntDictOptions, DICT_TYPE } from '@/utils/dict'
 import { checkPermi } from '@/utils/permission'
+import UserForm from './UserForm.vue'
 
 /** 设计师认证 列表 */
 defineOptions({ name: 'MemberCertification' })
 
 const message = useMessage() // 消息弹窗
-
+const formUserRef = ref() // 用户表单的 Ref
 const loading = ref(true) // 列表的加载中
 const list = ref<CertificationVO[]>([]) // 列表的数据
 const total = ref(0) // 列表的总页数

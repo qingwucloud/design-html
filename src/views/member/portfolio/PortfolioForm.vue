@@ -93,7 +93,7 @@
           <el-form-item label="作品风格类型" prop="designerStyleType">
             <el-select
               multiple
-              :multiple-limit="2"
+              :multiple-limit="4"
               v-model="formData.designerStyleType"
               placeholder="请选择作品风格类型"
             >

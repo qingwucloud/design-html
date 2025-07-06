@@ -17,5 +17,5 @@ export const simplePlugins = [
 ]
 
 export const simpleToolbar = [
-  'lineheight bold italic underline fontsizeselect bullist numlist   forecolor backcolor undo redo aligncenter preview fullscreen '
+  'lineheight bold italic underline fontsizeselect bullist numlist   forecolor backcolor undo redo aligncenter preview custom_upload fullscreen '
 ]

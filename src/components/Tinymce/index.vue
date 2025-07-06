@@ -203,7 +203,7 @@ export default defineComponent({
       return {
         selector: `#${unref(tinymceId)}`,
         height,
-        toolbar: toolbar.concat(['custom_upload']), // 添加自定义上传按钮到���具栏
+        toolbar: toolbar, // 添加自定义上传按钮到���具栏
         menubar: '',
         plugins,
         language_url: publicPath + 'resource/tinymce/langs/zh_CN.js',

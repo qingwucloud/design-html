@@ -132,7 +132,7 @@
       </el-form-item>
 
       <el-form-item label="内容" prop="content">
-        <div class="flex flex-col w-full">
+        <div class="flex flex-col">
           <div
             >建议无损压缩后上传,有利于加快加载速度<a
               target="_blank"
@@ -147,6 +147,7 @@
             :plugins="simplePlugins"
             v-model="formData.content"
             height="700"
+            width="500"
           />
         </div>
       </el-form-item>
@@ -238,6 +239,13 @@ const open = async (type: string, id?: number) => {
     formLoading.value = true
     try {
       let data = await PortfolioApi.getPortfolio(id)
+      // 处理富文本内容中的图片，添加响应式样式
+      if (data.content) {
+        data.content = data.content.replace(
+          /<img([^>]*?)(?:\s+style="[^"]*")?([^>]*?)>/gi,
+          '<img$1 style="max-width: 100%; height: auto;"$2>'
+        )
+      }
       formData.value = {
         ...data,
         portfolioTagType: data.portfolioTagType

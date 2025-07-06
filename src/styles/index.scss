@@ -60,3 +60,8 @@
 //.tox .tox-dialog,.tox-tinymce-aux{
 //  z-index: 2100!important;
 //}
+
+.tox .tox-dialog--width-lg{
+  max-width: 500px !important;
+  height: 750px !important;
+}

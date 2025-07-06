@@ -294,10 +294,6 @@ export default defineComponent({
       }
     )
 
-    // watch(isDark, () => {
-    //   initEditor()
-    // })
-
     onMountedOrActivated(() => {
       if (!initOptions.value.inline) {
         tinymceId.value = buildShortUUID('tiny-vue')

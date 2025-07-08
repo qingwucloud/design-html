@@ -132,23 +132,15 @@
       </el-form-item>
 
       <el-form-item label="内容" prop="content">
-        <div class="flex flex-col">
-          <div
-            >建议无损压缩后上传,有利于加快加载速度<a
-              target="_blank"
-              href="https://www.iloveimg.com/zh-cn/compress-image/compress-jpg"
-              >点击跳转压缩</a
-            ></div
-          >
+        <div class="flex">
           <!--          <Editor v-model="formData.content" height="350px" />-->
-          <Tinymce
-            v-if="showTinymce"
-            :toolbar="simpleToolbar"
-            :plugins="simplePlugins"
-            v-model="formData.content"
-            height="700"
-            width="500"
-          />
+          <Tinymce v-if="showTinymce" :toolbar="simpleToolbar" :plugins="simplePlugins" v-model="formData.content" height="700" width="500" />
+          <div class="ml-10 text-16px">
+            <span class="text-[red]">温馨提示：</span><br />
+            1. 建议无损压缩后上传,有利于加快加载速度<a target="_blank" href="https://www.iloveimg.com/zh-cn/compress-image/compress-jpg">点击跳转压缩</a><br />
+            2. 使用最右侧全屏按钮可以全屏编辑内容，操作更加方便<br />
+            3. 设计图不要缩放太小，可能影响小程序展示<br />
+          </div>
         </div>
       </el-form-item>
       <!-- 为固定底部按钮预留空间 -->

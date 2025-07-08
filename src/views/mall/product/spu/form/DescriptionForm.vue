@@ -3,16 +3,22 @@
   <el-form ref="formRef" :model="formData" :rules="rules" label-width="120px" :disabled="isDetail">
     <!--富文本编辑器组件-->
     <el-form-item label="商品详情" prop="description">
-      <Editor v-model:modelValue="formData.description" />
+<!--      <Editor v-model:modelValue="formData.description" />-->
+      <Tinymce
+        :toolbar="simpleToolbar"
+        :plugins="simplePlugins"
+        v-model="formData.description"
+        height="700"
+      />
     </el-form-item>
   </el-form>
 </template>
 <script lang="ts" setup>
 import type { Spu } from '@/api/mall/product/spu'
-import { Editor } from '@/components/Editor'
 import { PropType } from 'vue'
 import { propTypes } from '@/utils/propTypes'
 import { copyValueToTarget } from '@/utils'
+import { simplePlugins, simpleToolbar } from '@/components/Tinymce/tinymce'
 
 defineOptions({ name: 'ProductDescriptionForm' })
 
@@ -79,3 +85,13 @@ const validate = async () => {
 }
 defineExpose({ validate })
 </script>
+<style scoped lang="scss">
+:deep(.tox .tox-editor-container ){
+  width: 750px !important;
+  margin: 0 auto;
+}
+
+:deep(.tox.tox-tinymce.tox-fullscreen) {
+  background-color: rgb(225 225 225 / 100%)!important;
+}
+</style>

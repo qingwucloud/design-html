@@ -211,7 +211,7 @@ export default defineComponent({
         branding: false,
         default_link_target: '_blank',
         link_title: false,
-        object_resizing: false,
+        object_resizing: true,
         auto_focus: true,
         skin: skinName.value,
         skin_url: publicPath + 'resource/tinymce/skins/ui/' + skinName.value,
@@ -262,7 +262,7 @@ export default defineComponent({
 
           // 注册自定义上传按钮
           editor.ui.registry.addButton('custom_upload', {
-            text: '上传图片',
+            text: '图片',
             icon: 'image',
             tooltip: '上传本地图片',
             onAction: () => handleFileUpload(editor)

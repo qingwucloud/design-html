@@ -440,3 +440,14 @@ watch(
   { deep: true }
 )
 </script>
+
+<style scoped lang="scss">
+:deep(.tox .tox-editor-container ){
+  width: 750px !important;
+  margin: 0 auto;
+}
+
+:deep(.tox.tox-tinymce.tox-fullscreen) {
+  background-color: rgb(225 225 225 / 100%)!important;
+}
+</style>

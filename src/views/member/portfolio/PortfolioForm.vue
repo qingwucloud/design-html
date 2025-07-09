@@ -14,7 +14,7 @@
         <el-col :span="12">
           <el-form-item label="设计师" prop="userId">
             <el-select
-              :disabled="formType === 'update'"
+              :disabled="formType === 'update' && !checkPermi(['member:portfolio:updateUser'])"
               v-model="formData.userId"
               filterable
               placeholder="请选择设计师"
@@ -165,6 +165,7 @@ import { validateCountWords } from '@/utils/formRules'
 import { onMounted } from 'vue'
 import { simplePlugins, simpleToolbar } from '@/components/Tinymce/tinymce'
 import { useTagsViewStore } from '@/store/modules/tagsView'
+import { checkPermi } from '@/utils/permission'
 
 /** 设计师作品集 表单 */
 defineOptions({ name: 'PortfolioForm' })

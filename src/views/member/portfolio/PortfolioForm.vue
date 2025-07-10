@@ -210,13 +210,7 @@ const formRules = reactive({
   area: [{ required: true, message: '面积不能为空', trigger: 'blur' }],
   portfolioTagType: [{ required: true, message: '作品签类型不能为空', trigger: 'change' }],
   designerStyleType: [{ required: true, message: '作品风格类型不能为空', trigger: 'change' }],
-  content: [
-    {
-      validator: (rule: any, value: string, callback: any) =>
-        validateCountWords(rule, value, callback, 500),
-      trigger: 'blur'
-    }
-  ]
+  content: [{ required: true, message: '作品集内容不能为空', trigger: 'blur' }],
 })
 const formRef = ref() // 表单 Ref
 const designerList = ref<any[]>([]) // 设计师列表

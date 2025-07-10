@@ -1,5 +1,5 @@
 <template>
-  <Dialog :title="dialogTitle" top="2vh" v-model="dialogVisible" isCenter>
+  <Dialog :title="dialogTitle" top="2vh" v-model="dialogVisible" :isCenter="true">
     <el-form
       ref="formRef"
       :model="formData"
@@ -40,6 +40,18 @@
           >
             {{ dict.label }}
           </el-radio>
+        </el-radio-group>
+      </el-form-item>
+      <el-form-item prop="insider">
+        <template #label>
+          <Tooltip
+            message="勾选为内部人员时，该用户不能邀请他人也不能被邀请加入团队，无法获得佣金收益"
+            title="内部人员"
+          />
+        </template>
+        <el-radio-group v-model="formData.insider">
+          <el-radio :value="0">否</el-radio>
+          <el-radio :value="1">是</el-radio>
         </el-radio-group>
       </el-form-item>
 <!--      <el-form-item label="出生日期" prop="birthday">-->
@@ -99,6 +111,7 @@ const formData = ref({
   avatar: undefined,
   name: undefined,
   sex: undefined,
+  insider: 0, // 内部人员，默认为0（否）
   areaId: undefined,
   birthday: undefined,
   mark: undefined,
@@ -174,6 +187,7 @@ const resetForm = () => {
     avatar: undefined,
     name: undefined,
     sex: undefined,
+    insider: 0, // 内部人员，默认为0（否）
     areaId: undefined,
     birthday: undefined,
     mark: undefined,

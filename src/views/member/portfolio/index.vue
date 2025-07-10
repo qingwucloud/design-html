@@ -283,7 +283,7 @@
   </ContentWrap>
 
   <!-- 表单弹窗：添加/修改 -->
-<!--  <PortfolioForm ref="formRef" @success="getList" />-->
+  <!--  <PortfolioForm ref="formRef" @success="getList" />-->
 
   <!-- 表单弹窗：详情/审核 -->
   <CheckAndDetail ref="checkRef" @success="getList" />
@@ -363,76 +363,77 @@ const handleSort = (row) => {
       message.success('排序成功')
       resetQuery()
     })
-    .catch(() => {
-    })
+    .catch(() => {})
 }
 const router = useRouter() // 路由
 /** 添加/修改操作 */
 // const formRef = ref()
 const openForm = (type: string, id?: number) => {
-  router.push({ name: 'PortfolioForm', params: { type, id }})
+  router.push({ name: 'PortfolioForm', params: { type, id } })
 }
-  const openCheckForm = (type: string, id?: number) => {
-    checkRef.value.open(type, id)
-  }
+const openCheckForm = (type: string, id?: number) => {
+  checkRef.value.open(type, id)
+}
 
-  /** 删除按钮操作 */
-  const handleDelete = async (id: any) => {
-    try {
-      // 删除的二次确认
-      await message.delConfirm()
-      // 发起删除
-      await PortfolioApi.deletePortfolio(id)
-      message.success(t('common.delSuccess'))
-      // 刷新列表
-      await getList()
-    } catch {
-    }
-  }
+/** 删除按钮操作 */
+const handleDelete = async (id: any) => {
+  try {
+    // 删除的二次确认
+    await message.delConfirm()
+    // 发起删除
+    await PortfolioApi.deletePortfolio(id)
+    message.success(t('common.delSuccess'))
+    // 刷新列表
+    await getList()
+  } catch {}
+}
 
-  const handleCancelSort = async (id: any) => {
-    ElMessageBox.confirm('确定需要取消精选吗？', '提示', {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
-      type: 'warning'
-    })
-      .then(async () => {
-        await PortfolioApi.recommendPortfolio({
-          sortNum: 0,
-          id
-        })
-        message.success('取消成功')
-        resetQuery()
-      })
-      .catch(() => {
-      })
-  }
-
-  /** 操作分发 */
-  const handleCommand = (command: string, row: any) => {
-    switch (command) {
-      case 'handleEdit':
-        // openForm('update', row.id)
-        router.push({ name: 'PortfolioForm', params: { type:'update', id:row.id }})
-        break
-      case 'handleSort':
-        handleSort(row)
-        break
-      case 'handleDelete':
-        handleDelete(row.id)
-        break
-      case 'handleCancelSort':
-        handleCancelSort(row.id)
-        break
-      default:
-        break
-    }
-  }
-
-  /** 初始化 **/
-  onMounted(() => {
-    getList()
+const handleCancelSort = async (id: any) => {
+  ElMessageBox.confirm('确定需要取消精选吗？', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
   })
+    .then(async () => {
+      await PortfolioApi.recommendPortfolio({
+        sortNum: 0,
+        id
+      })
+      message.success('取消成功')
+      resetQuery()
+    })
+    .catch(() => {})
+}
+
+/** 操作分发 */
+const handleCommand = (command: string, row: any) => {
+  switch (command) {
+    case 'handleEdit':
+      // openForm('update', row.id)
+      router.push({ name: 'PortfolioForm', params: { type: 'update', id: row.id } })
+      break
+    case 'handleSort':
+      handleSort(row)
+      break
+    case 'handleDelete':
+      handleDelete(row.id)
+      break
+    case 'handleCancelSort':
+      handleCancelSort(row.id)
+      break
+    default:
+      break
+  }
+}
+
+/** 初始化 **/
+onMounted(() => {
+  getList()
+})
+
+onActivated(() => {
+  getList()
+})
 </script>
 
 <style scoped lang="scss">

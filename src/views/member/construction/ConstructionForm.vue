@@ -25,7 +25,13 @@
               <el-option
                 v-for="item in userList"
                 :key="item.id"
-                :label="(item.name || item.nickname) + '-' + item.mobile"
+                :label="
+                  (item.name || item.nickname) +
+                  '-' +
+                  item.mobile +
+                  '-' +
+                  (item.memberType == 1 ? '会员' : '设计师')
+                "
                 :value="item.id"
               />
             </el-select>

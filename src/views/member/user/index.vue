@@ -48,6 +48,18 @@
           value-format="YYYY-MM-DD HH:mm:ss"
         />
       </el-form-item>
+      <el-form-item label="内部人员" prop="insider">
+        <el-select
+          v-model="queryParams.insider"
+          class="!w-240px"
+          clearable
+          placeholder="请选择"
+        >
+          <el-option label="全部" value="" />
+          <el-option label="否" :value="0" />
+          <el-option label="是" :value="1" />
+        </el-select>
+      </el-form-item>
       <el-form-item>
         <el-button @click="handleQuery">
           <Icon class="mr-5px" icon="ep:search" />
@@ -88,6 +100,13 @@
       <el-table-column align="center" label="状态" prop="status">
         <template #default="scope">
           <dict-tag :type="DICT_TYPE.COMMON_STATUS" :value="scope.row.status" />
+        </template>
+      </el-table-column>
+      <el-table-column align="center" label="内部人员" prop="insider" width="100">
+        <template #default="scope">
+          <el-tag :type="scope.row.insider === 1 ? 'warning' : 'success'">
+            {{ scope.row.insider === 1 ? '是' : '否' }}
+          </el-tag>
         </template>
       </el-table-column>
       <el-table-column
@@ -160,6 +179,7 @@ const queryParams = reactive({
   mobile: null,
   loginDate: [],
   createTime: [],
+  insider: '', // 修复类型错误，使用 undefined 代替 null
   tagIds: [],
   levelId: null,
   groupId: null

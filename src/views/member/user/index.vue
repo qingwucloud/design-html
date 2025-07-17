@@ -55,7 +55,6 @@
           clearable
           placeholder="请选择"
         >
-          <el-option label="全部" value="" />
           <el-option label="否" :value="0" />
           <el-option label="是" :value="1" />
         </el-select>

@@ -38,6 +38,10 @@ export const updateCommentVisible = async (data: any) => {
   return await request.put({ url: `/customer/comment/update-visible`, data })
 }
 
+// 更新自评
+export const updateComment = async (data: CommentVO) => {
+  return await request.post({ url: `/customer/comment/update`, data })
+}
 // // 商家回复
 // export const replyComment = async (data: any) => {
 //   return await request.put({ url: `/product/comment/reply`, data })

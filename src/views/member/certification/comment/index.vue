@@ -115,6 +115,18 @@
           </div>
         </template>
       </el-table-column>
+      <el-table-column label="操作" align="center" width="120px">
+        <template #default="scope">
+          <el-button
+            link
+            type="primary"
+            @click="openForm('update', scope.row)"
+            v-hasPermi="['customer:comment:updateComment']"
+          >
+            编辑
+          </el-button>
+        </template>
+      </el-table-column>
     </el-table>
     <!-- 分页 -->
     <Pagination
@@ -182,8 +194,8 @@ const resetQuery = () => {
 
 /** 添加/修改操作 */
 const formRef = ref()
-const openForm = (type: string, id?: number) => {
-  formRef.value.open(type, id)
+const openForm = (type: string, data?: any) => {
+  formRef.value.open(type, data)
 }
 
 /** 显示/隐藏 **/

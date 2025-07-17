@@ -1,5 +1,5 @@
 <template>
-  <Dialog v-model="dialogVisible" title="添加虚拟评论">
+  <Dialog v-model="dialogVisible" :title="dialogTitle">
     <el-form
       ref="formRef"
       v-loading="formLoading"
@@ -35,6 +35,14 @@
       <el-form-item label="评论图片" prop="picUrls">
         <UploadImgs v-model="formData.picUrls" :limit="9" height="80px" width="80px" />
       </el-form-item>
+      <el-form-item label="评论时间" prop="createTime">
+        <el-date-picker
+          v-model="formData.createTime"
+          type="datetime"
+          placeholder="请选择评论时间"
+          format="YYYY-MM-DD HH:mm:ss"
+        />
+      </el-form-item>
     </el-form>
     <template #footer>
       <el-button :disabled="formLoading" type="primary" @click="submitForm">确 定</el-button>
@@ -64,7 +72,8 @@ const formData = ref({
   descriptionScores: 5,
   benefitScores: 5,
   content: undefined,
-  picUrls: []
+  picUrls: [],
+  createTime: undefined
 })
 const formRules = reactive({
   // spuId: [{ required: true, message: '商品不能为空', trigger: 'blur' }],
@@ -74,30 +83,30 @@ const formRules = reactive({
   userNickname: [{ required: true, message: '用户账号不能为空', trigger: 'blur' }],
   content: [{ required: true, message: '评论内容不能为空', trigger: 'blur' }],
   descriptionScores: [{ required: true, message: '描述星级不能为空', trigger: 'blur' }],
-  benefitScores: [{ required: true, message: '服务星级不能为空', trigger: 'blur' }]
+  benefitScores: [{ required: true, message: '服务星级不能为空', trigger: 'blur' }],
+  createTime: [{ required: true, message: '评论时间不能为空', trigger: 'blur' }]
 })
 const formRef = ref() // 表单 Ref
 const designerList = ref([]) // 设计师列表
 /** 打开弹窗 */
-const open = async (type, id) => {
+const open = async (type, data) => {
   dialogVisible.value = true
-  dialogTitle.value = t('action.' + type)
+  dialogTitle.value = type === 'create' ? '添加虚拟评论' : '编辑虚拟评论'
   formType.value = type
   resetForm()
-  let data = await CertificationApi.getAllDesignerUserPage()
-  designerList.value = data
+  let designerData = await CertificationApi.getAllDesignerUserPage()
+  designerList.value = designerData
   if (route.params.id) {
     formData.value.designerId = route.params.id
   }
   // 修改时，设置数据
-  // if (id) {
-  //   formLoading.value = true
-  //   try {
-  //     formData.value = await CommentApi.getComment(id)
-  //   } finally {
-  //     formLoading.value = false
-  //   }
-  // }
+  if (data && type === 'update') {
+    formData.value = { ...data }
+    // 将时间戳转换为Date对象
+    if (data.createTime) {
+      formData.value.createTime = new Date(data.createTime)
+    }
+  }
 }
 defineExpose({ open }) // 提供 open 方法，用于打开弹窗
 
@@ -107,15 +116,23 @@ const submitForm = async () => {
   // 校验表单
   if (!formRef) return
   const valid = await formRef.value.validate()
+  console.log(valid)
   if (!valid) return
   // 提交请求
   formLoading.value = true
   try {
     if (formType.value === 'create') {
       await CommentApi.createComment({
-        ...formData.value
+        ...formData.value,
+        createTime: new Date(formData.value.createTime).getTime()
       })
       message.success(t('common.createSuccess'))
+    } else if (formType.value === 'update') {
+      await CommentApi.updateComment({
+        ...formData.value,
+        createTime: new Date(formData.value.createTime).getTime()
+      })
+      message.success(t('common.updateSuccess'))
     }
     dialogVisible.value = false
     // 发送操作成功的事件
@@ -138,7 +155,8 @@ const resetForm = () => {
     descriptionScores: 5,
     benefitScores: 5,
     content: undefined,
-    picUrls: []
+    picUrls: [],
+    createTime: undefined
   }
   formRef.value?.resetFields()
 }

@@ -1,5 +1,5 @@
 <template>
-  <Dialog v-model="dialogVisible" :title="dialogTitle">
+  <Dialog width="750" v-model="dialogVisible" is-center :title="dialogTitle">
     <el-form
       ref="formRef"
       v-loading="formLoading"
@@ -33,7 +33,7 @@
         <el-rate v-model="formData.benefitScores" />
       </el-form-item>
       <el-form-item label="评论图片" prop="picUrls">
-        <UploadImgs v-model="formData.picUrls" :limit="9" height="80px" width="80px" />
+        <UploadImgs v-model="formData.picUrls" :limit="6" height="80px" width="80px" />
       </el-form-item>
       <el-form-item label="评论时间" prop="createTime">
         <el-date-picker
@@ -41,6 +41,7 @@
           type="datetime"
           placeholder="请选择评论时间"
           format="YYYY-MM-DD HH:mm:ss"
+          class="w-full!"
         />
       </el-form-item>
     </el-form>

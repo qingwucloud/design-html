@@ -43,15 +43,15 @@
 </template>
 <script lang="ts" setup>
 import type { UploadFile, UploadProps, UploadUserFile } from 'element-plus'
-import { ElNotification } from 'element-plus'
+import { ElNotification, ElLoading } from 'element-plus'
 import { createImageViewer } from '@/components/ImageViewer'
+import { onBeforeUnmount } from 'vue'
 
 import { propTypes } from '@/utils/propTypes'
 import { useUpload } from '@/components/UploadFile/src/useUpload'
 
 defineOptions({ name: 'UploadImgs' })
 
-const message = useMessage() // 消息弹窗
 // 查看图片
 const imagePreview = (imgUrl: string) => {
   createImageViewer({
@@ -73,7 +73,7 @@ type FileTypes =
   | 'image/x-icon'
 
 const props = defineProps({
-  modelValue: propTypes.oneOfType<string | string[]>([String, Array<String>]).isRequired,
+  modelValue: propTypes.oneOfType<string | string[]>([String, Array]).isRequired,
   drag: propTypes.bool.def(true), // 是否支持拖拽上传 ==> 非必传（默认为 true）
   disabled: propTypes.bool.def(false), // 是否禁用上传组件 ==> 非必传（默认为 false）
   limit: propTypes.number.def(5), // 最大图片上传数 ==> 非必传（默认为 5张）
@@ -88,8 +88,10 @@ const props = defineProps({
 const { uploadUrl, httpRequest } = useUpload(props.directory)
 
 const fileList = ref<UploadUserFile[]>([])
-const uploadNumber = ref<number>(0)
+const uploadNumber = ref<number>(0) // 总上传文件数
+const completedNumber = ref<number>(0) // 已完成（成功+失败）文件数
 const uploadList = ref<UploadUserFile[]>([])
+const loading = ref<any>(null) // 用于存储 loading 实例
 /**
  * @description 文件上传之前判断
  * @param rawFile 上传的文件
@@ -109,7 +111,19 @@ const beforeUpload: UploadProps['beforeUpload'] = (rawFile) => {
       message: `上传图片大小不能超过 ${props.fileSize}M！`,
       type: 'warning'
     })
+
+  // 增加上传数量计数，启动 loading
   uploadNumber.value++
+
+  // 如果是第一个文件开始上传，显示 loading
+  if (uploadNumber.value === 1) {
+    loading.value = ElLoading.service({
+      lock: true,
+      text: '图片上传中...',
+      background: 'rgba(0, 0, 0, 0.7)'
+    })
+  }
+
   return imgType.includes(rawFile.type as FileTypes) && imgSize
 }
 
@@ -120,16 +134,33 @@ interface UploadEmits {
 
 const emit = defineEmits<UploadEmits>()
 const uploadSuccess: UploadProps['onSuccess'] = (res: any): void => {
-  message.success('上传成功')
+  // message.success('上传成功')
   // 删除自身
-  const index = fileList.value.findIndex((item) => item.response?.data === res.data)
+  const index = fileList.value.findIndex((item) => (item.response as any)?.data === res.data)
   fileList.value.splice(index, 1)
   uploadList.value.push({ name: res.data, url: res.data })
-  if (uploadList.value.length == uploadNumber.value) {
+
+  // 增加已完成数量
+  completedNumber.value++
+
+  // 更新 loading 文本显示当前进度
+  if (loading.value) {
+    loading.value.setText(`正在上传第 ${completedNumber.value}/${uploadNumber.value} 张图片...`)
+  }
+
+  // 检查是否所有文件都已完成（成功+失败）
+  if (completedNumber.value >= uploadNumber.value) {
     fileList.value.push(...uploadList.value)
     uploadList.value = []
     uploadNumber.value = 0
+    completedNumber.value = 0
     emitUpdateModelValue()
+
+    // 关闭 loading
+    if (loading.value) {
+      loading.value.close()
+      loading.value = null
+    }
   }
 }
 
@@ -149,6 +180,17 @@ watch(
   },
   { immediate: true, deep: true }
 )
+
+// 组件卸载时清理 loading
+onBeforeUnmount(() => {
+  if (loading.value) {
+    loading.value.close()
+    loading.value = null
+  }
+  // 重置计数器
+  uploadNumber.value = 0
+  completedNumber.value = 0
+})
 // 发送图片链接列表更新
 const emitUpdateModelValue = () => {
   let result: string[] = fileList.value.map((file) => file.url!)
@@ -167,6 +209,27 @@ const handleRemove = (uploadFile: UploadFile) => {
 
 // 图片上传错误提示
 const uploadError = () => {
+  // 增加已完成数量（失败也算完成）
+  completedNumber.value++
+
+  // 更新 loading 文本显示当前进度
+  if (loading.value) {
+    loading.value.setText(`正在上传第 ${completedNumber.value}/${uploadNumber.value} 张图片...`)
+  }
+
+  // 检查是否所有文件都已完成（成功+失败）
+  if (completedNumber.value >= uploadNumber.value) {
+    // 重置计数器
+    uploadNumber.value = 0
+    completedNumber.value = 0
+
+    // 关闭 loading
+    if (loading.value) {
+      loading.value.close()
+      loading.value = null
+    }
+  }
+
   ElNotification({
     title: '温馨提示',
     message: '图片上传失败，请您重新上传！',

@@ -68,6 +68,7 @@
       </el-table-column>
       <el-table-column label="作品标签" align="center" prop="portfolioTagTypeDesc" />
       <el-table-column label="作品风格" align="center" prop="designerStyleTypeDesc" />
+      <el-table-column label="排序权重" align="center" prop="selfSortNum" width="100" />
       <el-table-column
         label="创建时间"
         align="center"
@@ -84,7 +85,13 @@
         width="180px"
       />
       <el-table-column label="驳回原因" align="center" prop="rejectReason" />
-      <el-table-column label="操作" align="center" fixed="right" :show-overflow-tooltip="false">
+      <el-table-column
+        label="操作"
+        align="center"
+        fixed="right"
+        :show-overflow-tooltip="false"
+        width="150"
+      >
         <template #default="scope">
           <el-button
             link
@@ -92,6 +99,13 @@
             @click="openCheckForm('detail', scope.row.id)"
             v-hasPermi="['member:portfolio:detail']"
             >详情</el-button
+          >
+          <el-button
+            link
+            type="warning"
+            @click="openSortDialog(scope.row)"
+            v-hasPermi="['member:portfolio:selfSort']"
+            >排序</el-button
           >
         </template>
       </el-table-column>
@@ -107,13 +121,41 @@
 
   <!-- 表单弹窗：详情/审核 -->
   <CheckAndDetail ref="checkRef" @success="getList" />
+
+  <!-- 排序弹窗 -->
+  <el-dialog v-model="sortDialogVisible" title="设置排序权重" width="400px">
+    <el-form :model="sortForm" label-width="120px">
+      <el-form-item label="作品标题：">
+        <span>{{ sortForm.title }}</span>
+      </el-form-item>
+      <el-form-item label="当前排序权重：">
+        <span>{{ sortForm.currentSelfSortNum || 0 }}</span>
+      </el-form-item>
+      <el-form-item label="新排序权重：" required>
+        <el-input-number
+          v-model="sortForm.selfSortNum"
+          :min="0"
+          :max="9999"
+          controls-position="right"
+          placeholder="请输入排序权重"
+        />
+      </el-form-item>
+      <el-form-item>
+        <el-text type="info" size="small"> 排序权重越大，排序越靠前 </el-text>
+      </el-form-item>
+    </el-form>
+    <template #footer>
+      <el-button @click="sortDialogVisible = false">取消</el-button>
+      <el-button type="primary" @click="handleSort" :loading="sortLoading">确定</el-button>
+    </template>
+  </el-dialog>
 </template>
 
 <script setup lang="ts">
 import { dateFormatter } from '@/utils/formatTime'
-import {  PortfolioVO } from '@/api/member/portfolio'
+import { PortfolioVO } from '@/api/member/portfolio'
 import CheckAndDetail from '../../portfolio/CheckAndDetail.vue'
-import { getDesignerPortfolioList } from "@/api/member/view/designer";
+import { getDesignerPortfolioList, updatePortfolioSelfSort } from '@/api/member/view/designer'
 
 /** 设计师作品集 列表 */
 defineOptions({ name: 'DesignList' })
@@ -139,13 +181,23 @@ const queryParams = reactive({
 const queryFormRef = ref() // 搜索的表单
 const checkRef = ref() // 详情/审核的表单
 const route = useRoute()
+
+// 排序相关
+const sortDialogVisible = ref(false) // 排序弹窗显示状态
+const sortLoading = ref(false) // 排序加载状态
+const sortForm = reactive({
+  id: 0,
+  title: '',
+  currentSelfSortNum: 0,
+  selfSortNum: 0
+})
 /** 查询列表 */
 const getList = async () => {
   loading.value = true
   try {
     const data = await getDesignerPortfolioList({
       ...queryParams,
-      designerId:route.params.id
+      designerId: route.params.id
     })
     list.value = data.list
     total.value = data.total
@@ -168,6 +220,34 @@ const resetQuery = () => {
 
 const openCheckForm = (type: string, id?: number) => {
   checkRef.value.open(type, id)
+}
+
+// 打开排序弹窗
+const openSortDialog = (row: PortfolioVO) => {
+  sortForm.id = row.id
+  sortForm.title = row.title
+  sortForm.currentSelfSortNum = row.selfSortNum || 0
+  sortForm.selfSortNum = row.selfSortNum || 0
+  sortDialogVisible.value = true
+}
+
+// 处理排序
+const handleSort = async () => {
+  try {
+    sortLoading.value = true
+    await updatePortfolioSelfSort({
+      id: sortForm.id,
+      selfSortNum: sortForm.selfSortNum
+    })
+    ElMessage.success('排序设置成功')
+    sortDialogVisible.value = false
+    await getList() // 重新加载列表
+  } catch (error) {
+    console.error('排序设置失败:', error)
+    ElMessage.error('排序设置失败')
+  } finally {
+    sortLoading.value = false
+  }
 }
 
 /** 初始化 **/

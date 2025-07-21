@@ -21,6 +21,7 @@ export interface PortfolioVO {
   viewCount: number // 浏览次数
   likeCount: number // 点赞次数
   sortNum: number // 置顶优先级排序
+  selfSortNum?: number // 个人排序权重
   checker: string // 审核人
 }
 
@@ -51,7 +52,6 @@ export const PortfolioApi = {
     return await request.delete({ url: `/member/portfolio/delete?id=` + id })
   },
 
-
   // 审核设计师作品集
   checkPortfolio: async (data: any) => {
     return await request.put({ url: `/member/portfolio/check`, data })
@@ -60,6 +60,5 @@ export const PortfolioApi = {
   // 设置精选作品集排序
   recommendPortfolio: async (data: any) => {
     return await request.post({ url: `/member/portfolio/recommend`, data })
-  },
-
+  }
 }

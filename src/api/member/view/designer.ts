@@ -1,6 +1,5 @@
 import request from '@/config/axios'
 
-
 // 提现列表
 export const getDesignerWithdrawalList = async (params) => {
   return await request.get({ url: `/member/designerView/withdrawalList`, params })
@@ -34,4 +33,9 @@ export const getDesignerCommentList = async (params) => {
 // 预约列表
 export const getDesignerAppointmentList = async (params) => {
   return await request.get({ url: `/member/designerView/appointmentList`, params })
+}
+
+// 预约列表
+export const updatePortfolioSelfSort = async (data) => {
+  return await request.post({ url: `/member/portfolio/selfSort`, data })
 }

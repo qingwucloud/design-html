@@ -32,21 +32,21 @@
           />
         </el-select>
       </el-form-item> -->
-      <el-form-item label="擅长风格" prop="designerStyleType">
-        <el-select
-          v-model="queryParams.designerStyleType"
-          placeholder="请选择擅长风格"
-          clearable
-          class="!w-240px"
-        >
-          <el-option
-            v-for="dict in getIntDictOptions(DICT_TYPE.DESIGNER_STYLE_TYPE)"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          />
-        </el-select>
-      </el-form-item>
+<!--      <el-form-item label="擅长风格" prop="designerStyleType">-->
+<!--        <el-select-->
+<!--          v-model="queryParams.designerStyleType"-->
+<!--          placeholder="请选择擅长风格"-->
+<!--          clearable-->
+<!--          class="!w-240px"-->
+<!--        >-->
+<!--          <el-option-->
+<!--            v-for="dict in getIntDictOptions(DICT_TYPE.DESIGNER_STYLE_TYPE)"-->
+<!--            :key="dict.value"-->
+<!--            :label="dict.label"-->
+<!--            :value="dict.value"-->
+<!--          />-->
+<!--        </el-select>-->
+<!--      </el-form-item>-->
       <el-form-item label="申请时间" prop="applyTime">
         <el-date-picker
           v-model="queryParams.applyTime"
